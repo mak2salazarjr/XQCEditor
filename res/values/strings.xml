@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	
+    <string name="app_name">QEditor</string>
+    <string name="hello_world">Hello world!</string>
+
+    <string name="decode">Decode</string>
+    <string name="build">Build</string>
+    <string name="signer">Signer</string>
+    
+    <string name="undo">Undo</string>
+    <string name="redo">Redo</string>
+    <string name="run">Run</string>
+    <string name="console">Console</string>
+    <string name="open">Open</string>
+    <string name="close">Close</string>
+    <string name="close_other">Close Other</string>
+    <string name="close_all">Close All</string>
+    <string name="setting">Setting</string>
+    <string name="about">About</string>
+    <string name="exit">Exit</string>
+    
+    <string name="move_to_left">Move Left</string>
+    <string name="move_to_right">Move Right</string>
+    
+    <string name="build_and_run">Build and Run</string>
+    <string name="build_so">Build to SO</string>
+    
+        
+    <string name="new_file">New File</string>
+    <string name="new_dir">New Folder</string>
+    <string name="new_project">New Project</string>
+    <string name="refresh">Refresh</string>
+    <string name="info">Info</string>
+    <string name="by_wangchen11">By WangChen11\nhttp://www.kxdm.ml</string>
+    <string name="editor_set">Editor Setting:</string>
+    <string name="background_color">Background Color</string>
+    <string name="font_color">Font Color</string>
+    <string name="font_scale">Font Scale</string>
+    <string name="bei"></string>
+    <string name="high_light_set">Highlight Setting:</string>
+    <string name="key_word_color">Keyword Color</string>
+    <string name="pre_key_word_color">Pre-Keyword Color</string>
+    <string name="const_color">Constant Color</string>
+    <string name="identifier_color">Identifier Color</string>
+    <string name="comments_color">Comments Color</string>
+    <string name="other_set">Other Setting:</string>
+    <string name="quick_input">Quickly Input</string>
+    <string name="title_background_color">Title Background Color</string>
+    <string name="select_title_color">Selected Background Color</string>
+    <string name="restore_defaults">Restore Defaults</string>
+    <string name="ok">OK</string>
+    <string name="file_browser">File Browser</string>
+    <string name="no_title">No Title</string>
+    <string name="find">Find</string>
+    <string name="replace">Replace</string>
+    <string name="find_replace">Replace/Find</string>
+    <string name="replace_all">Replace All</string>
+    
+    <string name="failed_find">Failed Find!</string>
+    <string name="failed_replace">Failed Replace!</string>
+    <string name="failed_find_replace">Failed Replace/Find</string>
+    <string name="failed_replace_all">Failed Replace All!</string>
+    
+    
+    <string name="compiling">Compiling</string>
+    <string name="compilation_fails">Compilation Fails!</string>
+    <string name="successfully_compiled">Successfully Compiled!</string>
+    <string name="no_elf_file">No ELF File!</string>
+    
+    
+    
+    
+    <string name="rename_has_succeed">Rename has Succeed!</string>
+    <string name="rename_has_failed">Rename has Failed!</string>
+    
+    <string name="successfully">Successfully:</string>
+    <string name="failed">Failed:</string>
+    <string name="jni_runner">JNIRunner</string>
+    <string name="create_workspace_failed">failed to create workspace!</string>
+    <string name="press_back_more_to_exit">press more back again to quit!</string>
+    <string name="file_not_save">file not saved!</string>
+    <string name="file">file</string>
+    <string name="unsaved">not saved!</string>
+    <string name="cancel">cancel</string>
+    <string name="save_and_quit">save and quit</string>
+    <string name="force_close">force close</string>
+    <string name="c_file_not_found">not find \'.c\' or \'.cpp\' file in project.</string>
+    <string name="save_fail">save failed! try to force close.</string>
+    <string name="lunch_fail">lunch fail</string>
+    <string name="craete_file_fail">create file fail!</string>
+    <string name="create_dir_fail">crate dir fail!</string>
+    <string name="fail">fail:</string>
+    <string name="save_failed">save failed</string>
+    <string name="file_name">file name:</string>
+    <string name="file_path">file path:</string>
+    <string name="project_name">project name:</string>
+    <string name="src_path">src path:</string>
+    <string name="bin_path">bin path:</string>
+    <string name="project_path">project path:</string>
+    <string name="not_project">this file not in project.</string>
+    <string name="program_end">program end.</string>
+    <string name="loading">loading...</string>
+    <string name="dirs">dirs:</string>
+    <string name="files">files:</string>
+    <string name="unkonw">unkonws:</string>
+    <string name="size">size:</string>
+    <string name="i_know">i konw</string>
+    <string name="confirm_delete">confirm delete</string>
+    <string name="delete">delete</string>
+    <string name="success">success:</string>
+    <string name="file_unreadable">file_unreadable,try to get root  permission.</string>
+    <string name="exist">exist:</string>
+    <string name="share">share</string>
+    <string name="pack_and_run">package and run</string>
+    <string name="package_and_run">package and run</string>
+    <string name="failed_to_free_resource">failed to free resource,need SD card!</string>
+    <string name="compile_has_error">compile has error</string>
+    <string name="run_shell">run shell</string>
+    <string name="run_shell_as_root">run shell(as root)</string>
+    <string name="zip">zip</string>
+    <string name="package_fail">package fail!</string>
+    <string name="deal_res_fail">deal res fail!</string>
+    <string name="signed_apk_done">signed apk done!</string>
+    <string name="signed_apk_fail">signed apk fail!</string>
+    <string name="deal_res">deal res...</string>
+    <string name="deal_res_done">deal res done!</string>
+    <string name="add_files">add files...</string>
+    <string name="tip">tip:</string>
+    <string name="file_not_exist">file not exist</string>
+    <string name="help">help</string>
+    <string name="line_scale">line scale</string>
+    <string name="show_ad">get points</string>
+    <string name="close_ad">close ad</string>
+    <string name="debug_run">debug run</string>
+    <string name="php_config">php config</string>
+    <string name="remote_browsing">remote browsing</string>
+    <string name="local_browsing">local browsing</string>
+    <string name="open_with_browser">open with browser</string>
+    <string name="use_nice_font">"use nice font"</string>
+    <string name="use_high_light">use high light</string>
+    <string name="complie_to_s">complie to asm</string>
+    <string name="charset">charset:</string>
+    <string name="clean_objs">清除中间文件</string>
+    <string name="this_file_can_not_run">该文件不可运行</string>
+    <string name="input_param">请输入参数</string>
+    <string name="run_lua">运行Lua</string>
+    <string name="code_format">代码格式化</string>
+</resources>

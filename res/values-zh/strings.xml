@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	
+    <string name="app_name">快写代码</string>
+    <string name="hello_world">Hello world!</string>
+
+    <string name="decode">反编译</string>
+    <string name="build">回编译</string>
+    <string name="signer">签名</string>
+    
+    <string name="undo">撤销</string>
+    <string name="redo">重做</string>
+    <string name="run">运行</string>
+    <string name="console">控制台</string>
+    <string name="open">打开</string>
+    <string name="close">关闭</string>
+    <string name="close_other">关闭其它</string>
+    <string name="close_all">关闭全部</string>
+    <string name="setting">设置</string>
+    <string name="about">关于</string>
+    <string name="exit">退出</string>
+    
+    <string name="move_to_left">向左移动</string>
+    <string name="move_to_right">向右移动</string>
+    
+    <string name="build_and_run">编译运行</string>
+    <string name="build_so">编译为so</string>
+    
+        
+    <string name="new_file">新建文件</string>
+    <string name="new_dir">新建文件夹</string>
+    <string name="new_project">新建工程</string>
+    <string name="refresh">刷新</string>
+    <string name="info">属性</string>
+    <string name="by_wangchen11">望尘11作品\n----------------------\n特别鸣谢：\n复制哥\nSummer\nトぅソクス\nandroids7\n琉球王国复国军\n----------------------\n欢迎加入望尘11开发者群讨论\n群号136898517\n大神群:\n钱总的群:317210444\n官方网站:http://www.kxdm.ml\n备用网址:http://xiazai.aaiaa.top</string>
+    <string name="editor_set">编辑器设置：</string>
+    <string name="background_color">背景颜色</string>
+    <string name="font_color">字体颜色</string>
+    <string name="font_scale">字体比例</string>
+    <string name="bei">倍</string>
+    <string name="high_light_set">高亮设置：</string>
+    <string name="key_word_color">关键字颜色</string>
+    <string name="pre_key_word_color">预处理关键字颜色</string>
+    <string name="const_color">常量颜色</string>
+    <string name="identifier_color">标识符颜色</string>
+    <string name="comments_color">注释颜色</string>
+    <string name="other_set">其它设置：</string>
+    <string name="quick_input">快速输入</string>
+    <string name="title_background_color">标题背景颜色</string>
+    <string name="select_title_color">选中标题颜色</string>
+    <string name="restore_defaults">恢复默认</string>
+    <string name="ok">确定</string>
+    <string name="file_browser">文件浏览</string>
+    <string name="no_title">无标题</string>
+    <string name="find">查找</string>
+    <string name="replace">替换</string>
+    <string name="find_replace">替换/查找</string>
+    <string name="replace_all">替换全部</string>
+    
+    <string name="failed_find">查找失败!</string>
+    <string name="failed_replace">替换失败!</string>
+    <string name="failed_find_replace">替换/查找失败!</string>
+    <string name="failed_replace_all">替换全部失败!</string>
+    
+    
+    <string name="compiling">编译中...</string>
+    <string name="compilation_fails">编译失败!</string>
+    <string name="successfully_compiled">编译成功!</string>
+    <string name="no_elf_file">没有可执行文件!</string>
+    
+    <string name="rename_has_succeed">重命名成功!</string>
+    <string name="rename_has_failed">重命名失败!</string>
+    
+    <string name="successfully">成功：</string>
+    <string name="failed">失败：</string>
+    <string name="jni_runner">JNIRunner</string>
+    <string name="create_workspace_failed">创建工作目录失败!</string>
+    <string name="press_back_more_to_exit">再按一次返回键退出!</string>
+    <string name="file_not_save">文件未保存</string>
+    <string name="file">文件</string>
+    <string name="unsaved">未保存!</string>
+    <string name="cancel">取消</string>
+    <string name="save_and_quit">保存并关闭</string>
+    <string name="force_close">强行关闭</string>
+    <string name="c_file_not_found">在工程中没有找到c语言文件!</string>
+    <string name="save_fail">保存失败，您可以尝试强行关闭。</string>
+    <string name="lunch_fail">启动失败!</string>
+    <string name="craete_file_fail">创建文件失败!</string>
+    <string name="create_dir_fail">创建文件夹失败!</string>
+    <string name="fail">失败:</string>
+    <string name="save_failed">保存失败!</string>
+    <string name="file_name">文件名称:</string>
+    <string name="file_path">文件位置:</string>
+    <string name="project_name">项目名称:</string>
+    <string name="src_path">源码位置:</string>
+    <string name="bin_path">生成位置:</string>
+    <string name="project_path">项目位置:</string>
+    <string name="not_project">该文件不属于任何项目!</string>
+    <string name="program_end">程序结束!</string>
+    <string name="loading">加载中...</string>
+    <string name="dirs">目录:</string>
+    <string name="files">文件:</string>
+    <string name="unkonw">未知:</string>
+    <string name="size">大小:</string>
+    <string name="i_know">朕知道了</string>
+    <string name="confirm_delete">确认删除?</string>
+    <string name="delete">删除</string>
+    <string name="success">成功:</string>
+    <string name="file_unreadable">文件或文件夹不可读,尝试获取超级用户权限</string>
+    <string name="exist">已存在:</string>
+    <string name="share">分享</string>
+    <string name="pack_and_run">打包运行</string>
+    <string name="package_and_run">打包运行</string>
+    <string name="failed_to_free_resource">释放资源失败!需要内存卡!</string>
+    <string name="compile_has_error">编译时出现错误，停止打包!</string>
+    <string name="run_shell">运行脚本</string>
+    <string name="run_shell_as_root">运行脚本(root)</string>
+    <string name="zip">zip压缩</string>
+    <string name="package_fail">打包失败!</string>
+    <string name="deal_res_fail">解析资源失败，停止打包!</string>
+    <string name="signed_apk_done">签名成功!</string>
+    <string name="signed_apk_fail">签名失败!</string>
+    <string name="deal_res">解析资源中...</string>
+    <string name="deal_res_done">解析资源完成!</string>
+    <string name="add_files">添加文件...</string>
+    <string name="tip">提示：</string>
+    <string name="file_not_exist">文件不存在!</string>
+    <string name="help">帮助</string>
+    <string name="line_scale">行距比例</string>
+    <string name="show_ad">获取积分</string>
+    <string name="close_ad">关闭广告</string>
+    <string name="debug_run">启动运行...</string>
+    <string name="php_config">配置PHP</string>
+    <string name="remote_browsing">远程浏览</string>
+    <string name="local_browsing">本地浏览</string>
+    <string name="open_with_browser">用浏览器打开</string>
+    <string name="use_nice_font">"使用圆润字体 "</string>
+    <string name="use_high_light">使用高亮</string>
+    <string name="complie_to_s">编译为汇编代码</string>
+    <string name="charset">字符集:</string>
+</resources>
