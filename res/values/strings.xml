@@ -146,4 +146,16 @@
     <string name="input_param">请输入参数</string>
     <string name="run_lua">运行Lua</string>
     <string name="code_format">代码格式化</string>
+    <string name="ip_addr">IP地址</string>
+    <string name="port">端口</string>
+    <string name="connect">连接</string>
+    <string name="send">发送</string>
+    <string name="disconnect">断开</string>
+    <string name="show_as_hex">十六进制显示</string>
+    <string name="show_sender">显示发送者</string>
+    <string name="clear">清空</string>
+    <string name="net_assist">网络调试助手</string>
+    <string name="unsupport_udp">暂不支持UDP</string>
+    <string name="server_isnot_started">服务已关闭!</string>
+    <string name="not_connected">尚未连接!</string>
 </resources>

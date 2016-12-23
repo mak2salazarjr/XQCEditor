@@ -8,6 +8,7 @@ import person.wangchen11.help.Help;
 import person.wangchen11.window.ext.About;
 import person.wangchen11.window.ext.Console;
 import person.wangchen11.window.ext.FileBrowser;
+import person.wangchen11.window.ext.NetAssist;
 import person.wangchen11.window.ext.PHPServerConfig;
 import person.wangchen11.window.ext.Setting;
 import person.wangchen11.xqceditor.R;
@@ -289,6 +290,9 @@ public class WindowsManager implements View.OnClickListener, android.support.v7.
 		case R.string.php_config:
 			addWindow(new PHPServerConfig());
 			break;
+		case R.string.net_assist:
+			addWindow(new NetAssist());
+			break;
 		case R.string.close:
 			closeSelectWindow();
 			break;
@@ -348,6 +352,7 @@ public class WindowsManager implements View.OnClickListener, android.support.v7.
 		menuTags.add(new MenuTag(R.string.console, mContext.getResources().getText(R.string.console)));
 		menuTags.add(new MenuTag(R.string.open, mContext.getResources().getText(R.string.open)));
 		menuTags.add(new MenuTag(R.string.php_config, mContext.getResources().getText(R.string.php_config)));
+		menuTags.add(new MenuTag(R.string.net_assist, mContext.getResources().getText(R.string.net_assist)));
 		menuTags.add(new MenuTag(R.string.setting, mContext.getResources().getText(R.string.setting)));
 		menuTags.add(new MenuTag(R.string.help, mContext.getResources().getText(R.string.help)));
 		menuTags.add(new MenuTag(R.string.about, mContext.getResources().getText(R.string.about)));

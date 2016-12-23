@@ -90,7 +90,7 @@ public class Busybox {
 		cmd+="export PATH=$PATH:"+getWorkDir(context)+"\n";
 		cmd+="cd "+getWorkDir(context)+"\n";
 		cmd+="chmod 777 *\n";
-		cmd+="cd /\n\n";
+		cmd+="cd /\n";
 		return cmd;
 	}
 }

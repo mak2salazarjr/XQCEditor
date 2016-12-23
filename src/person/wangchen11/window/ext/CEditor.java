@@ -11,7 +11,6 @@ import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.support.v4.app.Fragment;
 import android.widget.Toast;
-import person.wangchen11.codeanalysis.ccode.CCodeParser;
 import person.wangchen11.cproject.CProject;
 import person.wangchen11.filebrowser.FileWork;
 import person.wangchen11.gnuccompiler.GNUCCompiler;

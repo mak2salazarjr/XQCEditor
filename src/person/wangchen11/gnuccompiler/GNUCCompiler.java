@@ -208,7 +208,7 @@ public class GNUCCompiler {
 		cmd+="else\n";
 		cmd+="cd \""+getRunablePath(context)+"\"\n";
 		cmd+="rm *.tmp\n";
-		cmd+="cd \""+executeFile.getParent()+"\"\n";
+		cmd+="cd \""+executeFile.getParent()+"\"\n";// TODO
 		String tempPath=getTempFilePath(context);
 		cmd+="mycp \""+executeFile.getPath()+"\" \""+tempPath+"\"\n";
 		cmd+="chmod 777 \""+tempPath+"\"\n";
