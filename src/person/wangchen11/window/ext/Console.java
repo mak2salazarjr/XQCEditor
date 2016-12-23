@@ -1,6 +1,8 @@
 package person.wangchen11.window.ext;
 
 import jackpal.androidterm.TermFragment;
+import jackpal.androidterm.emulatorview.TermSession;
+import jackpal.androidterm.emulatorview.TermSession.FinishCallback;
 
 import java.util.List;
 
@@ -16,7 +18,7 @@ import person.wangchen11.window.WindowsManager;
 import person.wangchen11.window.WindowsManager.WindowsManagerLintener;
 import person.wangchen11.xqceditor.R;
 
-public class Console implements Window, OnConsoleColseListener,WindowsManagerLintener{
+public class Console implements Window, OnConsoleColseListener,WindowsManagerLintener, FinishCallback{
 	static final String TAG="Console";
 	private ConsoleFragment mConsoleFragment;
 	private TermFragment mTermFragment;
@@ -40,6 +42,7 @@ public class Console implements Window, OnConsoleColseListener,WindowsManagerLin
 		if(Setting.mConfig.mOtherConfig.mNewConsoleEnable)
 		{
 			mTermFragment=new TermFragment(initCmd, runAsSu);
+			mTermFragment.setFinishCallback(this);
 		}
 		else
 		{
@@ -121,5 +124,10 @@ public class Console implements Window, OnConsoleColseListener,WindowsManagerLin
 
 	@Override
 	public void onCloseWindow(WindowsManager manager, WindowPointer pointer) {
+	}
+
+	@Override
+	public void onSessionFinish(TermSession session) {
+		mWindowsManager.closeWindow(this);
 	}
 }

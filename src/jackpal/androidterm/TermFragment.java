@@ -9,6 +9,7 @@ import person.wangchen11.xqceditor.R;
 
 import jackpal.androidterm.emulatorview.EmulatorView;
 import jackpal.androidterm.emulatorview.TermSession;
+import jackpal.androidterm.emulatorview.TermSession.FinishCallback;
 import jackpal.androidterm.util.TermSettings;
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -21,7 +22,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 
-public class TermFragment extends Fragment{
+public class TermFragment extends Fragment implements FinishCallback{
 	TermSession mTermSession = null;
 	String mInitCmd="cd /sdcard/\nls\n";
 	public TermFragment() {
@@ -48,7 +49,6 @@ public class TermFragment extends Fragment{
 				fileOutputStream.write(cmd.getBytes());
 				fileOutputStream.close();
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		} catch (FileNotFoundException e) {
@@ -88,6 +88,7 @@ public class TermFragment extends Fragment{
 		RelativeLayout relativeLayout = (RelativeLayout) inflater.inflate(R.layout.fragment_term, null);
 		RelativeLayout workSpaceLayout = (RelativeLayout) relativeLayout.findViewById(R.id.layout_work_space);
 		mTermSession = createTermSession();
+		mTermSession.setFinishCallback(this);
 		workSpaceLayout.addView(createEmulatorView(mTermSession), ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
 		
 		return relativeLayout;
@@ -117,7 +118,20 @@ public class TermFragment extends Fragment{
     
     public void destory()
     {
-    	mTermSession.finish();
+    	if(mTermSession.isRunning())
+    		mTermSession.finish();
     }
 
+	@Override
+	public void onSessionFinish(TermSession session) {
+		if(mFinishCallback!=null)
+			mFinishCallback.onSessionFinish(session);
+	}
+	
+	private TermSession.FinishCallback mFinishCallback = null;
+	public void setFinishCallback(TermSession.FinishCallback callback)
+	{
+		mFinishCallback = callback;
+	}
+	
 }
