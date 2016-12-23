@@ -1,5 +1,8 @@
 package person.wangchen11.window.ext;
 
+import jackpal.androidterm.TermView;
+import jackpal.androidterm.emulatorview.ColorScheme;
+
 import java.util.List;
 
 import cn.waps.UpdatePointsListener;
@@ -431,6 +434,11 @@ public class Setting extends Fragment implements Window, TextWatcher, OnClickLis
 					applySettingConfigToAllView(child);
 				}
 			}
+		}
+		if(view instanceof TermView)
+		{
+			TermView termView = (TermView) view;
+			termView.setColorScheme(new ColorScheme(config.mEditorConfig.mBaseFontColor, 0x00000000));
 		}
 	}
 	
