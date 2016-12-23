@@ -515,6 +515,7 @@ public class Setting extends Fragment implements Window, TextWatcher, OnClickLis
 		public int mSelectTitleColor = Color.rgb(0xbf, 0xff, 0x80) ;
 		public boolean mQuickCloseEnable = true;
 		public int mQuickCloseColor = Color.argb(0xff, 0xff, 0x6f, 0x00);
+		public boolean mNewConsoleEnable = true;
 		public static OtherConfig load(SharedPreferences sharedPreferences){
 			OtherConfig config=new OtherConfig();
 			config.mQuickInput=sharedPreferences.getString("mQuickInput", "\t'\"`$[]{}<>()+-*%=&|!^~,;?:_\\");
@@ -522,6 +523,7 @@ public class Setting extends Fragment implements Window, TextWatcher, OnClickLis
 			config.mSelectTitleColor=sharedPreferences.getInt("mSelectTitleColor",Color.rgb(0xbf, 0xff, 0x80));
 			config.mQuickCloseEnable=sharedPreferences.getBoolean("mQuickCloseEnable",true);
 			config.mQuickCloseColor=sharedPreferences.getInt("mQuickCloseColor",Color.rgb( 0xff, 0x6f, 0x00));
+			config.mNewConsoleEnable=sharedPreferences.getBoolean("mNewConsoleEnable",true);
 			return config;
 		}
 
@@ -531,6 +533,7 @@ public class Setting extends Fragment implements Window, TextWatcher, OnClickLis
 			editor.putInt("mSelectTitleColor", mSelectTitleColor);
 			editor.putBoolean("mQuickCloseEnable", mQuickCloseEnable);
 			editor.putInt("mQuickCloseColor", mQuickCloseColor);
+			editor.putBoolean("mNewConsoleEnable", mNewConsoleEnable);
 		}
 	}
 

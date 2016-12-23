@@ -1,5 +1,7 @@
 package person.wangchen11.window.ext;
 
+import jackpal.androidterm.TermFragment;
+
 import java.util.List;
 
 import android.content.Context;
@@ -17,6 +19,7 @@ import person.wangchen11.xqceditor.R;
 public class Console implements Window, OnConsoleColseListener,WindowsManagerLintener{
 	static final String TAG="Console";
 	private ConsoleFragment mConsoleFragment;
+	private TermFragment mTermFragment;
 	private WindowsManager mWindowsManager;
 	private String mProcessName=null;
 	public Console(WindowsManager windowsManager) {
@@ -33,8 +36,16 @@ public class Console implements Window, OnConsoleColseListener,WindowsManagerLin
 	
 	public Console(WindowsManager windowsManager,String initCmd,boolean needErrorInput,boolean runAsSu) {
 		mWindowsManager=windowsManager;
-		mConsoleFragment=new ConsoleFragment(initCmd,needErrorInput,runAsSu);
-		mConsoleFragment.setConsoleCloseListener(this);
+		
+		if(Setting.mConfig.mOtherConfig.mNewConsoleEnable)
+		{
+			mTermFragment=new TermFragment(initCmd, runAsSu);
+		}
+		else
+		{
+			mConsoleFragment=new ConsoleFragment(initCmd,needErrorInput,runAsSu);
+			mConsoleFragment.setConsoleCloseListener(this);
+		}
 		mWindowsManager.addListener(this);
 	}
 	
@@ -45,7 +56,11 @@ public class Console implements Window, OnConsoleColseListener,WindowsManagerLin
 	
 	@Override
 	public Fragment getFragment() {
-		return mConsoleFragment;
+		if(mConsoleFragment!=null)
+			return mConsoleFragment;
+		if(mTermFragment!=null)
+			return mTermFragment;
+		return null;
 	}
 
 	@Override
@@ -66,8 +81,10 @@ public class Console implements Window, OnConsoleColseListener,WindowsManagerLin
 	@Override
 	public boolean onClose() {
 		mWindowsManager.removeListener(this);
-		mConsoleFragment.closeInputMethod();
-		
+		if(mConsoleFragment!=null)
+			mConsoleFragment.closeInputMethod();
+		if(mTermFragment!=null)
+			mTermFragment.destory();
 		if(mProcessName!=null)
 		{
 			ProcessState state=ProcessState.getProcessByName(mProcessName);
