@@ -40,11 +40,21 @@ public class StringTranslate {
 	
 	public static String[] decodeArray(String string)
 	{
-		return string.replaceAll("##", "#").split("#");
+		String[] strings = string.split("#");
+		for(int i=0;i<strings.length;i++)
+		{
+			strings[i] = decodeString(strings[i]);
+		}
+		return strings;
 	}
 
 	private static String encodeString(String string)
 	{
-		return string.replaceAll("#", "##");
+		return string.replaceAll("%","%25").replaceAll("#", "%23");
+	}
+
+	private static String decodeString(String string)
+	{
+		return string.replaceAll("%23", "#").replaceAll("%25", "%");
 	}
 }
