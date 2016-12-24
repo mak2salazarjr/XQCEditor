@@ -88,6 +88,7 @@ public class Setting extends Fragment implements Window, TextWatcher, OnClickLis
 		((SwitchCompat)(mRelativeLayout.findViewById(R.id.high_light_switch))).setOnCheckedChangeListener(this);
 		((SwitchCompat)(mRelativeLayout.findViewById(R.id.use_nice_font_switch))).setOnCheckedChangeListener(this);
 		((SwitchCompat)(mRelativeLayout.findViewById(R.id.quick_close_window_switch))).setOnCheckedChangeListener(this);
+		((SwitchCompat)(mRelativeLayout.findViewById(R.id.use_new_console_switch))).setOnCheckedChangeListener(this);
 		
 		return mRelativeLayout;
 	}
@@ -208,12 +209,14 @@ public class Setting extends Fragment implements Window, TextWatcher, OnClickLis
 		mConfig.mCEditorConfig.mEnableHighLight=((SwitchCompat)mRelativeLayout.findViewById(R.id.high_light_switch)).isChecked();
 		mConfig.mEditorConfig.mUseNiceFont=((SwitchCompat)mRelativeLayout.findViewById(R.id.use_nice_font_switch)).isChecked();
 		mConfig.mOtherConfig.mQuickCloseEnable=((SwitchCompat)mRelativeLayout.findViewById(R.id.quick_close_window_switch)).isChecked();
+		mConfig.mOtherConfig.mNewConsoleEnable=((SwitchCompat)mRelativeLayout.findViewById(R.id.use_new_console_switch)).isChecked();
 	}
 	
 	public void refSwitchView(){
 		((SwitchCompat)mRelativeLayout.findViewById(R.id.high_light_switch)).setChecked(mConfig.mCEditorConfig.mEnableHighLight);
 		((SwitchCompat)mRelativeLayout.findViewById(R.id.use_nice_font_switch)).setChecked(mConfig.mEditorConfig.mUseNiceFont);
 		((SwitchCompat)mRelativeLayout.findViewById(R.id.quick_close_window_switch)).setChecked(mConfig.mOtherConfig.mQuickCloseEnable);
+		((SwitchCompat)mRelativeLayout.findViewById(R.id.use_new_console_switch)).setChecked(mConfig.mOtherConfig.mNewConsoleEnable);
 	}
 	
 	@Override
