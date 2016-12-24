@@ -10,7 +10,6 @@ import person.wangchen11.xqceditor.R;
 import jackpal.androidterm.emulatorview.EmulatorView;
 import jackpal.androidterm.emulatorview.TermSession;
 import jackpal.androidterm.emulatorview.TermSession.FinishCallback;
-import jackpal.androidterm.emulatorview.compat.KeycodeConstants;
 import jackpal.androidterm.util.TermSettings;
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -18,7 +17,6 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.DisplayMetrics;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -57,7 +55,7 @@ public class TermFragment extends Fragment implements FinishCallback{
 			e.printStackTrace();
 		}
 		file.setExecutable(true, false);
-		ret = file.getAbsolutePath()+"\n";
+		ret = file.getAbsolutePath();
 		return ret;
 	}
 	
