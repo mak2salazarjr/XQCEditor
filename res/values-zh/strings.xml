@@ -138,4 +138,28 @@
     <string name="use_high_light">使用高亮</string>
     <string name="complie_to_s">编译为汇编代码</string>
     <string name="charset">字符集:</string>
+    <string name="clean_objs">清除中间文件</string>
+    <string name="this_file_can_not_run">该文件不可运行</string>
+    <string name="input_param">请输入参数</string>
+    <string name="run_lua">运行Lua</string>
+    <string name="code_format">代码格式化</string>
+    <string name="ip_addr">IP地址</string>
+    <string name="port">端口</string>
+    <string name="connect">连接</string>
+    <string name="send">发送</string>
+    <string name="disconnect">断开</string>
+    <string name="show_as_hex">十六进制显示</string>
+    <string name="show_sender">显示发送者</string>
+    <string name="clear">清空</string>
+    <string name="net_assist">网络调试助手</string>
+    <string name="unsupport_udp">暂不支持UDP</string>
+    <string name="server_isnot_started">服务已关闭!</string>
+    <string name="not_connected">尚未连接!</string>
+    <string-array name="procotol_names">
+        <item >TCP客户端</item>
+        <item >TCP服务器</item>
+        <item >UDP</item>
+    </string-array>
+    <string name="close_button_color">关闭按钮颜色</string>
+    <string name="use_quickly_close">使用快速关闭</string>
 </resources>
