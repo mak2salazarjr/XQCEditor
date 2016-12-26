@@ -87,9 +87,9 @@ public class Aapt {
 		return true;
 	}
 	
-	public static String getLibSoShortPath()
+	public static String getLibSoShortPath(CProject project)
 	{
-		return "lib/armeabi/libNativeActivity.so";
+		return "lib/armeabi/"+project.getPackageSoFile();
 	}
 
 	public static String getElfShortPath()
@@ -99,7 +99,7 @@ public class Aapt {
 
 	public static String getLibSoPath(CProject project)
 	{
-		return project.getBinPath()+"/"+getLibSoShortPath();
+		return project.getBinPath()+"/"+getLibSoShortPath(project);
 	}
 
 	public static String getElfPath(CProject project)
@@ -166,7 +166,7 @@ public class Aapt {
 			cmd+=" \""+getClassesShortPath()+"\" ";
 		}
 		if(project.isGuiProject())
-			cmd+=" \""+getLibSoShortPath()+"\" ";
+			cmd+=" \""+getLibSoShortPath(project)+"\" ";
 		else
 			cmd+=" \""+getElfShortPath()+"\" ";
 		cmd+="\n";

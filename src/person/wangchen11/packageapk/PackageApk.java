@@ -149,12 +149,6 @@ public class PackageApk implements OnClickListener{
 	{
 		return mProject.getBinPath()+"/temp";
 	}
-
-	public String getSoPath()
-	{
-		return getTempPath()+"/lib/armeabi/"+mProject.getPackageSoFile();
-	}
-	
 	
 	public String getDexPathTo()
 	{
