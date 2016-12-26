@@ -417,7 +417,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:gravity="center_horizontal"
-                    android:text="@string/use_quickly_close"/>
+                    android:text="@string/use_new_ver_console"/>
                 <android.support.v7.widget.SwitchCompat
                     android:id="@+id/use_new_console_switch"
                     android:layout_weight="1"

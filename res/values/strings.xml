@@ -165,4 +165,5 @@
     </string-array>
     <string name="close_button_color">close button color</string>
     <string name="use_quickly_close">use quickly close</string>
+    <string name="use_new_ver_console">use new version console</string>
 </resources>

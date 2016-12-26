@@ -162,4 +162,5 @@
     </string-array>
     <string name="close_button_color">关闭按钮颜色</string>
     <string name="use_quickly_close">使用快速关闭</string>
+    <string name="use_new_ver_console">使用新版控制台</string>
 </resources>
