@@ -73,6 +73,7 @@ public class CProject {
 		mSrcName=srcPath;
 		mBinName=binPath;
 		mIsGuiProject=false;
+		mCompileOption="";
 	}
 
 	private CProject(String projectName,String path,String srcPath,String binPath,boolean isGuiProject) {
@@ -81,10 +82,16 @@ public class CProject {
 		mSrcName=srcPath;
 		mBinName=binPath;
 		mIsGuiProject=isGuiProject;
+		mCompileOption="";
 		if(isGuiProject)
 		{
 			mOtherOption=" -ljnigraphics ";
 			mPackageSoFile="libNativeActivity.so";
+			mDebugType = "";
+		}
+		else
+		{
+			mOtherOption="";
 		}
 	}
 	
