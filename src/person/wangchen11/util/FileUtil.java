@@ -59,14 +59,4 @@ public class FileUtil {
 			}
 		}
 	}
-	
-	public static String getEnvPath()
-	{
-		return System.getProperty("PATH");
-	}
-	
-	public static void addToEnvPath(String str)
-	{
-		System.setProperty("PATH", getEnvPath()+":"+str );
-	}
 }
