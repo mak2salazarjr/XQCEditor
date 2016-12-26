@@ -152,7 +152,7 @@ public class PackageApk implements OnClickListener{
 
 	public String getSoPath()
 	{
-		return getTempPath()+"/lib/armeabi/libNativeActivity.so";
+		return getTempPath()+"/lib/armeabi/"+mProject.getPackageSoFile();
 	}
 	
 	

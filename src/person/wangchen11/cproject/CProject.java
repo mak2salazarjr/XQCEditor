@@ -57,6 +57,11 @@ public class CProject {
 		return mIsGuiProject;
 	}
 	
+	public String getPackageSoFile()
+	{
+		return mPackageSoFile;
+	}
+	
 	public String getCompileOption()
 	{
 		return mCompileOption;
