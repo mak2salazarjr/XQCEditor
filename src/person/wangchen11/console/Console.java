@@ -33,6 +33,7 @@ public abstract class Console {
 					//ConsoleName:java.lang.ProcessManager$ProcessInputStream
 					Log.d(TAG, "ConsoleName:"+inputStream.getClass().getName());
 					mOutputStream=getOutputStream();
+					onCreatedProcess();
 					mHandler.post(new Runnable() {
 						@Override
 						public void run() {
@@ -269,6 +270,7 @@ public abstract class Console {
 	}
 
 	public abstract void doProcess();
+	public abstract void onCreatedProcess();
 	public abstract void onDestory();
 	public abstract InputStream getInputStream();
 	public abstract InputStream getErrorStream();

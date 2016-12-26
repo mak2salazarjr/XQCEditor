@@ -6,6 +6,7 @@ import java.io.FileOutputStream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
+import person.wangchen11.util.FileUtil;
 import person.wangchen11.xqceditor.State;
 
 import android.content.Context;
@@ -22,6 +23,7 @@ public class Busybox {
 			new File(getWorkDir(context)).mkdirs();
 			freeZip(context, "busybox.zip", getRunnablePath(context) );
 		}
+		FileUtil.setFileAllChildsExecutable(new File(getWorkDir(context)));
 	}
 	
 	public static boolean freeZip(Context context,String assetsName,String pathTo){

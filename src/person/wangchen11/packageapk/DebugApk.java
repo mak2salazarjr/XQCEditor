@@ -132,7 +132,7 @@ public class DebugApk implements OnClickListener {
 					}
 				});
 			}
-		});
+		},mContext);
 		String cmd="";
 		List<File > files=mProject.getAllCFiles();
 		if(files.size()>0)

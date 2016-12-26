@@ -33,6 +33,40 @@ public class FileUtil {
 			e.printStackTrace();
 		}
 		return "";
-		
+	}
+	
+	public static boolean setFileExecutable(File file)
+	{
+		return file.setExecutable(true, true);
+	}
+	
+	public static void setFileAllChildsExecutable(File file)
+	{
+		if(file.isFile())
+		{
+			setFileExecutable(file);
+			return ;
+		}
+		if(file.isDirectory())
+		{
+			File []files = file.listFiles();
+			if(files!=null)
+			{
+				for(File item : files)
+				{
+					setFileAllChildsExecutable(item);
+				}
+			}
+		}
+	}
+	
+	public static String getEnvPath()
+	{
+		return System.getProperty("PATH");
+	}
+	
+	public static void addToEnvPath(String str)
+	{
+		System.setProperty("PATH", getEnvPath()+":"+str );
 	}
 }

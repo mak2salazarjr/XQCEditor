@@ -24,8 +24,8 @@ public class ConsoleInputConnection extends MyInputConnection implements Console
 	
 	public ConsoleInputConnection(View view) {
 		super(view);
-		mConsole=new Terminal(view.getHandler(),this);
-		mConsole.execute(getExportPathCmd(view.getContext()));
+		mConsole=new Terminal(view.getHandler(),this,view.getContext());
+		//mConsole.execute(getExportPathCmd(view.getContext()));
 	}
 	
 	public static String getExportPathCmd(Context context)

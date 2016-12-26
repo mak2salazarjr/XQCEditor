@@ -5,6 +5,8 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
+import person.wangchen11.busybox.Busybox;
+import person.wangchen11.gnuccompiler.GNUCCompiler;
 import person.wangchen11.xqceditor.R;
 
 import jackpal.androidterm.emulatorview.EmulatorView;
@@ -108,6 +110,11 @@ public class TermFragment extends Fragment implements FinishCallback{
     private TermSession createTermSession() {
     	TermSettings settings = new TermSettings(getResources(), getActivity().getPreferences(0));
     	mTermSettings = settings;
+    	mTermSettings.setAppendPath(Busybox.getWorkDir(getActivity())+":"
+    			+GNUCCompiler.getCcPath(getActivity())+":"
+    			+GNUCCompiler.getAbiPath(getActivity())+":"
+    			+GNUCCompiler.getGccPath(getActivity())
+    			);
     	TermSession session = createTermSession(getActivity(), settings, getInitCmdEx(mInitCmd) );
         return session;
     }

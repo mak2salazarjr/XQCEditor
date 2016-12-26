@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
-import person.wangchen11.busybox.Busybox;
+import person.wangchen11.util.FileUtil;
 import person.wangchen11.xqceditor.R;
 import person.wangchen11.xqceditor.State;
 
@@ -43,6 +43,9 @@ public class GNUCCompiler {
 				{
 					freeZip(context, "g++ include.zip", getSystemDir() );
 				}
+				FileUtil.setFileAllChildsExecutable(new File(getGccPath(context)));
+				FileUtil.setFileAllChildsExecutable(new File(getCcPath(context)));
+				FileUtil.setFileAllChildsExecutable(new File(getAbiPath(context)));
 				State.save(context);
 			}
 		}).start();
@@ -159,6 +162,7 @@ public class GNUCCompiler {
 	public static String getCompilerCmd(Context context,List <File> files,File outFile,String otherOption){
 		outFile.getParentFile().mkdirs();
 		String cmd="";
+		/*
 		cmd+="cd \""+getGccPath(context)+"\"\n";
 		cmd+="chmod 777 *\n";
 		cmd+="cd \""+getCcPath(context)+"\"\n";
@@ -171,7 +175,9 @@ public class GNUCCompiler {
 		cmd+="export PATH=$PATH:"+getGccPath(context)+"\n";
 		cmd+="export PATH=$PATH:"+getCcPath(context)+"\n";
 		cmd+="export PATH=$PATH:"+getAbiPath(context)+"\n";
+		*/
 		cmd+="echo \""+context.getText(R.string.compiling)+"\"\n";
+		cmd+="cd \""+outFile.getParent()+"\"\n";
 		cmd+="gcc ";
 		cmd+=getFilesString(files)+" ";
 		cmd+=getNeedOption();
@@ -201,7 +207,7 @@ public class GNUCCompiler {
 			e.printStackTrace();
 		}
 		String cmd="";
-		cmd+=Busybox.getCmd(context);
+		//cmd+=Busybox.getCmd(context);
 		executeFile=new File(executeFile.getPath());
 		cmd+="if [ ! -f \""+executeFile.getPath()+"\" ]; then \n";
 		cmd+="echo \""+context.getText(R.string.no_elf_file)+"\"\n";

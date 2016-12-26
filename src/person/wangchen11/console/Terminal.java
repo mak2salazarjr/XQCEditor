@@ -3,13 +3,20 @@ package person.wangchen11.console;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+
+import person.wangchen11.busybox.Busybox;
+import person.wangchen11.gnuccompiler.GNUCCompiler;
+
+import android.content.Context;
 import android.os.Handler;
 import android.util.Log;
 
 public class Terminal extends Console{
 	private Process mProcess;
-	public Terminal(Handler handler, ConsoleCallback callback) {
+	private Context mContext;
+	public Terminal(Handler handler, ConsoleCallback callback,Context context) {
 		super(handler, callback);
+		mContext = context;
 	}
 
 	@Override
@@ -26,7 +33,6 @@ public class Terminal extends Console{
 
 	@Override
 	public OutputStream getOutputStream() {
-		//createProcessIfNeed();
 		return mProcess.getOutputStream();
 	}
 	
@@ -68,5 +74,14 @@ public class Terminal extends Console{
 			mProcess=null;
 			mIsAlive=false;
 		}
+	}
+
+	@Override
+	public void onCreatedProcess() {
+		String appendEnvPath = Busybox.getWorkDir(mContext)+":"
+				+GNUCCompiler.getAbiPath(mContext)+":"
+				+GNUCCompiler.getGccPath(mContext)+":"
+				+GNUCCompiler.getCcPath(mContext)+":";
+		execute("export PATH=$PATH:"+appendEnvPath+"\n");
 	}
 }

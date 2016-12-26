@@ -111,7 +111,7 @@ public class PackageApk implements OnClickListener{
 					}
 				});
 			}
-		});
+		},mContext);
 		String cmd="";
 		List<File > files=mProject.getAllCFiles();
 		if(files.size()>0)
@@ -260,7 +260,7 @@ public class PackageApk implements OnClickListener{
 					public void onConsoleClosed(Console console) {
 						onAaptComplete();
 					}
-				});
+				},mContext);
 				String cmd=Aapt.getPackageApkCmd(mContext, mProject);
 				new File(mProject.getResZipPath()).delete();
 				mTerminal.execute(cmd+"\nexit\n");

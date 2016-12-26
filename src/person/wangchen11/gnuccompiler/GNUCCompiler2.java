@@ -168,7 +168,7 @@ public class GNUCCompiler2 {
 		String otherOption = project.getOtherOption();
 		StringBuilder cmdBuilder = new StringBuilder();
 		cmdBuilder.append("cd \""+project.getProjectPath()+"\"\n");
-		cmdBuilder.append(getExportEnvPathCmd(context));
+		//cmdBuilder.append(getExportEnvPathCmd(context));
 		try {
 			cmdBuilder.append(getCompilerToObjCmd(project.getAllCFiles(), objPath, srcPath));
 		} catch (Exception e) {
