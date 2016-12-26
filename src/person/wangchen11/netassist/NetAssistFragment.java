@@ -45,12 +45,6 @@ public class NetAssistFragment extends Fragment implements OnClickListener, OnIt
 	private EditText mMsgEditText = null;
 	private ScrollView mMsgScrollView = null;
 	
-	private static final String mProcotolNames[]=new String[]{
-		"TCP客户端",
-		"TCP服务器",
-		"UDP",
-	};
-	
 	@SuppressLint("InflateParams")
 	@Override
 	@Nullable
@@ -58,7 +52,9 @@ public class NetAssistFragment extends Fragment implements OnClickListener, OnIt
 			@Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 		RelativeLayout relativeLayout = (RelativeLayout) inflater.inflate(R.layout.fragment_net_assist,null);
 		mProcTypeSpinner = (Spinner) relativeLayout.findViewById(R.id.spinner_proc_type);
-		ArrayAdapter<String> adapter =  new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_dropdown_item, mProcotolNames);
+
+		String procotolNames[]=getResources().getStringArray(R.array.procotol_names);
+		ArrayAdapter<String> adapter =  new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_dropdown_item, procotolNames);
 		mProcTypeSpinner.setOnItemSelectedListener(this);
 		mProcTypeSpinner.setAdapter(adapter);
 		mAddrEditText = (AutoCompleteTextView) relativeLayout.findViewById(R.id.edit_text_addr);
@@ -80,7 +76,7 @@ public class NetAssistFragment extends Fragment implements OnClickListener, OnIt
 		setAutoText();
 		return relativeLayout;
 	}
-
+	
 	public void destory()
 	{
 		stopTCPClient();

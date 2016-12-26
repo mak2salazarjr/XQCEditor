@@ -158,4 +158,11 @@
     <string name="unsupport_udp">暂不支持UDP</string>
     <string name="server_isnot_started">服务已关闭!</string>
     <string name="not_connected">尚未连接!</string>
+    <string-array name="procotol_names">
+        <item >TCP客户端</item>
+        <item >TCP服务器</item>
+        <item >UDP</item>
+    </string-array>
+        <string name="close_button_color">关闭按钮颜色</string>
+        <string name="use_quickly_close">使用快速关闭</string>
 </resources>
