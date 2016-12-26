@@ -27,6 +27,9 @@ public class CProject {
 	private String mPath;		//绝对路径  
 	private String mSrcName;	//相对路径  
 	private String mBinName;	//相对路径  
+	private String mCompileOption;	
+	private String mPackageSoFile;	
+	private String mDebugType;	
 	private boolean mIsGuiProject = false;	//是否为图形界面的项目
 	private String mOtherOption = "";	//其它编译选项
 	
@@ -54,6 +57,16 @@ public class CProject {
 		return mIsGuiProject;
 	}
 	
+	public String getCompileOption()
+	{
+		return mCompileOption;
+	}
+	
+	public String getDebugType()
+	{
+		return mDebugType;
+	}
+	
 	private CProject(String projectName,String path,String srcPath,String binPath) {
 		mProjectName=projectName;
 		mPath=path;
@@ -71,6 +84,7 @@ public class CProject {
 		if(isGuiProject)
 		{
 			mOtherOption=" -ljnigraphics ";
+			mPackageSoFile="libNativeActivity.so";
 		}
 	}
 	
@@ -201,10 +215,28 @@ public class CProject {
 					xmlSerializer.endTag(null, "other_option");
 					xmlSerializer.text("\n");
 					
+					xmlSerializer.startTag(null, "complie_option");
+					xmlSerializer.text(mCompileOption);
+					xmlSerializer.endTag(null, "complie_option");
+					xmlSerializer.text("\n");
+					
 					xmlSerializer.startTag(null, "is_gui_project");
 					xmlSerializer.text( String.valueOf(mIsGuiProject) );
 					xmlSerializer.endTag(null, "is_gui_project");
 					xmlSerializer.text("\n");
+					
+					if(mIsGuiProject)
+					{
+						xmlSerializer.startTag(null, "package_so_file");
+						xmlSerializer.text( mPackageSoFile );
+						xmlSerializer.endTag(null, "package_so_file");
+						xmlSerializer.text("\n");
+						
+						xmlSerializer.startTag(null, "debug_type");
+						xmlSerializer.text( mDebugType );
+						xmlSerializer.endTag(null, "debug_type");
+						xmlSerializer.text("\n");
+					}
 					
 					xmlSerializer.endDocument();  
 
@@ -267,7 +299,16 @@ public class CProject {
 			                    	temp.mIsGuiProject=true;
 			                    else
 			                    	temp.mIsGuiProject=false;
-			                }
+			                } else if (parser.getName().equals("package_so_file")) {  
+			                    eventType = parser.next();  
+								temp.mPackageSoFile=parser.getText();
+			                }  else if (parser.getName().equals("complie_option")) {  
+			                    eventType = parser.next();  
+								temp.mCompileOption=parser.getText();
+			                }   else if (parser.getName().equals("debug_type")) {  
+			                    eventType = parser.next();  
+								temp.mDebugType=parser.getText();
+			                } 
 			                break;  
 			            case XmlPullParser.END_TAG:  
 			                break; 

@@ -27,7 +27,7 @@ public class GNUCCodeCheck {
 			e.printStackTrace();
 		}
 		tempFile.deleteOnExit();
-		mCmd+=GNUCCompiler2.getCompilerOnlyCmd(file,tempFile);
+		mCmd+=GNUCCompiler2.getCompilerOnlyCmd(file,tempFile,null);
 		mCmd+="\nexit\n";
 	}
 	

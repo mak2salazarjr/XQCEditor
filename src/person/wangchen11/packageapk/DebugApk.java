@@ -161,7 +161,7 @@ public class DebugApk implements OnClickListener {
 				addTextLn("");
 				addTextLn( mContext.getString(R.string.debug_run) );
 				try {
-					runSo(mProject.getSoFilePath(), mProject.getAssetsPath(),mRequestVersion);
+					runSo(mProject.getSoFilePath(), mProject.getAssetsPath(),mRequestVersion,mProject.getDebugType());
 				} catch (Exception e) {
 					e.printStackTrace();
 				} catch (Error e) {
@@ -199,7 +199,7 @@ public class DebugApk implements OnClickListener {
 		am.killBackgroundProcesses(mGUIRunnerPackage);//it is do not work!!!
 	}
 	
-	private void runSo(final String soPath,final String assetsPath,final String requestVersion)
+	private void runSo(final String soPath,final String assetsPath,final String requestVersion,String debugType)
 	{
 		killGUIRunner();
 		/*
@@ -228,6 +228,7 @@ public class DebugApk implements OnClickListener {
 		intent.putExtra("soPath", soPath);
 		intent.putExtra("assetsPath", assetsPath);
 		intent.putExtra("requestVersion", requestVersion);
+		intent.putExtra("debugType", debugType!=null?debugType:"");
 		intent.addFlags(
 				Intent.FLAG_ACTIVITY_NEW_TASK
 				);

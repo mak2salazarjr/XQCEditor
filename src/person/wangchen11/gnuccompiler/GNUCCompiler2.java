@@ -106,18 +106,20 @@ public class GNUCCompiler2 {
 		return retFiles;
 	}
 	
-	public static String getCompilerOnlyCmd(File file,File objFile)
+	
+	public static String getCompilerOnlyCmd(File file,File objFile,String compileOption)
 	{
 		String cmd = ""
 				+"gcc -c "
 				+" \""+file.getAbsolutePath()+"\" "
 				+" -o \""+objFile.getAbsolutePath()+"\" "
 				+getNeedOption()
+				+" "+(compileOption!=null?compileOption:"")
 				+"\n";
 		return cmd;
 	}
 	
-	private static String getCompilerToObjCmd(List <File> files,File objPath,File srcPath) throws Exception
+	private static String getCompilerToObjCmd(List <File> files,File objPath,File srcPath,String compileOption) throws Exception
 	{
 		StringBuilder cmdBuilder = new StringBuilder();
 		cmdBuilder.append("compiler_to_obj_success=1\n");
@@ -143,6 +145,7 @@ public class GNUCCompiler2 {
 						+" \""+file.getAbsolutePath()+"\" "
 						+" -o \""+objFile.getAbsolutePath()+"\" "
 						+getNeedOption()
+						+" "+(compileOption!=null?compileOption:"")
 						+"\n"
 						+"if [ ! -f \""+objFile.getPath()+"\" ]; then \n"
 				      	+"compiler_to_obj_success=0\n"
@@ -170,7 +173,7 @@ public class GNUCCompiler2 {
 		cmdBuilder.append("cd \""+project.getProjectPath()+"\"\n");
 		//cmdBuilder.append(getExportEnvPathCmd(context));
 		try {
-			cmdBuilder.append(getCompilerToObjCmd(project.getAllCFiles(), objPath, srcPath));
+			cmdBuilder.append(getCompilerToObjCmd(project.getAllCFiles(), objPath, srcPath,project.getCompileOption()));
 		} catch (Exception e) {
 			e.printStackTrace();
 			return "echo \"Exception:"+e.getMessage()+"\"\n";
