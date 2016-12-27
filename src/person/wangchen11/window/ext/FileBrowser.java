@@ -20,6 +20,7 @@ import person.wangchen11.cproject.CProject;
 import person.wangchen11.filebrowser.FileBowserFragment;
 import person.wangchen11.filebrowser.OnOpenListener;
 import person.wangchen11.gnuccompiler.GNUCCompiler;
+import person.wangchen11.util.FileUtil;
 import person.wangchen11.window.MenuTag;
 import person.wangchen11.window.Window;
 import person.wangchen11.window.WindowsManager;
@@ -189,7 +190,9 @@ public class FileBrowser implements Window,OnOpenListener, OnClickListener{
 	
 	private AlertDialog mNewProjectDialog=null;
 	private EditText mNewProjectEditText=null;
-	private RadioButton mRadioButton =null;
+	private RadioButton mRadioConsole =null;
+	private RadioButton mRadioWindow =null;
+	private RadioButton mRadioSdl =null;
 
 	private AlertDialog mZipDialog=null;
 	private EditText mZipEditText=null;
@@ -212,7 +215,9 @@ public class FileBrowser implements Window,OnOpenListener, OnClickListener{
 				ViewGroup viewGroup = (ViewGroup) inflater.inflate(R.layout.dialog_new_project, null);
 				Builder builder=new AlertDialog.Builder(mWindowsManager.getContext());
 				mNewProjectEditText = (EditText) viewGroup.findViewById(R.id.edit_project_name);
-				mRadioButton = (RadioButton) viewGroup.findViewById(R.id.radio_console);
+				mRadioConsole = (RadioButton) viewGroup.findViewById(R.id.radio_console);
+				mRadioWindow = (RadioButton) viewGroup.findViewById(R.id.radio_window);
+				mRadioSdl = (RadioButton) viewGroup.findViewById(R.id.radio_sdl);
 				builder.setView(viewGroup);
 				builder.setNegativeButton(android.R.string.cancel, this);
 				builder.setPositiveButton(android.R.string.ok, this);
@@ -267,12 +272,29 @@ public class FileBrowser implements Window,OnOpenListener, OnClickListener{
 		case DialogInterface.BUTTON_POSITIVE:
 			if(dialog==mNewProjectDialog)
 			{
-				CProject cProject=CProject.newProject(mNewProjectEditText.getText().toString(), mFileBowserFragment.getPath()+File.separatorChar+mNewProjectEditText.getText(), "src", "bin",mRadioButton.isChecked() ? false : true);
-				try {
-					cProject.createProject( mWindowsManager.getContext() );
-				} catch (Exception e) {
-					Toast.makeText(mWindowsManager.getContext(), mWindowsManager.getContext().getText( R.string.fail )+e.getMessage(), Toast.LENGTH_SHORT).show();
-					e.printStackTrace();
+				if(mRadioSdl.isChecked())
+				{
+					File file = new File(mFileBowserFragment.getPath()+"/"+mNewProjectEditText.getText());
+					if(file.exists())
+					{
+						Toast.makeText(mWindowsManager.getContext(), "failed to create project:project is exists!",Toast.LENGTH_SHORT).show();
+					}
+					else
+					{
+						file.mkdirs();
+						GNUCCompiler.freeZip(mWindowsManager.getContext(), "sdl project.zip", file.getAbsolutePath());
+					}
+					
+				}
+				else
+				{
+					CProject cProject=CProject.newProject(mNewProjectEditText.getText().toString(), mFileBowserFragment.getPath()+File.separatorChar+mNewProjectEditText.getText(), "src", "bin",mRadioConsole.isChecked() ? false : true);
+					try {
+						cProject.createProject( mWindowsManager.getContext() );
+					} catch (Exception e) {
+						Toast.makeText(mWindowsManager.getContext(), mWindowsManager.getContext().getText( R.string.fail )+e.getMessage(), Toast.LENGTH_SHORT).show();
+						e.printStackTrace();
+					}
 				}
 				mFileBowserFragment.refresh();
 			}
