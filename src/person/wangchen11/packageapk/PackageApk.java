@@ -305,7 +305,8 @@ public class PackageApk implements OnClickListener{
 			addTextLn(mContext.getString(R.string.signed_apk_done));
 			Open.openFile(mContext, new File(getSignedApkPath()));
 			mIsAlive=false;
-			mAlertDialog.cancel();
+			//mAlertDialog.cancel();
+			mAlertDialog.setCancelable(true);
 		}
 		else
 		{

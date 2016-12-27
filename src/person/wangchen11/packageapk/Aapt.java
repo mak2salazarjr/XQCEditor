@@ -170,7 +170,22 @@ public class Aapt {
 		else
 			cmd+=" \""+getElfShortPath()+"\" ";
 		cmd+="\n";
-		cmd+="sleep 1\n";
+		
+		File libsDir= new File(project.getProjectPath()+"/lib/armeabi/");
+		File libs[] = libsDir.listFiles();
+		
+		if(libs!=null&&libs.length>0)
+		{
+			cmd+="echo \"add other libs...\"\n";
+			cmd+="cd \""+project.getProjectPath()+"\"\n";
+			cmd+="aapt add \""+project.getResZipPath()+"\"";
+			for(int i=0;i<libs.length;i++)
+			{
+				cmd+=" \"lib/armeabi/"+libs[i].getName()+"\" ";
+			}
+		}
+		cmd+="\n";
+		cmd+="sleep 2\n";
 		return cmd;
 	}
 

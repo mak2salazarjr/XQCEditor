@@ -79,6 +79,9 @@ public class CProject {
 		mBinName=binPath;
 		mIsGuiProject=false;
 		mCompileOption="";
+		mPackageSoFile="libNativeActivity.so";
+		mOtherOption="";
+		mDebugType = "";
 	}
 
 	private CProject(String projectName,String path,String srcPath,String binPath,boolean isGuiProject) {
