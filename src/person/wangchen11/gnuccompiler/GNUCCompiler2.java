@@ -188,6 +188,7 @@ public class GNUCCompiler2 {
 			e.printStackTrace();
 			return "echo \"Exception:"+e.getMessage()+"\"\n";
 		}
+		cmdBuilder.append(" \""+GNUCCompiler.getFixCppObj(context)+"\" ");
 		cmdBuilder.append(getNeedOption());
 		cmdBuilder.append(" -o \""+outFile.getAbsolutePath()+"\" ");
 		if(toSo)

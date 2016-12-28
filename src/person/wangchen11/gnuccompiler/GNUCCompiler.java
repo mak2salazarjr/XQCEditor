@@ -2,8 +2,11 @@ package person.wangchen11.gnuccompiler;
 
 import java.io.BufferedOutputStream;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -27,6 +30,7 @@ public class GNUCCompiler {
 		if( State.isUpdated() || !new File(getWorkSpaceDir()).isDirectory() )
 		{
 			freeZip(context, "workspace.zip", getSystemDir() );
+			
 		}
 		new Thread(new Runnable() {
 			@Override
@@ -43,6 +47,12 @@ public class GNUCCompiler {
 				{
 					freeZip(context, "g++ include.zip", getSystemDir() );
 				}
+				
+				if( State.isUpdated() || !new File(getFixCppObj(context)).isFile() )
+				{
+					freeFile(context, "fix.cpp.o", getFixCppObj(context));
+				}
+				
 				FileUtil.setFileAllChildsExecutable(new File(getGccPath(context)));
 				FileUtil.setFileAllChildsExecutable(new File(getCcPath(context)));
 				FileUtil.setFileAllChildsExecutable(new File(getAbiPath(context)));
@@ -101,6 +111,34 @@ public class GNUCCompiler {
 		return true;
 	}
 
+	public static boolean freeFile(Context context,String assetsName,String fileTo)
+	{
+		try {
+			OutputStream outputStream=new FileOutputStream(new File(fileTo));
+			try {
+				InputStream inputStream=context.getAssets().open(assetsName);
+				byte data[] = new byte[4096];
+				int readLen=0;
+				while( ( readLen=inputStream.read(data))>0 )
+				{
+					outputStream.write(data,0,readLen);
+				}
+				inputStream.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			try {
+				outputStream.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+			return false;
+		}
+		return true;
+	}
+	
 	public static String getGccPath(Context context){
 		return getRunablePath(context)+"/gcc/arm-linux-androideabi/bin/";
 	}
@@ -111,6 +149,11 @@ public class GNUCCompiler {
 
 	public static String getAbiPath(Context context){
 		return getRunablePath(context)+"/gcc/bin/";
+	}
+	
+	public static String getFixCppObj(Context context)
+	{
+		return getRunablePath(context)+"/fix.cpp.o";
 	}
 	
 	public static String getRunablePath(Context context){
@@ -180,6 +223,7 @@ public class GNUCCompiler {
 		cmd+="cd \""+outFile.getParent()+"\"\n";
 		cmd+="gcc ";
 		cmd+=getFilesString(files)+" ";
+		cmd+=" \""+getFixCppObj(context)+"\" ";
 		cmd+=getNeedOption();
 		cmd+=" -o \""+outFile.getPath()+"\" ";
 		cmd+="-Wall ";
