@@ -148,10 +148,14 @@ public class CEditor implements Window, EditorFregment.ChangeFlagChanged, OnClic
 				CProject cProject=CProject.findCProjectByFile(mCEditorFregment.getFile());
 				if(cProject!=null)
 				{
-					//if(!cProject.isGuiProject())
+					if(cProject.isGuiProject()&&(cProject.getDebugType()!=null&&cProject.getDebugType().length()>0))
+					{
+					}
+					else
 					{
 						menuTags.add(new MenuTag(R.string.build_and_run,mCEditorFregment.getActivity().getResources().getText(R.string.build_and_run) ));
 					}
+					
 					menuTags.add(new MenuTag( R.string.pack_and_run, mCEditorFregment.getActivity().getResources().getText(R.string.pack_and_run) ));
 				}
 				else
@@ -438,7 +442,12 @@ public class CEditor implements Window, EditorFregment.ChangeFlagChanged, OnClic
 				CProject cProject=CProject.findCProjectByFile(mCEditorFregment.getFile());
 				if(cProject!=null)
 				{
-					this.onMenuItemClick(R.string.build_and_run);
+					if(cProject.isGuiProject()&&(cProject.getDebugType()!=null&&cProject.getDebugType().length()>0))
+					{
+						this.onMenuItemClick(R.string.pack_and_run);
+					}
+					else
+						this.onMenuItemClick(R.string.build_and_run);
 					return true;
 				}
 				else

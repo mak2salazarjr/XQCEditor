@@ -20,7 +20,6 @@ import person.wangchen11.cproject.CProject;
 import person.wangchen11.filebrowser.FileBowserFragment;
 import person.wangchen11.filebrowser.OnOpenListener;
 import person.wangchen11.gnuccompiler.GNUCCompiler;
-import person.wangchen11.util.FileUtil;
 import person.wangchen11.window.MenuTag;
 import person.wangchen11.window.Window;
 import person.wangchen11.window.WindowsManager;

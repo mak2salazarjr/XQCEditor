@@ -69,6 +69,7 @@ public class CProject {
 	
 	public String getDebugType()
 	{
+		Log.i(TAG,"mDebugType:"+  mDebugType);
 		return mDebugType;
 	}
 	
