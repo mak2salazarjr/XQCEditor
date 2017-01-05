@@ -289,13 +289,15 @@ public class CCodeParser implements Runnable{
 		{
 			for( File tf : incFiles )
 			{
-				String name = pro+tf.getName();
+				String name = tf.getName();
+				Log.i(TAG, "name:"+name.toLowerCase());
+				Log.i(TAG, "end:"+end.toLowerCase());
 				if(name.toLowerCase().startsWith(end.toLowerCase()))
 				{
 					if(tf.isDirectory())
-						linkedList.add(name+'/');
+						linkedList.add(pro+name+'/');
 					else
-						linkedList.add(name);
+						linkedList.add(pro+name);
 				}
 			}
 		}
@@ -331,13 +333,13 @@ public class CCodeParser implements Runnable{
 		{
 			for( File tf : sysIncFiles )
 			{
-				String name = pro+tf.getName();
+				String name = tf.getName();
 				if(name.toLowerCase().startsWith(end.toLowerCase()))
 				{
 					if(tf.isDirectory())
-						linkedList.add(name+'/');
+						linkedList.add(pro+name+'/');
 					else
-						linkedList.add(name);
+						linkedList.add(pro+name);
 				}
 			}
 		}
