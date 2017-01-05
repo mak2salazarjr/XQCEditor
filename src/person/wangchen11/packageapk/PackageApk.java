@@ -1,9 +1,14 @@
 package person.wangchen11.packageapk;
 
 import java.io.BufferedOutputStream;
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -22,6 +27,8 @@ import android.app.AlertDialog.Builder;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
+import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.util.Log;
@@ -321,4 +328,57 @@ public class PackageApk implements OnClickListener{
 		}
 		return true;
 	}
+
+	protected void installApkSilently(Context context, File file){
+		Uri apkUri = Uri.fromFile(file);
+		PackageManager packageManager = context.getPackageManager();
+		
+		//packageManager.
+	}
+	
+	
+	/*
+	public boolean installApk(File file) throws Exception
+	{
+		String result = readConsole("pm install -r \""+file.getAbsolutePath()+"\"\n",true,true);
+		String []lines = result.split("\n");
+		if(lines!=null&&lines.length>0)
+		{
+			if(lines[lines.length-1].contains("success")||lines[lines.length-1].contains("Success") );
+				return true;
+		}
+		throw new Exception(""+result);
+	}
+	
+	public static String readConsole(String cmd,Boolean runAsRoot, Boolean isPrettify) {
+		StringBuffer cmdout = new StringBuffer();
+		Process process = null;
+		try {
+			if(runAsRoot)
+				process = Runtime.getRuntime().exec("su");
+			else
+				process = Runtime.getRuntime().exec("sh");
+			OutputStream outputStream = process.getOutputStream();
+			outputStream.write(cmd.getBytes());
+			outputStream.write("\nexit\n".getBytes());
+			InputStream fis = process.getInputStream();
+			BufferedReader br = new BufferedReader(new InputStreamReader(fis));
+			String line = null;
+			if (isPrettify == null || isPrettify) {
+				while ((line = br.readLine()) != null) {
+					cmdout.append(line).append("\n");
+				}
+			} else {
+				while ((line = br.readLine()) != null) {
+					cmdout.append(line).append(
+					System.getProperty("line.separator"));
+				}
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		} finally {
+			process.destroy();
+		}
+		return cmdout.toString().trim();
+	}*/
 }
