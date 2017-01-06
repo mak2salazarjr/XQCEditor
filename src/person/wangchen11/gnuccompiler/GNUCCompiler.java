@@ -203,6 +203,7 @@ public class GNUCCompiler {
 	}
 	
 	public static String getCompilerCmd(Context context,List <File> files,File outFile,String otherOption){
+		outFile.delete();
 		outFile.getParentFile().mkdirs();
 		String cmd="";
 		/*
