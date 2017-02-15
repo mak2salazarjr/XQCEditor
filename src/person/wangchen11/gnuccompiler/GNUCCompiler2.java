@@ -192,9 +192,9 @@ public class GNUCCompiler2 {
 		cmdBuilder.append(getNeedOption());
 		cmdBuilder.append(" -o \""+outFile.getAbsolutePath()+"\" ");
 		if(toSo)
-			cmdBuilder.append("  -shared ");
+			cmdBuilder.append(" -llog -landroid -shared ");
 		else
-		//	cmdBuilder.append(" -static ");
+			cmdBuilder.append(" -static ");
 		cmdBuilder.append(" "+ (otherOption!=null?otherOption:""));
 		cmdBuilder.append("\n");
 

@@ -246,7 +246,7 @@ public class GNUCCompiler {
 	
 	public static String getRunCmd(Context context,File executeFile,String otherOption){
 		try {
-			//√à√Érm¬≤¬ª¬±¬®¬æ¬Ø¬∏√¶ 
+			//»√rm≤ª±®æØ∏Ê 
 			new File(getRunablePath(context)+"asddsatemp.tmp").createNewFile();
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -283,7 +283,7 @@ public class GNUCCompiler {
 	public static String getProjectCompilerCmd(Context context,List <File> files,File outFile,@Nullable String otherOption){
 		String cmd="";
 		File elfFile=new File(outFile.getPath());
-		cmd=getCompilerCmd(context,files,elfFile," "+(otherOption!=null?otherOption:""));
+		cmd=getCompilerCmd(context,files,elfFile,"  -static "+(otherOption!=null?otherOption:""));
 		return cmd;
 	}
 
@@ -318,11 +318,11 @@ public class GNUCCompiler {
 		String cmd="";
 		File elfFile=new File(file.getPath()+".so");
 		// -fuse-ld=bfd 
-	/*	cmd=getCompilerCmd(context,files,elfFile," -llog -landroid -lEGL -shared "+(otherOption!=null?otherOption:""));
-*/		
-/**** androids7‰øÆÊîπÔºå‰ΩøÂæóÂèØ‰ª•ÁºñËØëjni
-cmd=getCompilerCmd(context,files,elfFile,"  -shared "+(otherOption!=null?otherOption:""))
-return cmd;
+		/*	cmd=getCompilerCmd(context,files,elfFile," -llog -landroid -lEGL -shared "+(otherOption!=null?otherOption:""));
+		 */		
+		/**** by androids7 **/
+		cmd=getCompilerCmd(context,files,elfFile," -llog -landroid -shared "+(otherOption!=null?otherOption:""));
+		return cmd;
 	}
 	
 	public static String getCompilerSCmd(Context context,File file,File fileTo,@Nullable String otherOption)
