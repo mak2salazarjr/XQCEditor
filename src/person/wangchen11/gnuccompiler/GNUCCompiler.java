@@ -283,7 +283,7 @@ public class GNUCCompiler {
 	public static String getProjectCompilerCmd(Context context,List <File> files,File outFile,@Nullable String otherOption){
 		String cmd="";
 		File elfFile=new File(outFile.getPath());
-		cmd=getCompilerCmd(context,files,elfFile," -static "+(otherOption!=null?otherOption:""));
+		cmd=getCompilerCmd(context,files,elfFile," "+(otherOption!=null?otherOption:""));
 		return cmd;
 	}
 
