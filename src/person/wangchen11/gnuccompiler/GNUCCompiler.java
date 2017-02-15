@@ -246,7 +246,7 @@ public class GNUCCompiler {
 	
 	public static String getRunCmd(Context context,File executeFile,String otherOption){
 		try {
-			//ÈÃrm²»±¨¾¯¸æ 
+			//ÃˆÃƒrmÂ²Â»Â±Â¨Â¾Â¯Â¸Ã¦ 
 			new File(getRunablePath(context)+"asddsatemp.tmp").createNewFile();
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -318,8 +318,11 @@ public class GNUCCompiler {
 		String cmd="";
 		File elfFile=new File(file.getPath()+".so");
 		// -fuse-ld=bfd 
-		cmd=getCompilerCmd(context,files,elfFile," -llog -landroid -lEGL -shared "+(otherOption!=null?otherOption:""));
-		return cmd;
+	/*	cmd=getCompilerCmd(context,files,elfFile," -llog -landroid -lEGL -shared "+(otherOption!=null?otherOption:""));
+*/		
+/**** androids7ä¿®æ”¹ï¼Œä½¿å¾—å¯ä»¥ç¼–è¯‘jni
+cmd=getCompilerCmd(context,files,elfFile,"  -shared "+(otherOption!=null?otherOption:""))
+return cmd;
 	}
 	
 	public static String getCompilerSCmd(Context context,File file,File fileTo,@Nullable String otherOption)
