@@ -118,6 +118,15 @@ public class CEditor implements Window, EditorFregment.ChangeFlagChanged, OnClic
 		if(file!=null)
 		{
 			String name = file.getName().toLowerCase();
+			if(name.equals("makefile"))
+			{
+				menuTags.add(new MenuTag( R.string.make_j8,mCEditorFregment.getText(R.string.make_j8)));
+				menuTags.add(new MenuTag( R.string.make_b_j8,mCEditorFregment.getText(R.string.make_b_j8)));
+				menuTags.add(new MenuTag( R.string.make_clean,mCEditorFregment.getText(R.string.make_clean)));
+				menuTags.add(new MenuTag( R.string.make_option,mCEditorFregment.getText(R.string.make_option)));
+				return menuTags;
+			}
+			
 			if(name.endsWith(".lua"))
 			{
 				menuTags.add(new MenuTag( R.string.run_lua,mCEditorFregment.getText(R.string.run_lua)));
@@ -183,6 +192,37 @@ public class CEditor implements Window, EditorFregment.ChangeFlagChanged, OnClic
 	@Override
 	public boolean onMenuItemClick(int id) {
 		switch (id) {
+		case R.string.make_j8:
+			{
+				String cmd = "";
+				cmd = "cd \"" + getFile().getParent() + "\"\n" +
+						"make -j8\n";
+				mWindowsManager.addWindow(new Console(mWindowsManager,cmd,true,getFile().getParent()));
+			}
+			break;
+		case R.string.make_b_j8:
+			{
+				String cmd = "";
+				cmd = "cd \"" + getFile().getParent() + "\"\n" +
+						"make -B -j8\n";
+				mWindowsManager.addWindow(new Console(mWindowsManager,cmd,true,getFile().getParent()));
+			}
+			break;
+		case R.string.make_clean:
+			{
+				String cmd = "";
+				cmd = "cd \"" + getFile().getParent() + "\"\n" +
+						"make clean\n";
+				mWindowsManager.addWindow(new Console(mWindowsManager,cmd,true,getFile().getParent()));
+			}
+			break;
+		case R.string.make_option:
+			{
+				String cmd = "";
+				cmd = "cd \"" + getFile().getParent() + "\"\n";
+				mWindowsManager.addWindow(new Console(mWindowsManager,cmd,true,getFile().getParent()));
+			}
+			break;
 		case R.string.remote_browsing:
 		case R.string.local_browsing:
 		case R.string.pack_and_run:
@@ -263,7 +303,7 @@ public class CEditor implements Window, EditorFregment.ChangeFlagChanged, OnClic
 					processName=GNUCCompiler.getRunCmdProcessName();
 					//cmd=TinyCCompiler.getCompilerAndRunCmd(mWindowsManager.getContext(), mCEditorFregment.getFile(),null);
 				}
-				Console console=new Console(mWindowsManager,cmd,true);
+				Console console=new Console(mWindowsManager,cmd,true,getFile().getParent());
 				console.setKillProcessName(processName);
 				mWindowsManager.addWindow(console);
 			}
@@ -273,7 +313,7 @@ public class CEditor implements Window, EditorFregment.ChangeFlagChanged, OnClic
 			{
 				String cmd="";
 				cmd+=GNUCCompiler.getRunCmd(mCEditorFregment.getActivity(), mCEditorFregment.getFile());
-				mWindowsManager.addWindow(new Console(mWindowsManager,cmd,true));
+				mWindowsManager.addWindow(new Console(mWindowsManager,cmd,true,getFile().getParent()));
 			}
 			break;
 		case R.string.run_shell_as_root:
@@ -282,7 +322,7 @@ public class CEditor implements Window, EditorFregment.ChangeFlagChanged, OnClic
 				String cmd="";
 				//cmd+="export APP_PATH=\""+mWindowsManager.getContext().getFilesDir().getAbsolutePath()+"\"\n";
 				cmd+=GNUCCompiler.getRunCmd(mCEditorFregment.getActivity(), mCEditorFregment.getFile());
-				mWindowsManager.addWindow(new Console(mWindowsManager,cmd,true,true));
+				mWindowsManager.addWindow(new Console(mWindowsManager,cmd,true,true,getFile().getParent()));
 			}
 			break;
 		case R.string.complie_to_s:
@@ -309,7 +349,7 @@ public class CEditor implements Window, EditorFregment.ChangeFlagChanged, OnClic
 					File fileTo = new File(file.getAbsolutePath()+".s");
 					cmd = GNUCCompiler.getCompilerSCmd(mWindowsManager.getContext(),file ,fileTo,null);
 				}
-				mWindowsManager.addWindow(new Console(mWindowsManager,cmd,true));
+				mWindowsManager.addWindow(new Console(mWindowsManager,cmd,true,getFile().getParent()));
 			}
 			break;
 		case R.string.build_so:
@@ -333,7 +373,7 @@ public class CEditor implements Window, EditorFregment.ChangeFlagChanged, OnClic
 				{
 					cmd = GNUCCompiler.getCompilerSoCmd(mWindowsManager.getContext(), mCEditorFregment.getFile(),null);
 				}
-				mWindowsManager.addWindow(new Console(mWindowsManager,cmd,true));
+				mWindowsManager.addWindow(new Console(mWindowsManager,cmd,true,getFile().getParent()));
 			}
 			break;
 		case R.string.code_format:
@@ -354,7 +394,7 @@ public class CEditor implements Window, EditorFregment.ChangeFlagChanged, OnClic
 			{
 				String cmd="cd \""+file.getParent()+"\"\n";
 				cmd+="lua \""+file.getAbsolutePath()+"\"\n";
-				mWindowsManager.addWindow(new Console(mWindowsManager,cmd,true));
+				mWindowsManager.addWindow(new Console(mWindowsManager,cmd,true,getFile().getParent()));
 			}
 			break;
 		}
@@ -412,6 +452,14 @@ public class CEditor implements Window, EditorFregment.ChangeFlagChanged, OnClic
 		if(file!=null)
 		{
 			String name = file.getName().toLowerCase();
+			
+
+			if(name.equals("makefile"))
+			{
+				this.onMenuItemClick(R.string.make_j8);
+				return true;
+			}
+			
 			if(name.endsWith(".lua"))
 			{
 				this.onMenuItemClick(R.string.run_lua);

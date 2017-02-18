@@ -4,9 +4,11 @@ import jackpal.androidterm.TermFragment;
 import jackpal.androidterm.emulatorview.TermSession;
 import jackpal.androidterm.emulatorview.TermSession.FinishCallback;
 
+import java.io.File;
 import java.util.List;
 
 import android.content.Context;
+import android.os.Environment;
 import android.support.v4.app.Fragment;
 import person.wangchen11.console.ConsoleFragment;
 import person.wangchen11.console.OnConsoleColseListener;
@@ -24,28 +26,32 @@ public class Console implements Window, OnConsoleColseListener,WindowsManagerLin
 	private TermFragment mTermFragment;
 	private WindowsManager mWindowsManager;
 	private String mProcessName=null;
+	public static File mDefaultFile=Environment.getExternalStorageDirectory();
+	
 	public Console(WindowsManager windowsManager) {
-		this(windowsManager,"");
+		this(windowsManager,"",mDefaultFile.getPath());
 	}
 	
-	public Console(WindowsManager windowsManager,String initCmd) {
-		this(windowsManager,initCmd,true);
+	public Console(WindowsManager windowsManager,String initCmd,String home) {
+		this(windowsManager,initCmd,true,home);
 	}
 	
-	public Console(WindowsManager windowsManager,String initCmd,boolean needErrorInput) {
-		this(windowsManager,initCmd,needErrorInput,false);
+	public Console(WindowsManager windowsManager,String initCmd,boolean needErrorInput,String home) {
+		this(windowsManager,initCmd,needErrorInput,false,home);
 	}
 	
-	public Console(WindowsManager windowsManager,String initCmd,boolean needErrorInput,boolean runAsSu) {
+	public Console(WindowsManager windowsManager,String initCmd,boolean needErrorInput,boolean runAsSu,String home) {
 		mWindowsManager=windowsManager;
 		
 		if(Setting.mConfig.mOtherConfig.mNewConsoleEnable)
 		{
-			mTermFragment=new TermFragment(initCmd, runAsSu);
+			mTermFragment=new TermFragment(initCmd, runAsSu,home);
 			mTermFragment.setFinishCallback(this);
 		}
 		else
 		{
+			if(home!=null)
+				initCmd = "cd \""+home+"\"\n" + initCmd;
 			mConsoleFragment=new ConsoleFragment(initCmd,needErrorInput,runAsSu);
 			mConsoleFragment.setConsoleCloseListener(this);
 		}

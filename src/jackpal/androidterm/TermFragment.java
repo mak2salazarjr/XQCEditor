@@ -27,23 +27,26 @@ import android.widget.RelativeLayout;
 public class TermFragment extends Fragment implements FinishCallback{
 	TermSession mTermSession = null;
 	String mInitCmd="cd /sdcard/\nls\n";
+	private String mHome="/sdcard/";
 	public TermFragment() {
 	}
 
-	public TermFragment(String cmd){
+	public TermFragment(String cmd,String home){
 		mInitCmd=cmd;
+		mHome = home;
 	}
 
 	
-	public TermFragment(String cmd,boolean runAsSu){
+	public TermFragment(String cmd,boolean runAsSu,String home){
 		mInitCmd=cmd;
+		mHome = home;
 	}
 	
 	public String getInitCmdEx(String cmd)
 	{
 		if(cmd == null||cmd.length()<0)
 			return "";
-		String ret = "";
+		String ret = "";//"cd $HOME\n";
 		File file = getNextRunnableSh(this.getActivity());
 		try {
 			FileOutputStream fileOutputStream = new FileOutputStream(file);
@@ -57,7 +60,7 @@ public class TermFragment extends Fragment implements FinishCallback{
 			e.printStackTrace();
 		}
 		file.setExecutable(true, false);
-		ret = file.getAbsolutePath();
+		ret += file.getAbsolutePath();
 		return ret;
 	}
 	
@@ -115,6 +118,7 @@ public class TermFragment extends Fragment implements FinishCallback{
     			+GNUCCompiler.getAbiPath(getActivity())+":"
     			+GNUCCompiler.getGccPath(getActivity())
     			);
+    	mTermSettings.setHomePath(mHome);
     	TermSession session = createTermSession(getActivity(), settings, getInitCmdEx(mInitCmd) );
         return session;
     }

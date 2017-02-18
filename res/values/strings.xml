@@ -166,4 +166,8 @@
     <string name="close_button_color">close button color</string>
     <string name="use_quickly_close">use quickly close</string>
     <string name="use_new_ver_console">use new version console</string>
+    <string name="make_j8">make -j8</string>
+    <string name="make_b_j8">make -B -j8</string>
+    <string name="make_clean">make clean</string>
+    <string name="make_option">make option</string>
 </resources>

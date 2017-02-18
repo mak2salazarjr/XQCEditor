@@ -324,7 +324,7 @@ public class FileBrowser implements Window,OnOpenListener, OnClickListener{
 					{
 						File file = (File) obj; 
 						String parm = mParamEditText.getText().toString().replaceAll("\n", " ");
-						Console console=new Console(mWindowsManager, GNUCCompiler.getRunCmd(mWindowsManager.getContext(), file,parm));
+						Console console=new Console(mWindowsManager, GNUCCompiler.getRunCmd(mWindowsManager.getContext(), file,parm),file.getParent());
 						console.setKillProcessName(GNUCCompiler.getRunCmdProcessName());
 						mWindowsManager.addWindow(console);
 					}

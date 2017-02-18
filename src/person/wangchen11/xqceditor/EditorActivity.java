@@ -22,6 +22,7 @@ import person.wangchen11.waps.Waps;
 import person.wangchen11.window.MenuTag;
 import person.wangchen11.window.WindowPointer;
 import person.wangchen11.window.WindowsManager;
+import person.wangchen11.window.ext.Console;
 import person.wangchen11.window.ext.FileBrowser;
 import person.wangchen11.window.ext.Setting;
 import android.annotation.SuppressLint;
@@ -64,7 +65,10 @@ public class EditorActivity extends FragmentActivity implements OnClickListener,
 		Busybox.freeResourceIfNeed(this);
 		GNUCCompiler.freeResourceIfNeed(this);
         mContent=null;
-		FileBowserFragment.mDefaultFile=new File(GNUCCompiler.getSystemDir()+File.separatorChar+"workspace"+File.separatorChar);
+        File workspace = new File(GNUCCompiler.getSystemDir()+File.separatorChar+"workspace"+File.separatorChar);
+		FileBowserFragment.mDefaultFile=workspace;
+		Console.mDefaultFile=workspace;
+		
 		if(!FileBowserFragment.mDefaultFile.isDirectory()){
 			if(!FileBowserFragment.mDefaultFile.mkdirs()){
 				Toast.makeText(this, R.string.create_workspace_failed, Toast.LENGTH_SHORT).show();
