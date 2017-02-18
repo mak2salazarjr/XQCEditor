@@ -163,4 +163,17 @@
     <string name="close_button_color">关闭按钮颜色</string>
     <string name="use_quickly_close">使用快速关闭</string>
     <string name="use_new_ver_console">使用新版控制台</string>
+    <string name="_goal">目标：</string>
+    <string name="_score">分数：</string>
+    <string name="_help">支持</string>
+    <string name="_newGame">重新开始</string>
+    <string name="_undo">撤销</string>
+    <string name="_level">关卡：</string>
+    <string name="_high">最高：</string>
+
+    <string name="_gameover">游戏结束</string>
+    <string name="_noenoughscore">未能达到指定的分数\n</string>
+    <string name="_nonext">没有下一步可做\n</string>
+    <string name="_wait">再看看</string>
+    <string name="_back">返回</string>
 </resources>

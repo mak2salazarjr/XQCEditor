@@ -8,6 +8,7 @@ import person.wangchen11.xqceditor.R;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -21,7 +22,14 @@ public class About extends Fragment implements Window{
 	@Override
 	public View onCreateView(LayoutInflater inflater,
 			@Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-		return inflater.inflate(R.layout.fragment_about, null);
+		ViewGroup viewGroup = (ViewGroup) inflater.inflate(R.layout.fragment_about, null);
+		viewGroup.findViewById(R.id.image_game_add).setOnClickListener(new View.OnClickListener() {
+			public void onClick(View v) {
+				Intent intent=new Intent(getContext(),person.wangchen11.add.MainActivity.class);
+				startActivity(intent);
+			}
+		});
+		return viewGroup;
 	}
 	
 	@Override

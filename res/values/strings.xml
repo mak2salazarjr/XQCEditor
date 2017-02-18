@@ -170,4 +170,17 @@
     <string name="make_b_j8">make -B -j8</string>
     <string name="make_clean">make clean</string>
     <string name="make_option">make option</string>
+    <string name="_goal">Goal：</string>
+    <string name="_score">Point：</string>
+    <string name="_help">Help</string>
+    <string name="_newGame">New Game</string>
+    <string name="_undo">Undo</string>
+    <string name="_level">Level：</string>
+    <string name="_high">High：</string>
+
+    <string name="_gameover">Game Over</string>
+    <string name="_noenoughscore">Failed to reach the specified points.\n</string>
+    <string name="_nonext">There\'s nothing to do.\n</string>
+    <string name="_wait">Wait</string>
+    <string name="_back">Back</string>
 </resources>
