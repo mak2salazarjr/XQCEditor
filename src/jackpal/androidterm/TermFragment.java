@@ -60,7 +60,7 @@ public class TermFragment extends Fragment implements FinishCallback{
 			e.printStackTrace();
 		}
 		file.setExecutable(true, false);
-		ret += file.getAbsolutePath();
+		ret += "source "+file.getAbsolutePath();
 		return ret;
 	}
 	
