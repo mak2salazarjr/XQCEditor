@@ -1,5 +1,7 @@
 package person.wangchen11.xqceditor;
 
+import android.app.AlertDialog;
+import android.app.AlertDialog.Builder;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
@@ -28,6 +30,12 @@ public class State {
 		} catch (NameNotFoundException e) {
 			e.printStackTrace();
 		}
+		
+		if(isUpdated())
+		{
+			showUpdateMsg(context);
+		}
+		
 		Log.i(TAG, "VersionCodePro:"+VersionCodePro);
 		Log.i(TAG, "VersionCodeNow:"+VersionCodeNow);
 		Log.i(TAG, "VersionNamePro:"+VersionNamePro);
@@ -58,4 +66,27 @@ public class State {
 		editor.commit();
 	}
 	
+	public static String mUpdateMsg = "do nothing!";
+	public static void showUpdateMsg(Context context)
+	{
+		AlertDialog.Builder builder=new Builder(context);
+		builder.setTitle(R.string._updatemsg);
+		builder.setMessage(mUpdateMsg);
+		builder.setCancelable(false);
+		builder.setPositiveButton(android.R.string.ok, null);
+		builder.create();
+		builder.show();
+	}
 }
+
+
+
+
+
+
+
+
+
+
+
+

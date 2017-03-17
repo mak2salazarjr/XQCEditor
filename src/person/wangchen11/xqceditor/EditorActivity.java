@@ -26,6 +26,7 @@ import person.wangchen11.window.ext.Console;
 import person.wangchen11.window.ext.FileBrowser;
 import person.wangchen11.window.ext.Setting;
 import android.annotation.SuppressLint;
+import android.annotation.TargetApi;
 import android.content.res.Configuration;
 import android.graphics.Color;
 import android.os.Build;
@@ -49,6 +50,8 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+
+@TargetApi(Build.VERSION_CODES.HONEYCOMB)
 public class EditorActivity extends FragmentActivity implements OnClickListener,WindowsManager.WindowsManagerLintener{
 	protected static final String TAG="MainActivity"; 
 	private WindowsManager mWindowsManager;
@@ -98,6 +101,7 @@ public class EditorActivity extends FragmentActivity implements OnClickListener,
 		{
 			mWindowsManager.addWindow(new FileBrowser(mWindowsManager));
 		}
+		
 		fragmentTransaction.commit();
 		onContentChanged();
 	}
