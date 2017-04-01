@@ -943,6 +943,9 @@ class ReplaceBody{
 		if( isInsert() && body.isInsert() && mSt+mText.length()==body.mSt) 
 		{//合并相连的插入 
 			Log.i("addBody", "合并相连的插入 ");
+			if( body.mText.toString().contains("\n") ) {
+				return false;
+			}
 			this.mText=this.mText+body.mText.subSequence(body.mStart, body.mEnd).toString();
 			this.mEnd+=body.mEnd-body.mStart;
 			this.mSelectionEnd = body.mSelectionEnd;

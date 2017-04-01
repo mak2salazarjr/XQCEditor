@@ -791,29 +791,63 @@ public class MyEditText extends View implements OnGestureListener,TextWatcher, O
 	}
 	
 	@Override
-	public boolean onKeyDown(int keyCode, KeyEvent event) {
-		//Log.i(TAG, "onKeyDown:"+event);
+	public boolean onKeyUp(int keyCode, KeyEvent event) {
+		Log.i(TAG, "onKeyDown:"+event);
 		switch(event.getKeyCode()){
 		case KeyEvent.KEYCODE_SHIFT_LEFT:
-			mDownState=1;
-			break;
 		case KeyEvent.KEYCODE_SHIFT_RIGHT:
-			mDownState=2;
+			mDownState=0;
+			break;
+		case KeyEvent.KEYCODE_A:
+			if(event.isCtrlPressed()){
+				setSelection(0, getText().length());
+			}
+			break;
+		case KeyEvent.KEYCODE_Z:
+			if(event.isCtrlPressed()){
+				Log.i(TAG, "Ctrl Z");
+				this.undo();
+			}
+			break;
+		case KeyEvent.KEYCODE_Y:
+			if(event.isCtrlPressed()){
+				Log.i(TAG, "Ctrl Y");
+				this.redo();
+			}
+			break;
+		case KeyEvent.KEYCODE_X:
+			if(event.isCtrlPressed()){
+				this.performContextMenuAction(android.R.id.cut);
+			}
+			break;
+		case KeyEvent.KEYCODE_C:
+			if(event.isCtrlPressed()){
+				this.performContextMenuAction(android.R.id.copy);
+			}
+			break;
+		case KeyEvent.KEYCODE_V:
+			if(event.isCtrlPressed()){
+				this.performContextMenuAction(android.R.id.paste);
+			}
 			break;
 		default:
-			return false;	
+			return true;	
 		}
 		return true;
 	}
 	
 	@Override
-	public boolean onKeyUp(int keyCode, KeyEvent event) {
-		//Log.i(TAG, "onKeyUp:"+event);
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+		Log.i(TAG, "onKeyUp:"+event);
 		Editable editable=getText();
 		int start=Selection.getSelectionStart(editable);
 		int end=Selection.getSelectionEnd(editable);
-		if(event.getAction()==KeyEvent.ACTION_UP)
 		switch(event.getKeyCode()){
+		case KeyEvent.KEYCODE_SHIFT_LEFT:
+		case KeyEvent.KEYCODE_SHIFT_RIGHT:
+			if(mDownState==0)
+				mDownState=3;
+			break;
 		case KeyEvent.KEYCODE_DEL:
 			if(start>=end)
 				start=end-1;
@@ -824,7 +858,13 @@ public class MyEditText extends View implements OnGestureListener,TextWatcher, O
 			editable.replace(start, end, "\n");
 			setSelection(start+1, start+1);
 			break;
+		case KeyEvent.KEYCODE_TAB:
+			editable.replace(start, end, "\t");
+			setSelection(start+1, start+1);
+			break;
 		case KeyEvent.KEYCODE_DPAD_LEFT:
+			if( mDownState ==3 )
+				mDownState=1;
 			if(isMoveSelectionStart()){
 				start--;
 				if(start>=0)
@@ -840,6 +880,8 @@ public class MyEditText extends View implements OnGestureListener,TextWatcher, O
 			}
 			break;
 		case KeyEvent.KEYCODE_DPAD_RIGHT:
+			if( mDownState==3 )
+				mDownState=2;
 			if(isMoveSelectionStart()){
 				start++;
 				if(start<end)
@@ -855,6 +897,8 @@ public class MyEditText extends View implements OnGestureListener,TextWatcher, O
 			}
 			break;
 		case KeyEvent.KEYCODE_DPAD_UP :
+			if( mDownState ==3 )
+				mDownState=1;
 			if(isMoveSelectionStart()){
 				int line=mLayout.getLineForOffset(start);
 				float x=mLayout.getPrimaryHorizontal(start);
@@ -882,6 +926,8 @@ public class MyEditText extends View implements OnGestureListener,TextWatcher, O
 			}
 			break;
 		case KeyEvent.KEYCODE_DPAD_DOWN:
+			if( mDownState==3 )
+				mDownState=2;
 			if(isMoveSelectionStart()){
 				int line=mLayout.getLineForOffset(start);
 				if(line<mLayout.getLineCount()-1){
@@ -905,7 +951,7 @@ public class MyEditText extends View implements OnGestureListener,TextWatcher, O
 			}
 			break;
 		default:
-			return false;	
+			return true;	
 		}
 		return true;
 	}

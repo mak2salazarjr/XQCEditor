@@ -168,7 +168,7 @@ public class EditorFregment extends Fragment implements OnClickListener, AfterTe
 	public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
 		mCodeEditText.cleanRedo();
 		mCodeEditText.cleanUndo();
-		mCodeEditText.setMaxSaveHistory(32);
+		mCodeEditText.setMaxSaveHistory(120);
 		mCodeEditText.setAfterTextChangeListener(this);
 		mIsChanged=false;
 		if(mChangeFlagChanged!=null)
