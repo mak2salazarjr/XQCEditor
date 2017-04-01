@@ -1,14 +1,11 @@
 package folk.china.util;
 
 /**
- * 可无限制增长的字节缓冲区
  * @author wangchen11
  *
  */
 public class ByteBuffer {
-	//默认起始缓冲区长度
 	public static final int DEFAULT_START_SIZE = 64;
-	//默认每次增加缓冲区的长度
 	public static final int DEFAULT_STEP_SIZE = 512; 
 	private byte []mBuffer = null;
 	private int mPos = 0;

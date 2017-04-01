@@ -16,7 +16,8 @@ package jackpal.androidterm.emulatorview.compat;
 public class AndroidCompat {
     public final static int SDK = getSDK();
 
-    private final static int getSDK() {
+    @SuppressWarnings("deprecation")
+	private final static int getSDK() {
         int result;
         try {
             result = AndroidLevel4PlusCompat.getSDKInt();
