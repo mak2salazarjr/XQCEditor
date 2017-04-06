@@ -37,7 +37,6 @@ public class PHPIndexer implements Runnable{
 		}
 		if(mNow == null)
 			return;
-		Log.i(TAG, "mNow:"+mNow);
 		
 		iterator = codeSpans.iterator();
 		while(iterator.hasNext())
@@ -45,7 +44,6 @@ public class PHPIndexer implements Runnable{
 			PHPCodeSpan codeSpan = iterator.next();
 			if( codeSpan.mContent.length()>mNow.mContent.length() )
 			{
-				Log.i(TAG, "codeSpan:"+codeSpan);
 				if( codeSpan.mContent.startsWith(mNow.mContent) )
 				{
 					addWant(codeSpan);
@@ -60,7 +58,6 @@ public class PHPIndexer implements Runnable{
 	}
 	
 	public void addWant(PHPCodeSpan codeSpan){
-		Log.i(TAG, "addWant:"+codeSpan);
 		if(!mWants.contains(codeSpan.mContent))
 		{
 			mWants.addLast(codeSpan.mContent);
