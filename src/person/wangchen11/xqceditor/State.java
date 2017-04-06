@@ -66,7 +66,11 @@ public class State {
 		editor.commit();
 	}
 	
-	public static String mUpdateMsg = "do nothing!";
+	public static String mUpdateMsg = 
+			"2.0.9:\n" +
+			"(1)修复makefile部分问题。\n" +
+			"(2)添加物理键盘支持。\n" +
+			"(3)可以从其它应用中通过快写代码打开代码。";
 	public static void showUpdateMsg(Context context)
 	{
 		AlertDialog.Builder builder=new Builder(context);

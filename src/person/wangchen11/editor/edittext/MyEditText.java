@@ -798,40 +798,8 @@ public class MyEditText extends View implements OnGestureListener,TextWatcher, O
 		case KeyEvent.KEYCODE_SHIFT_RIGHT:
 			mDownState=0;
 			break;
-		case KeyEvent.KEYCODE_A:
-			if(event.isCtrlPressed()){
-				setSelection(0, getText().length());
-			}
-			break;
-		case KeyEvent.KEYCODE_Z:
-			if(event.isCtrlPressed()){
-				Log.i(TAG, "Ctrl Z");
-				this.undo();
-			}
-			break;
-		case KeyEvent.KEYCODE_Y:
-			if(event.isCtrlPressed()){
-				Log.i(TAG, "Ctrl Y");
-				this.redo();
-			}
-			break;
-		case KeyEvent.KEYCODE_X:
-			if(event.isCtrlPressed()){
-				this.performContextMenuAction(android.R.id.cut);
-			}
-			break;
-		case KeyEvent.KEYCODE_C:
-			if(event.isCtrlPressed()){
-				this.performContextMenuAction(android.R.id.copy);
-			}
-			break;
-		case KeyEvent.KEYCODE_V:
-			if(event.isCtrlPressed()){
-				this.performContextMenuAction(android.R.id.paste);
-			}
-			break;
 		default:
-			return true;	
+			return false;	
 		}
 		return true;
 	}
@@ -950,8 +918,40 @@ public class MyEditText extends View implements OnGestureListener,TextWatcher, O
 				}
 			}
 			break;
+		case KeyEvent.KEYCODE_A:
+			if(event.isCtrlPressed()){
+				this.performContextMenuAction(android.R.id.selectAll);
+			}
+			break;
+		case KeyEvent.KEYCODE_Z:
+			if(event.isCtrlPressed()){
+				Log.i(TAG, "Ctrl Z");
+				this.undo();
+			}
+			break;
+		case KeyEvent.KEYCODE_Y:
+			if(event.isCtrlPressed()){
+				Log.i(TAG, "Ctrl Y");
+				this.redo();
+			}
+			break;
+		case KeyEvent.KEYCODE_X:
+			if(event.isCtrlPressed()){
+				this.performContextMenuAction(android.R.id.cut);
+			}
+			break;
+		case KeyEvent.KEYCODE_C:
+			if(event.isCtrlPressed()){
+				this.performContextMenuAction(android.R.id.copy);
+			}
+			break;
+		case KeyEvent.KEYCODE_V:
+			if(event.isCtrlPressed()){
+				this.performContextMenuAction(android.R.id.paste);
+			}
+			break;
 		default:
-			return true;	
+			return false;	
 		}
 		return true;
 	}

@@ -190,7 +190,8 @@ public class GNUCCompiler {
 	
 	public static String getNeedOption()
 	{
-		return " -I\""+getIncludeDir()+"\" -I\""+getIncludeDirEx()+"\" -lm -lstdc++ -lsupc++ -lgnustl_static ";
+		// -I\""+getIncludeDir()+"\" -I\""+getIncludeDirEx()+"\"
+		return " -Wall -lm -lstdc++ -lsupc++ -lgnustl_static -std=c99 ";
 	}
 	
 	public static String getFilesString(List <File> files){

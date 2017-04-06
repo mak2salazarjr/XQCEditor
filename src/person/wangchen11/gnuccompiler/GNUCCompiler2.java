@@ -17,6 +17,7 @@ public class GNUCCompiler2 {
 	public static String getRunablePath(Context context){
 		return context.getFilesDir().getAbsolutePath()+File.separatorChar;
 	}
+	
 	public static String getGccPath(Context context){
 		return getRunablePath(context)+"/gcc/arm-linux-androideabi/bin/";
 	}
@@ -47,7 +48,8 @@ public class GNUCCompiler2 {
 
 	public static String getNeedOption()
 	{
-		return " -Wall -I\""+getIncludeDir()+"\" -I\""+getIncludeDirEx()+"\" -lm -lstdc++ -lsupc++ -lgnustl_static ";
+		// -I\""+getIncludeDir()+"\" -I\""+getIncludeDirEx()+"\"
+		return " -Wall -lm -lstdc++ -lsupc++ -lgnustl_static -std=c99 ";
 	}
 	
 	public static String getExportEnvPathCmd(Context context)

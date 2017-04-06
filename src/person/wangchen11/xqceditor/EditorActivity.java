@@ -22,11 +22,13 @@ import person.wangchen11.waps.Waps;
 import person.wangchen11.window.MenuTag;
 import person.wangchen11.window.WindowPointer;
 import person.wangchen11.window.WindowsManager;
+import person.wangchen11.window.ext.CEditor;
 import person.wangchen11.window.ext.Console;
 import person.wangchen11.window.ext.FileBrowser;
 import person.wangchen11.window.ext.Setting;
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Color;
 import android.os.Build;
@@ -97,13 +99,35 @@ public class EditorActivity extends FragmentActivity implements OnClickListener,
 	    mWindowsManager.addListener(this);
 		FragmentManager fragmentManager = getSupportFragmentManager();//getFragmentManager();
 		FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+		
 		if(fragmentTransaction.isEmpty())
 		{
 			mWindowsManager.addWindow(new FileBrowser(mWindowsManager));
 		}
+
+		openNewIntent(getIntent());
 		
 		fragmentTransaction.commit();
 		onContentChanged();
+	}
+	
+	@Override
+	protected void onNewIntent(final Intent intent) {
+		mHandler.post(new Runnable() {
+			@Override
+			public void run() {
+				openNewIntent(intent);
+			}
+		});
+	}
+	
+	private void openNewIntent(Intent intent){
+		Log.i(TAG, "openNewIntent:"+intent);
+		String action = intent.getAction();
+		if(Intent.ACTION_VIEW.equals(action)){
+			String file = intent.getData().getPath();
+			mWindowsManager.addWindow(new CEditor(mWindowsManager, new File(file)));
+		}
 	}
 	
 	@SuppressLint("InlinedApi")
