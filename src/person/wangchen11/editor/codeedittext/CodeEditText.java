@@ -105,7 +105,7 @@ public class CodeEditText extends MyEditText implements CodeStypeAdapterListener
 			}
 			else
 			if(mCodeType==CodeType.TYPE_PHP){
-				runnable=new PHPCodeStyleAdapter(getHandler(), getText().toString(), this);
+				runnable=new PHPCodeStyleAdapter(getHandler(),getText().toString(),getCursor(), this);
 			}
 			else
 			{

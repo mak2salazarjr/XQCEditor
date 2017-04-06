@@ -20,6 +20,11 @@ public class PHPCodeParser implements Runnable{
 		return mCodeSpans;
 	}
 	
+	public char []getCode()
+	{
+		return mCode;
+	}
+	
 	public boolean isParsed()
 	{
 		return mIsParsed;

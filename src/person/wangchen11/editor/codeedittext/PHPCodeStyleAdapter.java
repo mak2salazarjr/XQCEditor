@@ -15,8 +15,9 @@ import android.text.style.ForegroundColorSpan;
 
 public class PHPCodeStyleAdapter extends CodeStyleAdapter{
 	PHPCodeParser mCodeParser = null;
+	PHPIndexer    mIndexer = null;
 	
-	public PHPCodeStyleAdapter(Handler handler,String code,CodeStypeAdapterListener listener) {
+	public PHPCodeStyleAdapter(Handler handler,String code,int pos,CodeStypeAdapterListener listener) {
 		super(handler,code.length(),listener);
 		mCodeParser = new PHPCodeParser(code,new PHPCodeKeywordsAdapter() {
 			@Override
@@ -24,11 +25,13 @@ public class PHPCodeStyleAdapter extends CodeStyleAdapter{
 				return PHPCodeKeyWords.mKeyWord;
 			}
 		});
+		mIndexer = new PHPIndexer(mCodeParser, pos);
 	}
 
 	@Override
 	public void parser() {
 		mCodeParser.run();
+		mIndexer.run();
 	}
 
 	@Override
@@ -67,18 +70,15 @@ public class PHPCodeStyleAdapter extends CodeStyleAdapter{
 
 	@Override
 	public LinkedList<String> getWants() {
-		// TODO Auto-generated method stub
-		return null;
+		return mIndexer.getWants();
 	}
 
 	@Override
 	public int getWantChangeStart() {
-		// TODO Auto-generated method stub
-		return 0;
+		return mIndexer.getWantChangeStart();
 	}
 
 	@Override
 	public int getWantChangeEnd() {
-		// TODO Auto-generated method stub
-		return 0;
+		return mIndexer.getWantChangeEnd();
 	}}
