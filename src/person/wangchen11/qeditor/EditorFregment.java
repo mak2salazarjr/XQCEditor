@@ -524,6 +524,7 @@ public class EditorFregment extends Fragment implements OnClickListener, AfterTe
 		if(mChangeFlagChanged!=null)
 			mChangeFlagChanged.onChangeFlagChanged();
 		onNeedChangeWants(0,0,null);
+		mCodeEditText.requestFocus();
 	}
 	
 	public boolean isChanged(){
