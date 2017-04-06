@@ -792,11 +792,13 @@ public class MyEditText extends View implements OnGestureListener,TextWatcher, O
 	
 	@Override
 	public boolean onKeyUp(int keyCode, KeyEvent event) {
-		Log.i(TAG, "onKeyDown:"+event);
+		Log.i(TAG, "onKeyUp:"+event);
 		switch(event.getKeyCode()){
 		case KeyEvent.KEYCODE_SHIFT_LEFT:
 		case KeyEvent.KEYCODE_SHIFT_RIGHT:
 			mDownState=0;
+			break;
+		case KeyEvent.KEYCODE_ENTER:
 			break;
 		default:
 			return false;	
@@ -806,7 +808,7 @@ public class MyEditText extends View implements OnGestureListener,TextWatcher, O
 	
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
-		Log.i(TAG, "onKeyUp:"+event);
+		Log.i(TAG, "onKeyDown:"+event);
 		Editable editable=getText();
 		int start=Selection.getSelectionStart(editable);
 		int end=Selection.getSelectionEnd(editable);
@@ -823,8 +825,8 @@ public class MyEditText extends View implements OnGestureListener,TextWatcher, O
 			editable.delete(start, end);
 			break;
 		case KeyEvent.KEYCODE_ENTER:
-			editable.replace(start, end, "\n");
-			setSelection(start+1, start+1);
+			//editable.replace(start, end, "\n");
+			//setSelection(start+1, start+1);
 			break;
 		case KeyEvent.KEYCODE_TAB:
 			editable.replace(start, end, "\t");
