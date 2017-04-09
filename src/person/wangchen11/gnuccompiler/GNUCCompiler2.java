@@ -49,7 +49,7 @@ public class GNUCCompiler2 {
 	public static String getNeedOption()
 	{
 		// -I\""+getIncludeDir()+"\" -I\""+getIncludeDirEx()+"\"
-		return " -Wall -lm -lstdc++ -lsupc++ -lgnustl_static -std=c99 ";
+		return " -Wall -lm -lstdc++ -lsupc++ -lgnustl_static ";
 	}
 	
 	public static String getExportEnvPathCmd(Context context)

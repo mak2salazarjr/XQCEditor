@@ -5,6 +5,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -17,6 +18,7 @@ import android.graphics.Rect;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
@@ -51,6 +53,7 @@ import person.wangchen11.drawable.CircleDrawable;
 import person.wangchen11.editor.codeedittext.CodeEditText;
 import person.wangchen11.editor.codeedittext.OnNeedChangeWants;
 import person.wangchen11.editor.edittext.AfterTextChangeListener;
+import person.wangchen11.gnuccompiler.CheckInfo;
 import person.wangchen11.gnuccompiler.GNUCCodeCheck;
 import person.wangchen11.xqceditor.R;
 
@@ -67,6 +70,7 @@ public class EditorFregment extends Fragment implements OnClickListener, AfterTe
 	private boolean mIsChanged=false;
 	private Toast mToast=null;
 	private OnRunButtonClickListener mOnRunButtonClickListener = null;
+	private Handler mHandler = new Handler();
 	private static String []mCodeTypeNames=new String[]{
 		"TXT",
 		"C",
@@ -173,6 +177,7 @@ public class EditorFregment extends Fragment implements OnClickListener, AfterTe
 		mIsChanged=false;
 		if(mChangeFlagChanged!=null)
 			mChangeFlagChanged.onChangeFlagChanged();
+		onChangeFlagChanged();
 		super.onViewCreated(view, savedInstanceState);
 	}
 	
@@ -241,7 +246,16 @@ public class EditorFregment extends Fragment implements OnClickListener, AfterTe
 			String name = file.getName().toLowerCase();
 			if(name.endsWith(".c")||name.endsWith(".cpp"))
 			{
-				mCodeCheck.start();
+				final LinkedList<CheckInfo> checkInfos = mCodeCheck.start();
+				if(checkInfos!=null){
+					mHandler.post(new Runnable() {
+						
+						@Override
+						public void run() {
+							mCodeEditText.setWarnAndError( CheckCodeAdapt.getCWarnAndErrors(checkInfos,mFile) );
+						}
+					});
+				}
 			}
 		}
 		mCodeCheck = null;

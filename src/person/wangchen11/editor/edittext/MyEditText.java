@@ -1,5 +1,7 @@
 package person.wangchen11.editor.edittext;
 
+import java.util.List;
+
 import person.wangchen11.xqceditor.R;
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -1087,6 +1089,14 @@ public class MyEditText extends View implements OnGestureListener,TextWatcher, O
 			return ((EditableWithLayout)getLayout()).redo();
 		}
 		return false;
+	}
+	
+	public void setWarnAndError(List<WarnAndError> warnAndErrors){
+		if(getLayout() instanceof EditableWithLayout)
+		{
+			((EditableWithLayout)getLayout()).setWarnAndErrors(warnAndErrors);
+			this.invalidate();
+		}
 	}
 	
 	public boolean findString(String str){

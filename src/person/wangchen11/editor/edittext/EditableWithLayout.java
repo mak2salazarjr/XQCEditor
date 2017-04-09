@@ -40,8 +40,9 @@ public class EditableWithLayout implements Editable,MyLayout {
 	private int mMaxSaveHistory;
 	private Stack<ReplaceBody> mUndoBodies = new Stack<ReplaceBody>();
 	private Stack<ReplaceBody> mRedoBodies = new Stack<ReplaceBody>();
-    List<LineBody> mLineBodies=new ArrayList<LineBody>();
-    List<SpanBody> mSpanBodies=new ArrayList<SpanBody>();
+    private List<LineBody> mLineBodies=new ArrayList<LineBody>();
+    private List<SpanBody> mSpanBodies=new ArrayList<SpanBody>();
+    private List<WarnAndError> mWarnAndErrors=new ArrayList<WarnAndError>();
 	public EditableWithLayout() {
 		setPaint(new TextPaint());
 		analysisLines();
@@ -601,8 +602,23 @@ public class EditableWithLayout implements Editable,MyLayout {
 		int startLine=getLineForVertical(mRect.top);
 		int endLine=getLineForVertical(mRect.bottom);
 		float descent=mTextPaint.getFontMetrics().descent;
+		Paint warnAndErrorPaint = new Paint();
+		warnAndErrorPaint.setStrokeWidth(mTextPaint.getTextSize()/12);
 		for(int i=startLine;i<=endLine;i++)
 		{
+			WarnAndError fullLine = null;
+			LinkedList<WarnAndError> curLines = new LinkedList<WarnAndError>();
+			Iterator<WarnAndError> curLinesIterator = mWarnAndErrors.iterator();
+			while(curLinesIterator.hasNext()){
+				WarnAndError warnAndError = curLinesIterator.next();
+				if(warnAndError.mLine==i){
+					if(warnAndError.mFullLine){
+						fullLine = warnAndError;
+					}else{
+						curLines.add(warnAndError);
+					}
+				}
+			}
 			getLineBounds(i, mRectLine);
 			LineBody body=mLineBodies.get(i);
 			int proTab=body.mStart;
@@ -624,8 +640,9 @@ public class EditableWithLayout implements Editable,MyLayout {
 						SpanBody spanBody=iterator.next();
 						mSpanPaint.setColor( ((ForegroundColorSpan)spanBody.mSpan).getForegroundColor() );
 						float tstartX=startX+measureText(mText, spanBody.mStart, spanBody.length());
-						if(tstartX>mRect.left)
+						if(tstartX>mRect.left){
 							canvas.drawText(mText, spanBody.mStart, spanBody.length(), startX, lineY, mSpanPaint);
+						}
 						startX=tstartX;
 						if(startX>mRect.right)
 							break;
@@ -652,14 +669,19 @@ public class EditableWithLayout implements Editable,MyLayout {
 					mSpanPaint.setColor( ((ForegroundColorSpan)spanBody.mSpan).getForegroundColor() );
 					//耗时大户，在measureText,drawText这里耗费了大量的时间  
 					float tstartX=startX+measureText(mText, spanBody.mStart, spanBody.length());
-					if(tstartX>mRect.left)
+					if(tstartX>mRect.left){
 						canvas.drawText(mText, spanBody.mStart, spanBody.length(), startX, lineY, mSpanPaint);
+					}
 					startX=tstartX;
 					if(startX>mRect.right)
 						break;
 				}
 			}
-			
+
+			if(fullLine!=null){
+				warnAndErrorPaint.setColor(fullLine.mColor);
+				canvas.drawLine(0, lineY ,startX>0?startX:mRectLine.right, lineY , warnAndErrorPaint);
+			}
 		}
 	}
 	
@@ -859,7 +881,14 @@ public class EditableWithLayout implements Editable,MyLayout {
 		}
 		return true;
 	}
+
+	public void setWarnAndErrors(List<WarnAndError> warnAndErrors){
+		mWarnAndErrors = warnAndErrors;
+	}
 	
+	public List<WarnAndError> getWarnAndErrors(){
+		return mWarnAndErrors;
+	}
 }
 
 

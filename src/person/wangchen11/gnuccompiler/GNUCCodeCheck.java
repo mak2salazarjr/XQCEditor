@@ -36,10 +36,8 @@ public class GNUCCodeCheck {
 		return mIsChecked;
 	}
 	
-	public void start()
+	public LinkedList<CheckInfo> start()
 	{
-		if(true)
-			return ;
 		mIsChecked = false;
 		mCheckInfos.clear();
 		Log.i(TAG, "start");
@@ -52,6 +50,7 @@ public class GNUCCodeCheck {
 		}
 		Log.i(TAG, "mCheckInfos:"+mCheckInfos);
 		mIsChecked = true;
+		return mCheckInfos;
 	}
 	
 	private void startEx() 
@@ -117,7 +116,7 @@ public class GNUCCodeCheck {
 				try {
 					int lineAt = Integer.valueOf(items[1]);
 					int charAt = Integer.valueOf(items[2]);
-					int type = CheckInfo.TYPE_WARNING;
+					int type = CheckInfo.TYPE_WARN;
 					if(items[3].contains("error"))
 					{
 						type = CheckInfo.TYPE_ERROR;

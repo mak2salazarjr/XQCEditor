@@ -13,8 +13,9 @@ public class CheckInfo {
 		mLineAt = lineAt;
 		mCharAt = charAt;
 	}
-	public static final int TYPE_WARNING = 0;
-	public static final int TYPE_ERROR = 1;
+	public static final int TYPE_INFO = 0;
+	public static final int TYPE_WARN = 1;
+	public static final int TYPE_ERROR = 2;
 	@Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
