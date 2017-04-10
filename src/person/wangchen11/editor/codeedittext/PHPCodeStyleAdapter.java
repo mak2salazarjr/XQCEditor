@@ -5,6 +5,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
+import person.wangchen11.ccode.WantMsg;
 import person.wangchen11.codeanalysis.phpcode.PHPCodeKeyWords;
 import person.wangchen11.codeanalysis.phpcode.PHPCodeKeywordsAdapter;
 import person.wangchen11.codeanalysis.phpcode.PHPCodeParser;
@@ -69,8 +70,13 @@ public class PHPCodeStyleAdapter extends CodeStyleAdapter{
 
 
 	@Override
-	public LinkedList<String> getWants() {
-		return mIndexer.getWants();
+	public LinkedList<WantMsg> getWants() {
+		LinkedList<WantMsg> linkedList = new LinkedList<WantMsg>();
+		Iterator<String> iterator = mIndexer.getWants().iterator();
+		while(iterator.hasNext()){
+			linkedList.addLast(new WantMsg(iterator.next()));
+		}
+		return linkedList;
 	}
 
 	@Override

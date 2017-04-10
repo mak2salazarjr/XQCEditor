@@ -7,6 +7,7 @@ import android.graphics.Color;
 import android.os.Handler;
 import android.text.style.ForegroundColorSpan;
 
+import person.wangchen11.ccode.WantMsg;
 import person.wangchen11.editor.edittext.SpanBody;
 
 public abstract class CodeStyleAdapter implements Runnable{
@@ -26,7 +27,7 @@ public abstract class CodeStyleAdapter implements Runnable{
 	 */
 	public abstract void parser();
 	public abstract List<SpanBody> getStyles();
-	public abstract LinkedList<String> getWants();
+	public abstract LinkedList<WantMsg> getWants();
 	public abstract int getWantChangeStart();
 	public abstract int getWantChangeEnd();
 	
@@ -82,7 +83,7 @@ public abstract class CodeStyleAdapter implements Runnable{
 						});
 					}
 					
-					final LinkedList<String> linkedList=getWants();
+					final LinkedList<WantMsg> linkedList=getWants();
 					mHandler.post(new Runnable() {
 						@Override
 						public void run() {
@@ -109,6 +110,6 @@ public abstract class CodeStyleAdapter implements Runnable{
 	public interface CodeStypeAdapterListener{
 		public abstract int checkLength();
 		public abstract void parserComplete(CodeStyleAdapter parser,List<SpanBody> spanBodies);
-		public abstract void getWantComplete(CodeStyleAdapter parser,int wantChangeStart,int wantChangeEnd,List<String> wants);
+		public abstract void getWantComplete(CodeStyleAdapter parser,int wantChangeStart,int wantChangeEnd,List<WantMsg> wants);
 	}
 }

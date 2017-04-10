@@ -9,6 +9,7 @@ import android.os.Handler;
 import android.text.style.ForegroundColorSpan;
 import person.wangchen11.ccode.ArmAsmCodeParser;
 import person.wangchen11.ccode.CodeEntity;
+import person.wangchen11.ccode.WantMsg;
 import person.wangchen11.editor.edittext.SpanBody;
 
 public class ArmAsmCodeStyleAdapter extends CodeStyleAdapter{
@@ -66,8 +67,13 @@ public class ArmAsmCodeStyleAdapter extends CodeStyleAdapter{
 		return mCodeParser.getWantChangeEnd();
 	} 
 	
-	public LinkedList<String> getWants(){
-		return mCodeParser.getWant(mChangePosition,0);
+	public LinkedList<WantMsg> getWants(){
+		LinkedList<WantMsg> linkedList = new LinkedList<WantMsg>();
+		Iterator<String> iterator = mCodeParser.getWant(mChangePosition,0).iterator();
+		while(iterator.hasNext()){
+			linkedList.addLast(new WantMsg(iterator.next()));
+		}
+		return linkedList;
 	}
 	
 	private ForegroundColorSpan getColorSpanByCodeEntity(CodeEntity entity){

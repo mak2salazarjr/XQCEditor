@@ -44,6 +44,7 @@ import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
+import person.wangchen11.ccode.WantMsg;
 import person.wangchen11.codeanalysis.ccode.CCodeFormat;
 import person.wangchen11.codeanalysis.ccode.CCodeKeywords;
 import person.wangchen11.codeanalysis.ccode.CCodeKeywordsAdapter;
@@ -569,7 +570,7 @@ public class EditorFregment extends Fragment implements OnClickListener, AfterTe
 	private int mWantChangeEnd=0;
 	
 	@Override
-	public void onNeedChangeWants(int start, int end, List<String> wants) {
+	public void onNeedChangeWants(int start, int end, List<WantMsg> wants) {
 		Log.i(TAG, "onNeedChangeWants:"+start+ " "+end);
 		mWantChangeStart=start;
 		mWantChangeEnd=end;
@@ -591,8 +592,8 @@ public class EditorFregment extends Fragment implements OnClickListener, AfterTe
 	}
 	
 	class WantListAdapter extends BaseAdapter{
-		List<String> mWants;
-		public WantListAdapter(List<String> wants) {
+		List<WantMsg> mWants;
+		public WantListAdapter(List<WantMsg> wants) {
 			mWants=wants;
 		}
 		@Override
@@ -614,7 +615,7 @@ public class EditorFregment extends Fragment implements OnClickListener, AfterTe
 		public View getView(int position, View convertView, ViewGroup parent) {
 			float density=parent.getContext().getResources().getDisplayMetrics().density;
 			TextView textView=new TextView(parent.getContext());
-			textView.setText(mWants.get(position));
+			textView.setText(mWants.get(position).mReplace);
 			textView.setPadding((int)(density*2),(int)( density*6),(int)( density*2),(int)( density*6) );
 			return textView;
 		}

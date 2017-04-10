@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import person.wangchen11.ccode.WantMsg;
 import person.wangchen11.editor.codeedittext.CodeStyleAdapter.CodeStypeAdapterListener;
 import person.wangchen11.editor.edittext.AfterTextChangeListener;
 import person.wangchen11.editor.edittext.EditableWithLayout;
@@ -141,7 +142,7 @@ public class CodeEditText extends MyEditText implements CodeStypeAdapterListener
 	}
 
 	@Override
-	public void getWantComplete(CodeStyleAdapter adapter,int wantChangeStart,int wantChangeEnd,List<String> wants) {
+	public void getWantComplete(CodeStyleAdapter adapter,int wantChangeStart,int wantChangeEnd,List<WantMsg> wants) {
 		if(checkLength()==adapter.length()  && getText() instanceof EditableWithLayout )
 		{
 			if(mOnNeedChangeWants!=null)

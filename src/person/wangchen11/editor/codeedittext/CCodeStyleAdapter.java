@@ -8,6 +8,7 @@ import android.os.Handler;
 import android.text.style.ForegroundColorSpan;
 import person.wangchen11.ccode.CodeEntity;
 import person.wangchen11.ccode.CCodeParser;
+import person.wangchen11.ccode.WantMsg;
 import person.wangchen11.editor.edittext.SpanBody;
 
 public class CCodeStyleAdapter extends CodeStyleAdapter{
@@ -65,7 +66,7 @@ public class CCodeStyleAdapter extends CodeStyleAdapter{
 		return mCodeParser.getWantChangeEnd();
 	} 
 	
-	public LinkedList<String> getWants(){
+	public LinkedList<WantMsg> getWants(){
 		return mCodeParser.getWant(mChangePosition,0);
 	}
 	

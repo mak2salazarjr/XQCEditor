@@ -254,17 +254,17 @@ public class CCodeParser implements Runnable{
 		return mWantChangeEnd;
 	}
 	
-	public LinkedList<String> getWant(String str,int includeNumber){
-		LinkedList<String> linkedList=new LinkedList<String>();
+	public LinkedList<WantMsg> getWant(String str,int includeNumber){
+		LinkedList<WantMsg> linkedList=new LinkedList<WantMsg>();
 		if(str==null||str.length()<=0)
 			return linkedList;
 		return getWantWolds(str,mCode.length,mCode,includeNumber);
 	}
 
 	@SuppressLint("DefaultLocale")
-	private LinkedList<String> getIncludeWant(String str)
+	private LinkedList<WantMsg> getIncludeWant(String str)
 	{
-		LinkedList<String> linkedList=new LinkedList<String>();
+		LinkedList<WantMsg> linkedList=new LinkedList<WantMsg>();
 		if(str==null)
 			return linkedList;
 		int last_ = str.lastIndexOf('/');
@@ -295,9 +295,9 @@ public class CCodeParser implements Runnable{
 				if(name.toLowerCase().startsWith(end.toLowerCase()))
 				{
 					if(tf.isDirectory())
-						linkedList.add(pro+name+'/');
+						linkedList.add(new WantMsg(pro+name+'/'));
 					else
-						linkedList.add(pro+name);
+						linkedList.add(new WantMsg(pro+name));
 				}
 			}
 		}
@@ -305,9 +305,9 @@ public class CCodeParser implements Runnable{
 	}
 	
 	@SuppressLint("DefaultLocale")
-	private LinkedList<String> getIncludeSystemWant(String str)
+	private LinkedList<WantMsg> getIncludeSystemWant(String str)
 	{
-		LinkedList<String> linkedList=new LinkedList<String>();
+		LinkedList<WantMsg> linkedList=new LinkedList<WantMsg>();
 		if(str==null)
 			return linkedList;
 		int last_ = str.lastIndexOf('/');
@@ -337,9 +337,9 @@ public class CCodeParser implements Runnable{
 				if(name.toLowerCase().startsWith(end.toLowerCase()))
 				{
 					if(tf.isDirectory())
-						linkedList.add(pro+name+'/');
+						linkedList.add(new WantMsg(pro+name+'/'));
 					else
-						linkedList.add(pro+name);
+						linkedList.add(new WantMsg(pro+name));
 				}
 			}
 		}
@@ -352,16 +352,16 @@ public class CCodeParser implements Runnable{
 				if(name.toLowerCase().startsWith(end.toLowerCase()))
 				{
 					if(tf.isDirectory())
-						linkedList.add(name+'/');
+						linkedList.add(new WantMsg(name+'/'));
 					else
-						linkedList.add(name);
+						linkedList.add(new WantMsg(name));
 				}
 			}
 		}
 		return linkedList;
 	}
 	
-	public LinkedList<String> getWant(int pos,int includeNumber){
+	public LinkedList<WantMsg> getWant(int pos,int includeNumber){
 		CodeEntity entity = getEntity(pos-1);
 		if(entity==null)
 			return null;
@@ -410,20 +410,20 @@ public class CCodeParser implements Runnable{
 			}
 		}
 		
-		LinkedList<String> linkedList=getWantWolds(str,pos,mCode,includeNumber);
-		linkedList=(LinkedList<String>) addAllIfNotContains(linkedList,getWantKeyWords(str));
-		linkedList=(LinkedList<String>) addAllIfNotContains(linkedList,getWantKeyWordsEx(str));
+		LinkedList<WantMsg> linkedList=getWantWolds(str,pos,mCode,includeNumber);
+		linkedList=(LinkedList<WantMsg>) addAllIfNotContains(linkedList,getWantKeyWords(str));
+		linkedList=(LinkedList<WantMsg>) addAllIfNotContains(linkedList,getWantKeyWordsEx(str));
 		return linkedList;
 		//getWantKeyWords(str);
 		//getWantKeyWordsEx(str);
 	}
 	
 	
-	private LinkedList<String> getWantWolds(String str ,int findEnd,char []code,int includeNumber){
-		LinkedList<String> codeWants1=new LinkedList<String>();//存开头相同的字 
-		LinkedList<String> codeWants3=new LinkedList<String>();//存开头相似的字
+	private LinkedList<WantMsg> getWantWolds(String str ,int findEnd,char []code,int includeNumber){
+		LinkedList<WantMsg> codeWants1=new LinkedList<WantMsg>();//存开头相同的字 
+		LinkedList<WantMsg> codeWants3=new LinkedList<WantMsg>();//存开头相似的字
 		
-		LinkedList<String> codeWantsInclude=new LinkedList<String>();//存开头相似的字
+		LinkedList<WantMsg> codeWantsInclude=new LinkedList<WantMsg>();//存开头相似的字
 		Iterator<CodeEntity> iterator = mEntities.iterator();
 		CodeEntity proEntity=null;
 		while(iterator.hasNext()){
@@ -438,14 +438,14 @@ public class CCodeParser implements Runnable{
 					if(str2.startsWith(str))
 					{
 						if( !codeWants1.contains(str2) )
-							codeWants1.addFirst( str2 );
+							codeWants1.addFirst( new WantMsg(str2) );
 						if( codeWants1.size()>100 )
 							codeWants1.removeLast();
 					}
 					else
 					if(str2.substring(0, str.length()).equalsIgnoreCase(str)){
 						if( (!codeWants3.contains(str2)) && (!codeWants1.contains(str2)) )
-							codeWants3.addFirst(str2);
+							codeWants3.addFirst(new WantMsg(str2));
 						if( codeWants3.size()>100 )
 							codeWants3.removeLast();
 					}
@@ -459,13 +459,13 @@ public class CCodeParser implements Runnable{
 					String path=mIncludePath+File.separatorChar+new String(code,codeEntity.mStart+1,codeEntity.length()-2);
 					if(!new File(path).isFile())
 						path=mIncludePathEx+File.separatorChar+new String(code,codeEntity.mStart+1,codeEntity.length()-2);
-					codeWantsInclude=(LinkedList<String>) addAllIfNotContains(codeWantsInclude,findIncludeFile(path,str,includeNumber));
+					codeWantsInclude=(LinkedList<WantMsg>) addAllIfNotContains(codeWantsInclude,findIncludeFile(path,str,includeNumber));
 					Log.i(TAG, "include <>:"+path);
 				}else 
 				if( codeEntity.mTag==163 )//include "..."
 				{
 					String path=mPath+File.separatorChar+new String(code,codeEntity.mStart+1,codeEntity.length()-2);
-					codeWantsInclude=(LinkedList<String>) addAllIfNotContains(codeWantsInclude,findIncludeFile(path,str,includeNumber));
+					codeWantsInclude=(LinkedList<WantMsg>) addAllIfNotContains(codeWantsInclude,findIncludeFile(path,str,includeNumber));
 					Log.i(TAG, "include \"\":"+path);
 				}
 			}
@@ -474,8 +474,8 @@ public class CCodeParser implements Runnable{
 				proEntity=codeEntity;
 		}
 
-		codeWants1=(LinkedList<String>) addAllIfNotContains(codeWants1,codeWantsInclude);
-		codeWants1=(LinkedList<String>) addAllIfNotContains(codeWants1,codeWants3);
+		codeWants1=(LinkedList<WantMsg>) addAllIfNotContains(codeWants1,codeWantsInclude);
+		codeWants1=(LinkedList<WantMsg>) addAllIfNotContains(codeWants1,codeWants3);
 		return codeWants1;
 	}
 	
@@ -498,7 +498,7 @@ public class CCodeParser implements Runnable{
 		return new CCodeParser(code);
 	}
 	
-	public LinkedList<String> findIncludeFile(String path,String str,int includeNumber){
+	public LinkedList<WantMsg> findIncludeFile(String path,String str,int includeNumber){
 		includeNumber++;
 		File file=new File(path);
 		String key=file.getAbsolutePath()+"?"+file.lastModified();
@@ -511,8 +511,8 @@ public class CCodeParser implements Runnable{
 		return parser.getWant(str, includeNumber);
 	}
 	
-	private LinkedList<String> getWantKeyWords(String str){
-		LinkedList<String> codeWants2=new LinkedList<String>();//存开头相同的关键字
+	private LinkedList<WantMsg> getWantKeyWords(String str){
+		LinkedList<WantMsg> codeWants2=new LinkedList<WantMsg>();//存开头相同的关键字
 		for(int i=0;i<mCodeKeyWords.length;i++)
 		{
 			if(mCodeKeyWords[i].length()>=str.length())
@@ -521,7 +521,7 @@ public class CCodeParser implements Runnable{
 				{
 					String str2=mCodeKeyWords[i];
 					if(  (!codeWants2.contains(str2))   )
-						codeWants2.addFirst(str2);
+						codeWants2.addFirst(new WantMsg(str2));
 					if( codeWants2.size()>200 )
 						codeWants2.removeLast();
 				}
@@ -535,7 +535,7 @@ public class CCodeParser implements Runnable{
 				{
 					String str2=mCodeProKeyWords[i];
 					if(  (!codeWants2.contains(str2))   )
-						codeWants2.addFirst(str2);
+						codeWants2.addFirst(new WantMsg(str2));
 					if( codeWants2.size()>200 )
 						codeWants2.removeLast();
 				}
@@ -544,8 +544,8 @@ public class CCodeParser implements Runnable{
 		return codeWants2;
 	}
 	
-	private LinkedList<String> getWantKeyWordsEx(String str){
-		LinkedList<String> codeWants4=new LinkedList<String>();//存开头相同的关键字 
+	private LinkedList<WantMsg> getWantKeyWordsEx(String str){
+		LinkedList<WantMsg> codeWants4=new LinkedList<WantMsg>();//存开头相同的关键字 
 		for(int i=0;i<mCodeKeyWords.length;i++)
 		{
 			if(mCodeKeyWords[i].length()>=str.length())
@@ -554,7 +554,7 @@ public class CCodeParser implements Runnable{
 				{
 					String str2=mCodeKeyWords[i];
 					if(  (!codeWants4.contains(str2)) )
-						codeWants4.addFirst(str2);
+						codeWants4.addFirst(new WantMsg(str2));
 					if( codeWants4.size()>200 )
 						codeWants4.removeLast();
 				}
@@ -568,7 +568,7 @@ public class CCodeParser implements Runnable{
 				{
 					String str2=mCodeProKeyWords[i];
 					if(  (!codeWants4.contains(str2)) )
-						codeWants4.addFirst(str2);
+						codeWants4.addFirst(new WantMsg(str2));
 					if( codeWants4.size()>200 )
 						codeWants4.removeLast();
 				}
