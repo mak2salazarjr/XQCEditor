@@ -437,20 +437,20 @@ public class CCodeParser implements Runnable{
 				{
 					if(str2.startsWith(str))
 					{
-						if( !codeWants1.contains(str2) ){
-							Log.i(TAG, "codeWants1:"+str2);
-							String curLine = getLineByPos((codeEntity.mStart+codeEntity.mEnd)/2);
-							codeWants1.addFirst( new WantMsg(str2,curLine) );
+						String curLine = getLineByPos((codeEntity.mStart+codeEntity.mEnd)/2);
+						WantMsg wantMsg = new WantMsg(str2,curLine);
+						if( !codeWants1.contains(wantMsg) ){
+							codeWants1.addFirst( wantMsg );
 						}
 						if( codeWants1.size()>100 )
 							codeWants1.removeLast();
 					}
 					else
 					if(str2.substring(0, str.length()).equalsIgnoreCase(str)){
-						Log.i(TAG, "codeWants3:"+str2);
-						if( (!codeWants3.contains(str2)) && (!codeWants1.contains(str2)) ){
-							String curLine = getLineByPos((codeEntity.mStart+codeEntity.mEnd)/2);
-							codeWants3.addFirst(new WantMsg(str2,curLine));
+						String curLine = getLineByPos((codeEntity.mStart+codeEntity.mEnd)/2);
+						WantMsg wantMsg = new WantMsg(str2,curLine);
+						if( (!codeWants3.contains(wantMsg)) && (!codeWants1.contains(wantMsg)) ){
+							codeWants3.addFirst(wantMsg);
 						}
 						if( codeWants3.size()>100 )
 							codeWants3.removeLast();
@@ -528,8 +528,9 @@ public class CCodeParser implements Runnable{
 				if(mCodeKeyWords[i].startsWith(str))
 				{
 					String str2=mCodeKeyWords[i];
-					if(  (!codeWants2.contains(str2))   )
-						codeWants2.addFirst(new WantMsg(str2));
+					WantMsg wantMsg = new WantMsg(str2);
+					if(  (!codeWants2.contains(wantMsg))   )
+						codeWants2.addFirst(wantMsg);
 					if( codeWants2.size()>200 )
 						codeWants2.removeLast();
 				}
@@ -542,8 +543,9 @@ public class CCodeParser implements Runnable{
 				if(mCodeProKeyWords[i].startsWith(str))
 				{
 					String str2=mCodeProKeyWords[i];
-					if(  (!codeWants2.contains(str2))   )
-						codeWants2.addFirst(new WantMsg(str2));
+					WantMsg wantMsg = new WantMsg(str2);
+					if(  (!codeWants2.contains(wantMsg))   )
+						codeWants2.addFirst(wantMsg);
 					if( codeWants2.size()>200 )
 						codeWants2.removeLast();
 				}
@@ -561,8 +563,9 @@ public class CCodeParser implements Runnable{
 				if( mCodeKeyWords[i].substring(0, str.length()).equalsIgnoreCase(str) )
 				{
 					String str2=mCodeKeyWords[i];
-					if(  (!codeWants4.contains(str2)) )
-						codeWants4.addFirst(new WantMsg(str2));
+					WantMsg wantMsg = new WantMsg(str2);
+					if(  (!codeWants4.contains(wantMsg)) )
+						codeWants4.addFirst(wantMsg);
 					if( codeWants4.size()>200 )
 						codeWants4.removeLast();
 				}
@@ -575,8 +578,9 @@ public class CCodeParser implements Runnable{
 				if( mCodeProKeyWords[i].substring(0, str.length()).equalsIgnoreCase(str) )
 				{
 					String str2=mCodeProKeyWords[i];
-					if(  (!codeWants4.contains(str2)) )
-						codeWants4.addFirst(new WantMsg(str2));
+					WantMsg wantMsg = new WantMsg(str2);
+					if(  (!codeWants4.contains(wantMsg)) )
+						codeWants4.addFirst(wantMsg);
 					if( codeWants4.size()>200 )
 						codeWants4.removeLast();
 				}

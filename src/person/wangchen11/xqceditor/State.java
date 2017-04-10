@@ -68,7 +68,7 @@ public class State {
 	
 	public static String mUpdateMsg = 
 			"2.1.0:\n" +
-			"(1)增加实时查错功能。" +
+			"(1)增加实时查错功能。\n" +
 			"2.0.9:\n" +
 			"(1)修复makefile部分问题。\n" +
 			"(2)添加物理键盘支持。\n" +

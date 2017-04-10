@@ -24,4 +24,9 @@ public class WantMsg {
 			return false;
 		return mReplace.equals(((WantMsg)o).mReplace);
 	}
+	
+	@Override
+	public String toString() {
+		return mReplace;
+	}
 }
