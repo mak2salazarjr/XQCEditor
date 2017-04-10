@@ -423,7 +423,7 @@ public class CCodeParser implements Runnable{
 		LinkedList<WantMsg> codeWants1=new LinkedList<WantMsg>();//存开头相同的字 
 		LinkedList<WantMsg> codeWants3=new LinkedList<WantMsg>();//存开头相似的字
 		
-		LinkedList<WantMsg> codeWantsInclude=new LinkedList<WantMsg>();//存开头相似的字
+		LinkedList<WantMsg> codeWantsInclude=new LinkedList<WantMsg>();//
 		Iterator<CodeEntity> iterator = mEntities.iterator();
 		CodeEntity proEntity=null;
 		while(iterator.hasNext()){
@@ -437,15 +437,21 @@ public class CCodeParser implements Runnable{
 				{
 					if(str2.startsWith(str))
 					{
-						if( !codeWants1.contains(str2) )
-							codeWants1.addFirst( new WantMsg(str2) );
+						if( !codeWants1.contains(str2) ){
+							Log.i(TAG, "codeWants1:"+str2);
+							String curLine = getLineByPos((codeEntity.mStart+codeEntity.mEnd)/2);
+							codeWants1.addFirst( new WantMsg(str2,curLine) );
+						}
 						if( codeWants1.size()>100 )
 							codeWants1.removeLast();
 					}
 					else
 					if(str2.substring(0, str.length()).equalsIgnoreCase(str)){
-						if( (!codeWants3.contains(str2)) && (!codeWants1.contains(str2)) )
-							codeWants3.addFirst(new WantMsg(str2));
+						Log.i(TAG, "codeWants3:"+str2);
+						if( (!codeWants3.contains(str2)) && (!codeWants1.contains(str2)) ){
+							String curLine = getLineByPos((codeEntity.mStart+codeEntity.mEnd)/2);
+							codeWants3.addFirst(new WantMsg(str2,curLine));
+						}
 						if( codeWants3.size()>100 )
 							codeWants3.removeLast();
 					}
@@ -501,6 +507,8 @@ public class CCodeParser implements Runnable{
 	public LinkedList<WantMsg> findIncludeFile(String path,String str,int includeNumber){
 		includeNumber++;
 		File file=new File(path);
+		if(!file.isFile())
+			return new LinkedList<WantMsg>();
 		String key=file.getAbsolutePath()+"?"+file.lastModified();
 		CCodeParser parser=mParserCache.get(key);
 		if(parser==null)
@@ -729,6 +737,26 @@ public class CCodeParser implements Runnable{
 				return i;
 		}
 		return -1;
+	}
+	
+	public String getLineByPos(int pos){
+		int start = 0;
+		int end = mCode.length;
+		for(int i=0;i<mCode.length;i++){
+			if(mCode[i]=='\n'){
+				if(pos>i){
+					start = i+1;
+				}else{
+					end = i;
+					break;
+				}
+			}
+		}
+		Log.i(TAG, "getLineByPos:NULL,start:"+start+" end:"+end+" pos:"+pos);
+		if(start>pos||end<pos)
+			return "";
+		Log.i(TAG, "getLineByPos:"+new String(mCode,start,end-start));
+		return new String(mCode,start,end-start) ;
 	}
 	
 	public static String getAll(String fileName){
