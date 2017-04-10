@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="person.wangchen11.xqceditor"
     android:versionCode="19"
-    android:versionName="2.0.9" >
+    android:versionName="2.1.0" >
 
     <uses-sdk
         android:minSdkVersion="11"
@@ -22,6 +22,7 @@
     <uses-permission android:name="android.permission.ACCESS_SUPERUSER" />
     
     <application
+        android:largeHeap="true"
         android:taskAffinity=""
         android:windowSoftInputMode="adjustResize" 
         android:allowBackup="true"
