@@ -239,6 +239,10 @@ public class EditorFregment extends Fragment implements OnClickListener, AfterTe
 	@SuppressLint("DefaultLocale")
 	private void checkCode()
 	{
+		synchronized (EditorFregment.this) {
+			if(mCodeCheck!=null)
+				mCodeCheck.stop();
+		}
 		File file = getFile();
 		mCodeCheck = new GNUCCodeCheck(getActivity(), file);
 		if(file!=null)
@@ -249,7 +253,6 @@ public class EditorFregment extends Fragment implements OnClickListener, AfterTe
 				final LinkedList<CheckInfo> checkInfos = mCodeCheck.start();
 				if(checkInfos!=null){
 					mHandler.post(new Runnable() {
-						
 						@Override
 						public void run() {
 							mCodeEditText.setWarnAndError( CheckCodeAdapt.getCWarnAndErrors(checkInfos,mFile) );
@@ -258,7 +261,9 @@ public class EditorFregment extends Fragment implements OnClickListener, AfterTe
 				}
 			}
 		}
-		mCodeCheck = null;
+		synchronized (EditorFregment.this) {
+			mCodeCheck = null;
+		}
 	}
 	
 	private void configCharList(String chars){
@@ -539,6 +544,12 @@ public class EditorFregment extends Fragment implements OnClickListener, AfterTe
 			mChangeFlagChanged.onChangeFlagChanged();
 		onNeedChangeWants(0,0,null);
 		mCodeEditText.requestFocus();
+
+		synchronized (EditorFregment.this) {
+			if(mCodeCheck!=null)
+				mCodeCheck.stop();
+		}
+		mCodeEditText.setWarnAndError( null );
 	}
 	
 	public boolean isChanged(){

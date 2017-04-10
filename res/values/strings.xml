@@ -183,5 +183,7 @@
     <string name="_nonext">There\'s nothing to do.\n</string>
     <string name="_wait">Wait</string>
     <string name="_back">Back</string>
-    <string name="_updatemsg">更新说明</string>
+    <string name="_updatemsg">UpdateMsg</string>
+    <string name="warn">Warning</string>
+    <string name="error">Error</string>
 </resources>

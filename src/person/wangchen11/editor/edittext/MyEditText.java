@@ -1,9 +1,11 @@
 package person.wangchen11.editor.edittext;
 
+import java.util.Iterator;
 import java.util.List;
 
 import person.wangchen11.xqceditor.R;
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -38,6 +40,7 @@ import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputConnection;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Scroller;
+import android.widget.TextView;
 
 @SuppressWarnings("deprecation")
 public class MyEditText extends View implements OnGestureListener,TextWatcher, OnScaleGestureListener, OnDoubleTapListener {
@@ -355,11 +358,16 @@ public class MyEditText extends View implements OnGestureListener,TextWatcher, O
 				//canvas.drawCircle(x, mBoundsOfCursor.bottom + r, r, mSelectionPaint);
 				canvas.drawBitmap(mBitmapSelectLeft, x-(mBitmapSelectLeft.getWidth()*62f/72), mBoundsOfCursor.bottom, mSelectionPaint);
 			}
+			
 		}
 		canvas.save();
 		canvas.rotate(90);
 		canvas.translate( getScrollY(),-(getScrollX()+getWidth()) );
 		mScrollBar.draw(canvas);
+		if(mLayout instanceof EditableWithLayout) {
+			EditableWithLayout editableWithLayout = (EditableWithLayout) mLayout;
+			mScrollBar.drawWarnAndError(canvas,editableWithLayout.getWarnAndErrors(),mLayout.getLineCount());
+		}
 		canvas.save();
 		/*
 		canvas.restore();
@@ -601,10 +609,49 @@ public class MyEditText extends View implements OnGestureListener,TextWatcher, O
 	@Override
 	public boolean onDoubleTap(MotionEvent e) {
 		Log.i(TAG, "onDoubleTap");
-		showMenu();
+		//showMenu();
+		if(mLayout!=null){
+			int line=mLayout.getLineForVertical(getScrollY()+(int) e.getY());
+			int offset=mLayout.getOffsetForHorizontal(line, getScrollX()+(int)e.getX());
+			showWarnAndError(line,offset);
+		}
 		return false;
 	}
-
+	
+	public void showWarnAndError(int line,int offset){
+		if( !(getLayout() instanceof EditableWithLayout))
+		{
+			return ;
+		}
+		List<WarnAndError> warnAndErrors = ((EditableWithLayout)getLayout()).getWarnAndErrors();
+		if(warnAndErrors==null)
+			return ;
+		
+		Iterator<WarnAndError> iterator = warnAndErrors.iterator();
+		WarnAndError warnAndError = null;
+		while(iterator.hasNext()){
+			WarnAndError temp = iterator.next();
+			if(temp.include(line, offset))
+			{
+				warnAndError = temp;
+				break;
+			}
+		}
+		if(warnAndError==null)
+			return ;
+		
+		AlertDialog alertDialog = null;
+		AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+		builder.setTitle(warnAndError.getTitle());
+		builder.setCancelable(true);
+		TextView textView = new TextView(getContext());
+		textView.setText(""+warnAndError.mMsg);
+		textView.setPadding(12, 12, 12, 12);
+		textView.setTextIsSelectable(true);
+		builder.setView(textView);
+		alertDialog = builder.create();
+		alertDialog.show();
+	}
 
 	@Override
 	public boolean onDoubleTapEvent(MotionEvent e) {
@@ -627,6 +674,7 @@ public class MyEditText extends View implements OnGestureListener,TextWatcher, O
 		showSoftKeyboard();
 		return false;
 	}
+	
 	@Override
 	public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX,
 			float distanceY) {

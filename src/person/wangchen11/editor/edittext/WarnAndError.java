@@ -1,6 +1,7 @@
 package person.wangchen11.editor.edittext;
 
 import android.graphics.Color;
+import person.wangchen11.xqceditor.R;
 
 public class WarnAndError {
 	public int mLevel;
@@ -43,4 +44,25 @@ public class WarnAndError {
 		
 	}
 	
+	public int getTitle(){
+		switch (mLevel) {
+		case LEVEL_INFO:
+			return R.string.tip;
+		case LEVEL_WARN:
+			return R.string.warn;
+		case LEVEL_ERROR:
+			return R.string.error;
+		default:
+			return R.string.tip;
+		}
+	}
+	
+	public boolean include(int line,int offset){
+		if(mLine==line){
+			if(mFullLine==true)
+				return true;
+			// TODO 
+		}
+		return false;
+	}
 }

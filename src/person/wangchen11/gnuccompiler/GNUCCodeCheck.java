@@ -14,6 +14,7 @@ public class GNUCCodeCheck {
 	private String mCmd ="";
 	private boolean mIsChecked = false;
 	private LinkedList<CheckInfo> mCheckInfos = new LinkedList<CheckInfo>();
+	private boolean mStopFlag = false;
 	
 	public GNUCCodeCheck(Context context,File file) {
 		mCmd=GNUCCompiler2.getExportEnvPathCmd(context);
@@ -29,6 +30,10 @@ public class GNUCCodeCheck {
 		tempFile.deleteOnExit();
 		mCmd+=GNUCCompiler2.getCompilerOnlyCmd(file,tempFile,null);
 		mCmd+="\nexit\n";
+	}
+	
+	public void stop(){
+		mStopFlag = true;
 	}
 	
 	public boolean isChencked()
@@ -64,7 +69,7 @@ public class GNUCCodeCheck {
 			outputStream.flush();
 			int proLength=0;
 			byte[] buffer=new byte[100];
-			while(true){
+			while(!mStopFlag){
 				try {
 					Thread.sleep(10);
 				} catch (InterruptedException e) {
@@ -95,7 +100,8 @@ public class GNUCCodeCheck {
 				else
 					break;
 			}
-			dexErrorPutMsg(stringBuilder.toString());
+			if(!mStopFlag)
+				dexErrorPutMsg(stringBuilder.toString());
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

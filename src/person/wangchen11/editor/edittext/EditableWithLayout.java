@@ -884,6 +884,8 @@ public class EditableWithLayout implements Editable,MyLayout {
 
 	public void setWarnAndErrors(List<WarnAndError> warnAndErrors){
 		mWarnAndErrors = warnAndErrors;
+		if(mWarnAndErrors==null)
+			mWarnAndErrors = new LinkedList<WarnAndError>();
 	}
 	
 	public List<WarnAndError> getWarnAndErrors(){

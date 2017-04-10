@@ -1,5 +1,8 @@
 package person.wangchen11.editor.edittext;
 
+import java.util.Iterator;
+import java.util.List;
+
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -12,14 +15,28 @@ public class ScrollBar {
 	float mHeight;
 	final static float MINI_SCALE=0.1f; 
 	Paint mPaint=new Paint();
+	Paint mWarnAndErrorPaint=new Paint();
 	public ScrollBar() {
 		mPaint.setColor(Color.GRAY);
 	}
 	
 	public void draw(Canvas canvas){
-		float x=mWidth*(mStart/mAll);
-		float y=mWidth*(mEnd/mAll);
-		canvas.drawRect(x, 0, y, mHeight, mPaint);
+		float x1=mWidth*(mStart/mAll);
+		float x2=mWidth*(mEnd/mAll);
+		canvas.drawRect(x1, 0, x2, mHeight, mPaint);
+	}
+	
+	public void drawWarnAndError(Canvas canvas,List<WarnAndError> warnAndErrors,int count){
+		if(count<=0)
+			return;
+		Iterator<WarnAndError> iterator = warnAndErrors.iterator();
+		while(iterator.hasNext()){
+			WarnAndError warnAndError = iterator.next();
+			float x1=mWidth*(warnAndError.mLine/(float)count);
+			float x2=mWidth*(warnAndError.mLine/(float)count)+12;
+			mWarnAndErrorPaint.setColor(warnAndError.mColor);
+			canvas.drawRect(x1, 0, x2, mHeight, mWarnAndErrorPaint);
+		}
 	}
 	
 	public void setSize(float width,float height)

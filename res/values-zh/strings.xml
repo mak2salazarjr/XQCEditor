@@ -176,4 +176,7 @@
     <string name="_nonext">没有下一步可做\n</string>
     <string name="_wait">再看看</string>
     <string name="_back">返回</string>
+    <string name="_updatemsg">更新说明</string>
+    <string name="warn">警告</string>
+    <string name="error">错误</string>
 </resources>
