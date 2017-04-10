@@ -613,7 +613,9 @@ public class EditableWithLayout implements Editable,MyLayout {
 				WarnAndError warnAndError = curLinesIterator.next();
 				if(warnAndError.mLine==i){
 					if(warnAndError.mFullLine){
-						fullLine = warnAndError;
+						if(fullLine==null)
+							fullLine = warnAndError;
+						break;
 					}else{
 						curLines.add(warnAndError);
 					}

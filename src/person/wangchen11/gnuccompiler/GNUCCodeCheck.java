@@ -127,11 +127,21 @@ public class GNUCCodeCheck {
 					{
 						type = CheckInfo.TYPE_ERROR;
 					}
+					else
+					if(items[3].contains("warning"))
+					{
+						type = CheckInfo.TYPE_WARN;
+					}
+					else
+						continue;
 					String wmsg = items[4];
 					for(int j=5;j<items.length;j++)
 					{
 						wmsg+=":"+items[j];
 					}
+					String transMsg = translateMsg(wmsg);
+					if(!wmsg.equals(transMsg))
+						wmsg+="\n\n"+transMsg;
 					mCheckInfos.add(new CheckInfo(items[0], wmsg, type, lineAt, charAt));
 					
 				}catch (Exception e) {
@@ -182,4 +192,48 @@ public class GNUCCodeCheck {
 		return 1;
 	}
 	
+	public static final String mReplaceStr[][] = {
+		{"unused variable","没用到的变量"},
+		{"too many arguments for format","format对应的参数过多"},
+		{"expects a matching","期望匹配到"},
+		{"first use in this function","第一次在这个函数里使用"},
+		{"with no value","需要一个值"},
+		{"in function returning non-void","这个函数的返回类型不是void"},
+		{"data definition has no type or storage class","没有指明类型的数据定义"},
+		{"two or more data types in declaration specifiers","两个或两个以上的数据类型的声明"},
+		{"redeclared as different kind of symbol","重新声明为不同的符号"},
+		{"that defines no instances","并且没有定义实例"},
+		{"empty character constant","空字符常数"},
+		{"multi-character character constant","多字字符常数"},
+		{"conflicting types for","冲突的类型:"},
+		{"initialization makes integer from pointer without a cast","使用指针初始化整型数据却没有强转"},
+		{"pointer value used where a floating point value was expected",""},
+		{"cast from pointer to integer of different size","指针强转时类型大小不一致"},
+		{"return type defaults to","没指定返回类型，默认为:"},
+		{"control reaches end of non-void function","控制达到非void函数结束"},
+		{"implicit declaration of function","隐式声明的函数:"},
+		{"too few arguments to function","缺少参数去调用:"},
+		{"too many arguments to function","太多的参数去调用:"},
+		{"array size missing in","缺少数组大小:"},
+		{"lvalue required as left operand of assignment","左值无法被赋值"},
+		{"undeclared","未声明"},
+		{"expected ","缺少"},
+		{"expects ","期望的"},
+		{"before ","在这之前:"},
+		{"format ","格式"},
+		{"arguments","参数"},
+		{"argument","参数"},
+		{"unnamed ","未命名的"},
+		{"expression ","表达式"},
+		{"of type ","类型是"},
+		{"has type ","的类型是"},
+		{"but ","但是 "},
+		{"token",""},
+	};
+	private String translateMsg(String msg){
+		for(int i=0;i<mReplaceStr.length;i++){
+			msg = msg.replaceAll(mReplaceStr[i][0], mReplaceStr[i][1]);
+		}
+		return msg;
+	}
 }
