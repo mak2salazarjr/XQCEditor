@@ -491,10 +491,13 @@ public class CCodeParser implements Runnable{
 		while(iterator.hasNext())
 		{
 			E e=iterator.next();
-			if(!list1.contains(e))
+			if(list1.contains(e))
 			{
-				list1.add(e);
+				list1.remove(e);
+				list1.add(0,e);
 			}
+			else
+				list1.add(e);
 		}
 		return list1;
 	}

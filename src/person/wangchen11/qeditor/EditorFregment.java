@@ -616,16 +616,16 @@ public class EditorFregment extends Fragment implements OnClickListener, AfterTe
 			WantMsg wantMsg = mWants.get(position);
 			float density=parent.getContext().getResources().getDisplayMetrics().density;
 			LinearLayout layout = new LinearLayout(parent.getContext());
-			layout.setPadding((int)(density*2),(int)( density*6),(int)( density*2),(int)( density*6) );
+			layout.setPadding((int)(density*2),(int)( density*4),(int)( density*2),(int)( density*4) );
 			layout.setOrientation(LinearLayout.VERTICAL);
 			TextView textView=new TextView(parent.getContext());
 			textView.setText(wantMsg.mReplace);
-			textView.setTextSize(density*5);
+			textView.setTextSize(14f);
 			layout.addView(textView);
 			if(wantMsg.mTip!=null&&wantMsg.mTip.length()>0){
 				TextView textView2=new TextView(parent.getContext());
 				textView2.setText(wantMsg.mTip);
-				textView2.setTextSize(density*3.2f);
+				textView2.setTextSize(10);
 				textView2.setTextColor(Color.rgb(0x80, 0x30, 0x00));
 				layout.addView(textView2);
 			}

@@ -27,14 +27,13 @@ public class GNUCCompiler {
 	private final static int BUFFER=4096; 
 
 	public static void freeResourceIfNeed(final Context context){
-		if( State.isUpdated() || !new File(getWorkSpaceDir()).isDirectory() )
-		{
-			freeZip(context, "workspace.zip", getSystemDir() );
-			
-		}
 		new Thread(new Runnable() {
 			@Override
 			public void run() {
+				if( State.isUpdated() || !new File(getWorkSpaceDir()).isDirectory() )
+				{
+					freeZip(context, "workspace.zip", getSystemDir() );
+				}
 				if( State.isUpdated() || !new File(getGccPath(context)).isDirectory() )
 				{
 					freeZip(context, "gcc.zip", getRunablePath(context));
