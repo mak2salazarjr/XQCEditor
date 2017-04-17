@@ -12,7 +12,7 @@ public class Plugin {
 		mName = file.getName();
 	}
 	
-	public String getInitCmd(){
+	public String getInstallCmd(){
 		return "";
 	}
 	

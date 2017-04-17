@@ -2,6 +2,7 @@ package person.wangchen11.plugins;
 
 import java.io.File;
 import java.io.InputStream;
+import java.util.Iterator;
 import java.util.LinkedList;
 
 import android.content.Context;
@@ -15,14 +16,13 @@ public class PluginsManager {
 	private PluginsManager(Context context){
 		mContext = context;
 		refreshPlugs();
-		initPlugs();
 	}
 	
 	public static void init(Context context){
 		mPluginsManager = new PluginsManager(context);
 	}
 	
-	public PluginsManager getInstance(){
+	public static PluginsManager getInstance(){
 		return mPluginsManager;
 	}
 	
@@ -39,8 +39,16 @@ public class PluginsManager {
 		}
 	}
 	
-	private void initPlugs(){
-		
+	public String getSourceCmd(){
+		Iterator<Plugin> iterator = mPlugins.iterator();
+		StringBuilder stringBuilder = new StringBuilder();
+		while(iterator.hasNext())
+		{
+			Plugin plugin = iterator.next();
+			stringBuilder.append( plugin.getSourceCmd() );
+			stringBuilder.append( "\n" );
+		}
+		return stringBuilder.toString();
 	}
 	
 	public String getRunnablePath()
@@ -73,6 +81,7 @@ public class PluginsManager {
 		String cmd="\n";
 		cmd+="export PLUGINS="+getPluginsPath(context)+"\n";
 		cmd+="\n";
+		cmd+=getInstance().getSourceCmd();
 		return cmd;
 	}
 	
