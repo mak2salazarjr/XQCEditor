@@ -15,6 +15,7 @@ import person.wangchen11.editor.edittext.EditableWithLayout;
 import person.wangchen11.editor.edittext.MyInputConnection;
 import person.wangchen11.editor.edittext.SpanBody;
 import person.wangchen11.gnuccompiler.GNUCCompiler2;
+import person.wangchen11.plugins.PluginsManager;
 
 public class ConsoleInputConnection extends MyInputConnection implements ConsoleCallback{
 	private Console mConsole;
@@ -33,6 +34,7 @@ public class ConsoleInputConnection extends MyInputConnection implements Console
 		String cmd="";
 		cmd+="export APP_PATH=\""+context.getFilesDir().getAbsolutePath()+"\"\n";
 		cmd+=Busybox.getCmd(context);
+		cmd+=PluginsManager.getCmd(context);
 		cmd+=GNUCCompiler2.getExportEnvPathCmd(context);
 		return cmd;
 	}

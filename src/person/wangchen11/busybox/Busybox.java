@@ -90,9 +90,7 @@ public class Busybox {
 	{
 		String cmd="\n";
 		cmd+="export PATH=$PATH:"+getWorkDir(context)+"\n";
-		cmd+="cd "+getWorkDir(context)+"\n";
-		cmd+="chmod 777 *\n";
-		cmd+="cd /\n";
+		cmd+="chmod 777 "+getWorkDir(context)+"/*\n";
 		return cmd;
 	}
 }

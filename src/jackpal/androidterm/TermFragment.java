@@ -7,6 +7,7 @@ import java.io.IOException;
 
 import person.wangchen11.busybox.Busybox;
 import person.wangchen11.gnuccompiler.GNUCCompiler;
+import person.wangchen11.plugins.PluginsManager;
 import person.wangchen11.xqceditor.R;
 
 import jackpal.androidterm.emulatorview.EmulatorView;
@@ -46,6 +47,7 @@ public class TermFragment extends Fragment implements FinishCallback{
 	{
 		if(cmd == null||cmd.length()<0)
 			return "";
+		cmd = PluginsManager.getCmd(getActivity())+cmd;
 		String ret = "";//"cd $HOME\n";
 		File file = getNextRunnableSh(this.getActivity());
 		try {
