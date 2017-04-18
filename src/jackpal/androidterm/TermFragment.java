@@ -46,8 +46,8 @@ public class TermFragment extends Fragment implements FinishCallback{
 	public String getInitCmdEx(String cmd)
 	{
 		if(cmd == null||cmd.length()<0)
-			return "";
-		cmd = PluginsManager.getCmd(getActivity())+cmd;
+			cmd="";
+		cmd = PluginsManager.getCmd(getActivity())+"cd $HOME\n"+cmd;
 		String ret = "";//"cd $HOME\n";
 		File file = getNextRunnableSh(this.getActivity());
 		try {
@@ -62,7 +62,8 @@ public class TermFragment extends Fragment implements FinishCallback{
 			e.printStackTrace();
 		}
 		file.setExecutable(true, false);
-		ret += "source "+file.getAbsolutePath();
+		ret += ". "+file.getAbsolutePath();
+		ret += "\nclear";
 		return ret;
 	}
 	

@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
+import person.wangchen11.plugins.WaitingProcess;
 import person.wangchen11.util.FileUtil;
 import person.wangchen11.xqceditor.R;
 import person.wangchen11.xqceditor.State;
@@ -27,35 +28,48 @@ public class GNUCCompiler {
 	private final static int BUFFER=4096; 
 
 	public static void freeResourceIfNeed(final Context context){
-		new Thread(new Runnable() {
+		new WaitingProcess(context,"ÊÍ·Å×ÊÔ´") {
 			@Override
 			public void run() {
+				setProcess(0);
+				setMsg(R.string.free_example);
 				if( State.isUpdated() || !new File(getWorkSpaceDir()).isDirectory() )
 				{
 					freeZip(context, "workspace.zip", getSystemDir() );
 				}
+				setMsg(R.string.install_gcc);
+				setProcess(20);
 				if( State.isUpdated() || !new File(getGccPath(context)).isDirectory() )
 				{
 					freeZip(context, "gcc.zip", getRunablePath(context));
 				}
+				setMsg(R.string.free_gcc_res);
+				setProcess(40);
 				if( State.isUpdated() || !new File(getIncludeDir()).isDirectory() )
 				{
 					freeZip(context, "gcc include.zip", getSystemDir() );
 				}
+				setMsg(R.string.free_gpp_res);
+				setProcess(60);
 				if( State.isUpdated() || !new File(getIncludeDirEx()).isDirectory() )
 				{
 					freeZip(context, "g++ include.zip", getSystemDir() );
 				}
-				
+				setProcess(80);
 				if( State.isUpdated() || !new File(getFixCppObj(context)).isFile() )
 				{
 					freeFile(context, "fix.cpp.o", getFixCppObj(context));
 				}
-				
+				setProcess(100);
 				FileUtil.setFileAllChildsExecutable(new File(getGccPath(context)));
 				FileUtil.setFileAllChildsExecutable(new File(getCcPath(context)));
 				FileUtil.setFileAllChildsExecutable(new File(getAbiPath(context)));
 				State.save(context);
+			}
+		}.start();
+		new Thread(new Runnable() {
+			@Override
+			public void run() {
 			}
 		}).start();
 	}

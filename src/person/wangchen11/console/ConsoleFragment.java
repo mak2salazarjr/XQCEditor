@@ -45,8 +45,8 @@ public class ConsoleFragment extends Fragment implements OnConsoleColseListener{
 		if(mRunAsSu)
 		{
 			mConsoleView.getConsole().execute("su\n");
-			mConsoleView.getConsole().execute(ConsoleInputConnection.getExportPathCmd(view.getContext()));
 		}
+		mConsoleView.getConsole().execute(ConsoleInputConnection.getExportPathCmd(view.getContext()));
 		mConsoleView.setConsoleCloseListener(this);
 		if(!mNeedErrorInput)
 			mConsoleView.getConsole().disableErrorInput();

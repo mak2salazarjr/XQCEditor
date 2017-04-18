@@ -19,7 +19,6 @@ import person.wangchen11.drawable.CircleDrawable;
 import person.wangchen11.filebrowser.FileBowserFragment;
 import person.wangchen11.gnuccompiler.GNUCCompiler;
 import person.wangchen11.plugins.PluginsManager;
-import person.wangchen11.plugins.WaitingProcess;
 import person.wangchen11.waps.Waps;
 import person.wangchen11.window.MenuTag;
 import person.wangchen11.window.WindowPointer;
@@ -66,14 +65,6 @@ public class EditorActivity extends FragmentActivity implements OnClickListener,
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		new WaitingProcess(this,"µÈ´ý") {
-			
-			@Override
-			public void run() {
-				while(true)
-					;
-			}
-		};
 		Waps.init(this);
 		State.init(this);
 		PluginsManager.init(this);

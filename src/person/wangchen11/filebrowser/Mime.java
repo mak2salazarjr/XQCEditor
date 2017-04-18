@@ -15,6 +15,7 @@ public class Mime {
 	    {".class",    "application/octet-stream"},  
 	    {".conf",    "text/plain"},  
 	    {".cpp",    "text/plain"},  
+	    {".docx",    "application/msword"},  
 	    {".doc",    "application/msword"},  
 	    {".exe",    "application/octet-stream"},  
 	    {".gif",    "image/gif"},  

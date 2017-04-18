@@ -20,6 +20,7 @@ import person.wangchen11.cproject.CProject;
 import person.wangchen11.filebrowser.FileBowserFragment;
 import person.wangchen11.filebrowser.OnOpenListener;
 import person.wangchen11.gnuccompiler.GNUCCompiler;
+import person.wangchen11.plugins.PluginsManager;
 import person.wangchen11.window.MenuTag;
 import person.wangchen11.window.Window;
 import person.wangchen11.window.WindowsManager;
@@ -72,6 +73,11 @@ public class FileBrowser implements Window,OnOpenListener, OnClickListener{
 			mParamEditText.setTag(file);
 			mRunElfDialog.show();
 			
+			return true;
+		}
+		if(name.endsWith(".qplug.zip")){
+			if(!PluginsManager.getInstance().installPlugin(file))
+				;// TODO show install failed!
 			return true;
 		}
 		if(name.endsWith(".sh")){

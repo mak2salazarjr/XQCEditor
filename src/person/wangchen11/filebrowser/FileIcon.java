@@ -7,6 +7,7 @@ import person.wangchen11.bitmap.ThumbnailFactory;
 import person.wangchen11.xqceditor.R;
 
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
@@ -31,7 +32,7 @@ public class FileIcon {
 		};
 	};
 
-	public static Bitmap getFileIconIdQuick(Context context,File file,int baseSize)
+	@SuppressLint("DefaultLocale") public static Bitmap getFileIconIdQuick(Context context,File file,int baseSize)
 	{
 		Bitmap bmp=null;
 		String dirKey="?dir";
@@ -83,6 +84,10 @@ public class FileIcon {
 			{
 				bmp = BitmapFactory.decodeResource(res, R.drawable.file_elf);
 			} else
+			if(fileName.toLowerCase().endsWith(".qplug.zip"))
+			{
+				bmp = BitmapFactory.decodeResource(res, R.drawable.file_plug);
+			} else
 			if(str.compareToIgnoreCase(".xls")==0)
 			{
 				bmp = BitmapFactory.decodeResource(res, R.drawable.file_excel);
@@ -121,7 +126,7 @@ public class FileIcon {
 			{
 				bmp = BitmapFactory.decodeResource(res, R.drawable.file_text);
 			} else
-			if(str.compareToIgnoreCase(".doc")==0)
+			if(str.compareToIgnoreCase(".doc")==0||str.compareToIgnoreCase(".docx")==0)
 			{
 				bmp = BitmapFactory.decodeResource(res, R.drawable.file_word);
 			} else
@@ -237,7 +242,7 @@ public class FileIcon {
 			{
 				bmp = BitmapFactory.decodeResource(res, R.drawable.file_text);
 			} else
-			if(str.compareToIgnoreCase(".doc")==0)
+			if(str.compareToIgnoreCase(".doc")==0||str.compareToIgnoreCase(".dox")==0)
 			{
 				bmp = BitmapFactory.decodeResource(res, R.drawable.file_word);
 			} else
