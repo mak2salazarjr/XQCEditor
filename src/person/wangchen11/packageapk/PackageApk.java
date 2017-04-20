@@ -1,14 +1,9 @@
 package person.wangchen11.packageapk;
 
 import java.io.BufferedOutputStream;
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -27,8 +22,6 @@ import android.app.AlertDialog.Builder;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
-import android.content.pm.PackageManager;
-import android.net.Uri;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.util.Log;
@@ -329,6 +322,7 @@ public class PackageApk implements OnClickListener{
 		return true;
 	}
 
+	/*
 	protected void installApkSilently(Context context, File file){
 		Uri apkUri = Uri.fromFile(file);
 		PackageManager packageManager = context.getPackageManager();
@@ -337,7 +331,6 @@ public class PackageApk implements OnClickListener{
 	}
 	
 	
-	/*
 	public boolean installApk(File file) throws Exception
 	{
 		String result = readConsole("pm install -r \""+file.getAbsolutePath()+"\"\n",true,true);

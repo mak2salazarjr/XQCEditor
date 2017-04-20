@@ -5,6 +5,7 @@ import java.util.List;
 import person.wangchen11.window.MenuTag;
 import person.wangchen11.window.Window;
 import person.wangchen11.xqceditor.R;
+import person.wangchen11.xqceditor.State;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -29,6 +30,7 @@ public class About extends Fragment implements Window{
 				startActivity(intent);
 			}
 		});
+		State.showUpdateMsg(inflater.getContext());
 		return viewGroup;
 	}
 	

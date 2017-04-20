@@ -28,6 +28,7 @@ import android.widget.RelativeLayout;
 public class TermFragment extends Fragment implements FinishCallback{
 	TermSession mTermSession = null;
 	String mInitCmd="cd /sdcard/\nls\n";
+	@SuppressLint("SdCardPath") 
 	private String mHome="/sdcard/";
 	public TermFragment() {
 	}

@@ -196,7 +196,6 @@ public class FileBrowser implements Window,OnOpenListener, OnClickListener{
 	private AlertDialog mNewProjectDialog=null;
 	private EditText mNewProjectEditText=null;
 	private RadioButton mRadioConsole =null;
-	private RadioButton mRadioWindow =null;
 	private RadioButton mRadioSdl =null;
 
 	private AlertDialog mZipDialog=null;
@@ -221,7 +220,6 @@ public class FileBrowser implements Window,OnOpenListener, OnClickListener{
 				Builder builder=new AlertDialog.Builder(mWindowsManager.getContext());
 				mNewProjectEditText = (EditText) viewGroup.findViewById(R.id.edit_project_name);
 				mRadioConsole = (RadioButton) viewGroup.findViewById(R.id.radio_console);
-				mRadioWindow = (RadioButton) viewGroup.findViewById(R.id.radio_window);
 				mRadioSdl = (RadioButton) viewGroup.findViewById(R.id.radio_sdl);
 				builder.setView(viewGroup);
 				builder.setNegativeButton(android.R.string.cancel, this);
