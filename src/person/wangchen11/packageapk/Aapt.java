@@ -130,6 +130,12 @@ public class Aapt {
 		cmd+=" -M \""+project.getManifestPath()+"\" ";
 		cmd+=" -F \""+project.getResZipPath()+"\" ";
 		cmd+="\n";
+
+		cmd+="if [  $? -ne 0 ]; then \n";
+		cmd+="echo \""+context.getText(R.string.package_fail)+"\"\n";
+		cmd+="exit 1\n";
+		cmd+="fi\n";
+		
 		cmd+="echo "+context.getString(R.string.deal_res_done)+"\n";
 		
 		cmd+="echo "+context.getString(R.string.add_files)+"\n";
@@ -171,6 +177,11 @@ public class Aapt {
 			cmd+=" \""+getElfShortPath()+"\" ";
 		cmd+="\n";
 		
+		cmd+="if [  $? -ne 0 ]; then \n";
+		cmd+="echo \""+context.getText(R.string.package_fail)+"\"\n";
+		cmd+="exit 1\n";
+		cmd+="fi\n";
+		
 		File libsDir= new File(project.getProjectPath()+"/lib/armeabi/");
 		File libs[] = libsDir.listFiles();
 		
@@ -183,9 +194,15 @@ public class Aapt {
 			{
 				cmd+=" \"lib/armeabi/"+libs[i].getName()+"\" ";
 			}
+			cmd+="\n";
+			
+			cmd+="if [  $? -ne 0 ]; then \n";
+			cmd+="echo \""+context.getText(R.string.package_fail)+"\"\n";
+			cmd+="exit 1\n";
+			cmd+="fi\n";
 		}
-		cmd+="\n";
-		cmd+="sleep 2\n";
+		
+		
 		return cmd;
 	}
 

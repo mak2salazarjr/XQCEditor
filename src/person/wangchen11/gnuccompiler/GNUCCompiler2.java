@@ -9,10 +9,11 @@ import java.util.List;
 import person.wangchen11.cproject.CProject;
 import person.wangchen11.xqceditor.R;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Environment;
 
-public class GNUCCompiler2 {
+@SuppressLint("DefaultLocale") public class GNUCCompiler2 {
 	static final String TAG = "GNUCCompiler2";
 	public static String getRunablePath(Context context){
 		return context.getFilesDir().getAbsolutePath()+File.separatorChar;
@@ -46,11 +47,33 @@ public class GNUCCompiler2 {
 		return getSystemDir()+"/workspace/";
 	}
 
+	/*
 	public static String getNeedOption()
 	{
 		// -I\""+getIncludeDir()+"\" -I\""+getIncludeDirEx()+"\"
 		return " -Wall -lm -lstdc++ -lsupc++ -lgnustl_static ";
+	}*/
+	
+	public static String getCNeedOption()
+	{
+		return " -Wall -std=c99 ";
 	}
+	
+	public static String getCppNeedOption()
+	{
+		return " -Wall ";
+	}
+	
+	public static String getCLinkNeedOption()
+	{
+		return " -lm -lgnustl_static ";
+	}
+
+	public static String getCppLinkNeedOption()
+	{
+		return " -lm -lstdc++ -lsupc++ -lgnustl_static ";
+	}
+	
 	
 	public static String getExportEnvPathCmd(Context context)
 	{
@@ -111,11 +134,12 @@ public class GNUCCompiler2 {
 	
 	public static String getCompilerOnlyCmd(File file,File objFile,String compileOption)
 	{
+		boolean isCpp = file.getName().toLowerCase().endsWith(".cpp");
 		String cmd = ""
 				+"gcc -c "
 				+" \""+file.getAbsolutePath()+"\" "
 				+" -o \""+objFile.getAbsolutePath()+"\" "
-				+getNeedOption()
+				+(isCpp?getCppNeedOption():getCNeedOption())
 				+" "+(compileOption!=null?compileOption:"")
 				+"\n";
 		return cmd;
@@ -140,16 +164,19 @@ public class GNUCCompiler2 {
 			{
 				objFile.getParentFile().mkdirs();
 				objFile.delete();
-
+				
+				boolean isCpp = file.getName().toLowerCase().endsWith(".cpp");
 				cmdBuilder.append(
 						"echo \""+file.getName()+"\t-->\t"+objFile.getName()+"\"\n"
 						+"gcc -c "
 						+" \""+file.getAbsolutePath()+"\" "
 						+" -o \""+objFile.getAbsolutePath()+"\" "
-						+getNeedOption()
+						+(isCpp?getCppNeedOption():getCNeedOption())
+						+" -O "
 						+" "+(compileOption!=null?compileOption:"")
 						+"\n"
-						+"if [ ! -f \""+objFile.getPath()+"\" ]; then \n"
+						//+"if [ ! -f \""+objFile.getPath()+"\" ]; then \n"
+						+"if [  $? -ne 0 ]; then \n"
 				      	+"compiler_to_obj_success=0\n"
 						+"fi\n");
 			}
@@ -158,7 +185,18 @@ public class GNUCCompiler2 {
 		return cmdBuilder.toString();
 	}
 	
-	
+	private static boolean hasCppFile(List <File> files)
+	{
+		Iterator<File > iterator = files.iterator();
+		while(iterator.hasNext())
+		{
+			File file = iterator.next();
+			boolean isCpp = file.getName().toLowerCase().endsWith(".cpp");
+			if(isCpp)
+				return true;
+		}
+		return false;
+	}
 	
 	public static String getCompilerCmd(Context context,CProject project,boolean toSo){
 		File outFile = null;
@@ -174,8 +212,9 @@ public class GNUCCompiler2 {
 		StringBuilder cmdBuilder = new StringBuilder();
 		cmdBuilder.append("cd \""+project.getProjectPath()+"\"\n");
 		//cmdBuilder.append(getExportEnvPathCmd(context));
+		List<File> allFiles = project.getAllCFiles();
 		try {
-			cmdBuilder.append(getCompilerToObjCmd(project.getAllCFiles(), objPath, srcPath,project.getCompileOption()));
+			cmdBuilder.append(getCompilerToObjCmd(allFiles, objPath, srcPath,project.getCompileOption()));
 		} catch (Exception e) {
 			e.printStackTrace();
 			return "echo \"Exception:"+e.getMessage()+"\"\n";
@@ -190,8 +229,16 @@ public class GNUCCompiler2 {
 			e.printStackTrace();
 			return "echo \"Exception:"+e.getMessage()+"\"\n";
 		}
-		cmdBuilder.append(" \""+GNUCCompiler.getFixCppObj(context)+"\" ");
-		cmdBuilder.append(getNeedOption());
+		if(hasCppFile(allFiles))
+		{
+			cmdBuilder.append(" \""+GNUCCompiler.getFixCppObj(context)+"\" ");
+			cmdBuilder.append(getCppLinkNeedOption());
+		}
+		else
+		{
+			cmdBuilder.append(getCLinkNeedOption());
+		}
+		cmdBuilder.append(" -O ");
 		cmdBuilder.append(" -o \""+outFile.getAbsolutePath()+"\" ");
 		if(toSo)
 			cmdBuilder.append(" -llog -landroid -shared ");
@@ -200,7 +247,8 @@ public class GNUCCompiler2 {
 		cmdBuilder.append(" "+ (otherOption!=null?otherOption:""));
 		cmdBuilder.append("\n");
 
-		cmdBuilder.append("if [ ! -f \""+outFile.getPath()+"\" ]; then \n");
+		//cmdBuilder.append("if [ ! -f \""+outFile.getPath()+"\" ]; then \n");
+		cmdBuilder.append("if [  $? -ne 0 ]; then \n");
 		cmdBuilder.append("echo \""+context.getText(R.string.compilation_fails)+"\"\n");
 		cmdBuilder.append("else\n");
 		cmdBuilder.append("echo \""+context.getText(R.string.successfully_compiled)+"\"\n");
