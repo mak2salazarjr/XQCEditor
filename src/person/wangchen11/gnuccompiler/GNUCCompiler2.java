@@ -160,7 +160,7 @@ import android.os.Environment;
 				throw new Exception("source file not in src path!");
 			}
 			File objFile = new File(objPath.getAbsolutePath()+"/"+relPath+".o");
-			if(!objFile.isFile() || objFile.lastModified() <= file.lastModified() )
+			if(true)//if(!objFile.isFile() || objFile.lastModified() <= file.lastModified() )
 			{
 				objFile.getParentFile().mkdirs();
 				objFile.delete();
