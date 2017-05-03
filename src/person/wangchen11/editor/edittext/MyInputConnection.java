@@ -27,11 +27,15 @@ class ComposingText implements NoCopySpan {
 public class MyInputConnection implements InputConnection{
 	protected static final String TAG="MyInputConnection";
 	private boolean mIsFristCallGetEditable=true;
-    protected InputMethodManager mIMM;
+    private InputMethodManager mIMM;
 	private View mView;
     static final Object COMPOSING = new ComposingText();
     private Object[] mDefaultComposingSpans;
 
+    public InputMethodManager getInputMethodManager(){
+    	return mIMM;
+    }
+    
     public MyInputConnection(View view) {
     	mView=view;
         mIMM = (InputMethodManager)view.getContext().getSystemService( Context.INPUT_METHOD_SERVICE);
@@ -56,10 +60,10 @@ public class MyInputConnection implements InputConnection{
 	@Override
 	public ExtractedText getExtractedText(ExtractedTextRequest request,int flags) {
 		
-		//Log.i(TAG, "getExtractedText"+" flags:"+request.flags+" hitMaxC"+request.hintMaxChars+
-		//		" hintMaxLines:"+request.hintMaxLines+" token"+request.token
-		//		+" describeContents:"+request.describeContents()
-		//		);
+		Log.i(TAG, "getExtractedText"+" flags:"+request.flags+" hitMaxC"+request.hintMaxChars+
+				" hintMaxLines:"+request.hintMaxLines+" token"+request.token
+				+" describeContents:"+request.describeContents()
+				);
 		//return null;
 		
 		if(mBatchEditNum!=0)
@@ -238,12 +242,12 @@ public class MyInputConnection implements InputConnection{
 
 
     public static int getComposingSpanStart(Spannable text) {
-		//Log.i(TAG, "getComposingSpanStart:"+text);
+		Log.i(TAG, "getComposingSpanStart:"+text);
         return text.getSpanStart(COMPOSING);
     }
     
     public static int getComposingSpanEnd(Spannable text) {
-		//Log.i(TAG, "getComposingSpanEnd:"+text);
+		Log.i(TAG, "getComposingSpanEnd:"+text);
         return text.getSpanEnd(COMPOSING);
     }
     
@@ -385,15 +389,19 @@ public class MyInputConnection implements InputConnection{
             // If we are in selection mode, then we want to extend the
             // selection instead of replacing it.
             Selection.extendSelection(content, start);
+            getInputMethodManager().updateSelection(
+            		mView, start, start, 0, 0);
         } else {
             Selection.setSelection(content, start, end);
+            getInputMethodManager().updateSelection(
+            		mView, start, end, 0, 0);
         }
         return true;
 	}
 
 	@Override
 	public boolean performEditorAction(int editorAction) {
-		//Log.i(TAG, "performEditorAction:"+editorAction);
+		Log.i(TAG, "performEditorAction:"+editorAction);
         long eventTime = SystemClock.uptimeMillis();
         sendKeyEvent(new KeyEvent(eventTime, eventTime,
                 KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_ENTER, 0, 0,
