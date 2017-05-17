@@ -502,9 +502,9 @@ public class CCodeParser implements Runnable{
 		return list1;
 	}
 	
-	public CCodeParser createParser(String code)
+	public CCodeParser createParser(String code,String dir,String sysDir)
 	{
-		return new CCodeParser(code);
+		return new CCodeParser(code,dir,sysDir);
 	}
 	
 	public LinkedList<WantMsg> findIncludeFile(String path,String str,int includeNumber){
@@ -516,7 +516,7 @@ public class CCodeParser implements Runnable{
 		CCodeParser parser=mParserCache.get(key);
 		if(parser==null)
 		{
-			parser=createParser(getAll(path));
+			parser=createParser(getAll(path),file.getParent(),mIncludePath);
 			parser.run();
 		}
 		return parser.getWant(str, includeNumber);

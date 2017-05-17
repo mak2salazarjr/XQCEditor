@@ -21,7 +21,7 @@ public class JavaCodeParser extends CCodeParser{
 	}
 	
 	@Override
-	public CCodeParser createParser(String code) {
-		return new CCodeParser(code);
+	public CCodeParser createParser(String code, String dir, String sysDir) {
+		return new CCodeParser(code, dir, sysDir);
 	}
 }
