@@ -67,6 +67,11 @@ public class State {
 	}
 	
 	public static String mUpdateMsg = 
+			"2.1.1:\n" +
+			"(1)优化include处理逻辑。\n" +
+			"(2)修改GUI的绘图API。\n" +
+			"(3)增加状态保存恢复功能。\n" +
+			"(3)增加切换动画功能。\n" +
 			"2.1.0:\n" +
 			"(1)增加实时查错功能。\n" +
 			"(2)优化提示功能。\n" +

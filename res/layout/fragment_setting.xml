@@ -471,6 +471,33 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:gravity="center_horizontal"
+                    android:text="@string/animation"/>
+                <android.support.v7.widget.SwitchCompat
+                    android:id="@+id/animation"
+                    android:layout_weight="1"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:checked="false" />
+
+                <View
+                    android:layout_weight="1"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content" />
+
+            </LinearLayout>
+            
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp"
+                     >
+
+                <TextView
+                    android:layout_weight="1"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal"
                     android:text="@string/use_new_ver_console"/>
                 <android.support.v7.widget.SwitchCompat
                     android:id="@+id/use_new_console_switch"

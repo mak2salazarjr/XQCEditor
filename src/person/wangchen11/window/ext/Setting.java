@@ -91,6 +91,7 @@ public class Setting extends Fragment implements Window, TextWatcher, OnClickLis
 		((SwitchCompat)(mRelativeLayout.findViewById(R.id.use_new_console_switch))).setOnCheckedChangeListener(this);
 		((SwitchCompat)(mRelativeLayout.findViewById(R.id.title_at_head))).setOnCheckedChangeListener(this);
 		((SwitchCompat)(mRelativeLayout.findViewById(R.id.ctrl_at_head))).setOnCheckedChangeListener(this);
+		((SwitchCompat)(mRelativeLayout.findViewById(R.id.animation))).setOnCheckedChangeListener(this);
 		
 		return mRelativeLayout;
 	}
@@ -214,6 +215,7 @@ public class Setting extends Fragment implements Window, TextWatcher, OnClickLis
 		mConfig.mOtherConfig.mNewConsoleEnable=((SwitchCompat)mRelativeLayout.findViewById(R.id.use_new_console_switch)).isChecked();
 		mConfig.mOtherConfig.mTitleAtHead=((SwitchCompat)mRelativeLayout.findViewById(R.id.title_at_head)).isChecked();
 		mConfig.mOtherConfig.mCtrlAtHead=((SwitchCompat)mRelativeLayout.findViewById(R.id.ctrl_at_head)).isChecked();
+		mConfig.mOtherConfig.mAnimation=((SwitchCompat)mRelativeLayout.findViewById(R.id.animation)).isChecked();
 	}
 	
 	public void refSwitchView(){
@@ -223,6 +225,7 @@ public class Setting extends Fragment implements Window, TextWatcher, OnClickLis
 		((SwitchCompat)mRelativeLayout.findViewById(R.id.use_new_console_switch)).setChecked(mConfig.mOtherConfig.mNewConsoleEnable);
 		((SwitchCompat)mRelativeLayout.findViewById(R.id.title_at_head)).setChecked(mConfig.mOtherConfig.mTitleAtHead);
 		((SwitchCompat)mRelativeLayout.findViewById(R.id.ctrl_at_head)).setChecked(mConfig.mOtherConfig.mCtrlAtHead);
+		((SwitchCompat)mRelativeLayout.findViewById(R.id.animation)).setChecked(mConfig.mOtherConfig.mAnimation);
 	}
 	
 	@Override
@@ -535,6 +538,7 @@ public class Setting extends Fragment implements Window, TextWatcher, OnClickLis
 		public boolean mNewConsoleEnable = true;
 		public boolean mTitleAtHead = true;
 		public boolean mCtrlAtHead = true;
+		public boolean mAnimation = true;
 		public static OtherConfig load(SharedPreferences sharedPreferences){
 			OtherConfig config=new OtherConfig();
 			config.mQuickInput=sharedPreferences.getString("mQuickInput", "\t'\"`$[]{}<>()+-*%=&|!^~,;?:_\\");
@@ -545,6 +549,7 @@ public class Setting extends Fragment implements Window, TextWatcher, OnClickLis
 			config.mNewConsoleEnable=sharedPreferences.getBoolean("mNewConsoleEnable",true);
 			config.mTitleAtHead=sharedPreferences.getBoolean("mTitleAtHead",true);
 			config.mCtrlAtHead=sharedPreferences.getBoolean("mCtrlAtHead",true);
+			config.mAnimation=sharedPreferences.getBoolean("mAnimation",false);
 			return config;
 		}
 
@@ -557,6 +562,7 @@ public class Setting extends Fragment implements Window, TextWatcher, OnClickLis
 			editor.putBoolean("mNewConsoleEnable", mNewConsoleEnable);
 			editor.putBoolean("mTitleAtHead", mTitleAtHead);
 			editor.putBoolean("mCtrlAtHead", mCtrlAtHead);
+			editor.putBoolean("mAnimation", mAnimation);
 		}
 	}
 

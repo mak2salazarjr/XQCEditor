@@ -214,7 +214,10 @@ public class EditorActivity extends FragmentActivity implements OnClickListener,
 		if(mContent!=to)
 		{
 			FragmentManager fragmentManager = getSupportFragmentManager();
-			FragmentTransaction transaction = fragmentManager.beginTransaction();//.setCustomAnimations(android.R.anim.fade_in, R.anim.abc_fade_out); 
+			FragmentTransaction transaction = fragmentManager.beginTransaction();
+			if(Setting.mConfig.mOtherConfig.mAnimation){
+				transaction = transaction.setCustomAnimations(R.anim.scale_big_trans, R.anim.scale_small_trans); 
+			}
 			if (!to.isAdded()) {    
 				if(mContent!=null)
 					transaction.hide(mContent);
@@ -263,7 +266,10 @@ public class EditorActivity extends FragmentActivity implements OnClickListener,
 	@Override
 	public void onCloseWindow(WindowsManager manager,WindowPointer pointer) {
 		FragmentManager fragmentManager = getSupportFragmentManager();
-		FragmentTransaction transaction = fragmentManager.beginTransaction();//.setCustomAnimations(android.R.anim.fade_in, R.anim.abc_fade_out); 
+		FragmentTransaction transaction = fragmentManager.beginTransaction();
+		if(Setting.mConfig.mOtherConfig.mAnimation){
+			transaction = transaction.setCustomAnimations(R.anim.scale_big_trans, R.anim.scale_small_trans); 
+		}
 		transaction.detach(pointer.mWindow.getFragment());
 		transaction.commit();
 	}
@@ -326,4 +332,5 @@ public class EditorActivity extends FragmentActivity implements OnClickListener,
 	public boolean onTouchEvent(MotionEvent event) {
 		return super.onTouchEvent(event);
 	}
+	
 }

@@ -196,5 +196,6 @@
     <string name="unziping">Extracting...</string>
     <string name="title_at_head">The title bar is above</string>
     <string name="ctrl_at_head">The control panel is on the top</string>
+    <string name="animation">切换动画</string>
     
 </resources>

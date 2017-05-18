@@ -69,6 +69,8 @@ public class ShellCodeStyleAdapter extends CodeStyleAdapter{
 
 	public LinkedList<WantMsg> getWants(){
 		LinkedList<WantMsg> linkedList = new LinkedList<WantMsg>();
+		if(mCodeParser==null)
+			return linkedList; 
 		Iterator<String> iterator = mCodeParser.getWant(mChangePosition,0).iterator();
 		while(iterator.hasNext()){
 			linkedList.addLast(new WantMsg(iterator.next()));
