@@ -6,7 +6,6 @@ import java.util.List;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -22,7 +21,7 @@ import person.wangchen11.xqceditor.R;
 public class VideoPlayer extends Fragment implements Window{
 	private File mVideoFile ;
 	private VideoView mVideoView ;
-	public VideoPlayer(@NonNull File file) {
+	public VideoPlayer( File file) {
 		mVideoFile = file;
 	}
 	
@@ -32,8 +31,10 @@ public class VideoPlayer extends Fragment implements Window{
 			@Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 		RelativeLayout relativeLayout = (RelativeLayout) inflater.inflate(R.layout.fragment_vedio_player, null);
 		mVideoView = (VideoView) relativeLayout.findViewById(R.id.videoView1);
-		mVideoView.setVideoPath(mVideoFile.getAbsolutePath());
-		mVideoView.start();
+		if(mVideoFile!=null){
+			mVideoView.setVideoPath(mVideoFile.getAbsolutePath());
+			mVideoView.start();
+		}
 		MediaController mediaController = new MediaController(inflater.getContext());
 		mVideoView.setMediaController(mediaController);
 		return relativeLayout;
@@ -46,7 +47,11 @@ public class VideoPlayer extends Fragment implements Window{
 
 	@Override
 	public CharSequence getTitle(Context context) {
-		return mVideoFile.getName();
+		if(mVideoFile!=null){
+			return mVideoFile.getName();
+		}else{
+			return "No Title";
+		}
 	}
 
 	@Override
@@ -74,6 +79,18 @@ public class VideoPlayer extends Fragment implements Window{
 	public boolean onMenuItemClick(int id) {
 		// TODO Auto-generated method stub
 		return false;
+	}
+
+	@Override
+	public String[] getResumeCmd() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void resumeByCmd(String []cmd) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

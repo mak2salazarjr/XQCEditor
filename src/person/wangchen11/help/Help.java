@@ -52,4 +52,16 @@ public class Help extends Browser implements Window{
 	public boolean onMenuItemClick(int id) {
 		return false;
 	}
+
+	@Override
+	public String[] getResumeCmd() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void resumeByCmd(String []cmd) {
+		// TODO Auto-generated method stub
+		
+	}
 }

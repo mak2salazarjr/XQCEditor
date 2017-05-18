@@ -35,7 +35,7 @@ public class CEditor implements Window, EditorFregment.ChangeFlagChanged, OnClic
 	
 	public CEditor(WindowsManager windowsManager,File file) {
 		mWindowsManager=windowsManager;
-		mCEditorFregment=new EditorFregment(file.getAbsoluteFile());
+		mCEditorFregment=new EditorFregment(file);
 		mCEditorFregment.setChangeFlagChanged(this);
 		mCEditorFregment.setOnRunButtonClickListener(this);
 		mWindowsManager.addListener(this);
@@ -507,6 +507,23 @@ public class CEditor implements Window, EditorFregment.ChangeFlagChanged, OnClic
 		}
 		
 		return false;
+	}
+
+	@Override
+	public String[] getResumeCmd() {
+		String []cmd = new String[2];
+		cmd[0] = getFile()!=null?getFile().getPath():null;
+		cmd[1] = null;
+		return cmd;
+	}
+
+	@Override
+	public void resumeByCmd(String []cmd) {
+		if(cmd==null)
+			return;
+		if(cmd.length!=2)
+			return;
+		mCEditorFregment = new EditorFregment(new File(cmd[0]));
 	}
 
 }

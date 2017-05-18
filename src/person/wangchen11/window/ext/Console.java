@@ -136,4 +136,14 @@ public class Console implements Window, OnConsoleColseListener,WindowsManagerLin
 	public void onSessionFinish(TermSession session) {
 		mWindowsManager.closeWindow(this);
 	}
+
+	@Override
+	public String[] getResumeCmd() {
+		return null;
+	}
+
+	@Override
+	public void resumeByCmd(String []cmd) {
+		
+	}
 }

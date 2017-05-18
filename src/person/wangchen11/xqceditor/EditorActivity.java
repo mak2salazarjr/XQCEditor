@@ -91,7 +91,11 @@ public class EditorActivity extends FragmentActivity implements OnClickListener,
 			}
 			transaction.commit();
 		}
-		setContentView(R.layout.activity_editor_main );
+		if(Setting.mConfig.mOtherConfig.mTitleAtHead){
+			setContentView(R.layout.activity_editor_main );
+		}else{
+			setContentView(R.layout.activity_editor_main_ctd );
+		}
 		transparentStatus();
 		mWindowTitleList=(LinearLayout) findViewById(R.id.windows_list);
 		configAllView(findViewById(R.id.editor_layout));
@@ -99,10 +103,12 @@ public class EditorActivity extends FragmentActivity implements OnClickListener,
 		mWindowsManager=new WindowsManager(this) ;
 		mPopupMenu.setOnMenuItemClickListener(mWindowsManager);
 	    mWindowsManager.addListener(this);
+	    mWindowsManager.resumeWindowState();
+	    mWindowsManager.clearWindowState();
 		FragmentManager fragmentManager = getSupportFragmentManager();//getFragmentManager();
 		FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 		
-		if(fragmentTransaction.isEmpty())
+		if(fragmentTransaction.isEmpty()&&mWindowsManager.size()==0)
 		{
 			mWindowsManager.addWindow(new FileBrowser(mWindowsManager));
 		}

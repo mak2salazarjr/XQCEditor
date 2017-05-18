@@ -52,4 +52,14 @@ public class NetAssist implements Window {
 		return false;
 	}
 
+	@Override
+	public String[] getResumeCmd() {
+		return null;
+	}
+
+	@Override
+	public void resumeByCmd(String []cmd) {
+		
+	}
+
 }

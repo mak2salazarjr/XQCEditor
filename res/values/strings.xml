@@ -186,13 +186,15 @@
     <string name="_updatemsg">UpdateMsg</string>
     <string name="warn">Warning</string>
     <string name="error">Error</string>
-    <string name="installing">正在安装...</string>
-    <string name="free_example">释放例程</string>
-    <string name="install_gcc">安装gcc</string>
-    <string name="free_gcc_res">释放gcc资源</string>
-    <string name="free_gpp_res">释放g++资源</string>
-    <string name="install_done">安装完成</string>
-    <string name="install_failed">安装失败</string>
-    <string name="unziping">正在解压...</string>
+    <string name="installing">Installing...</string>
+    <string name="free_example">Release routine</string>
+    <string name="install_gcc">Install GCC</string>
+    <string name="free_gcc_res">Releasing GCC resources</string>
+    <string name="free_gpp_res">Releasing G++ resources</string>
+    <string name="install_done">Installation is complete</string>
+    <string name="install_failed">Installation failure</string>
+    <string name="unziping">Extracting...</string>
+    <string name="title_at_head">The title bar is above</string>
+    <string name="ctrl_at_head">The control panel is on the top</string>
     
 </resources>

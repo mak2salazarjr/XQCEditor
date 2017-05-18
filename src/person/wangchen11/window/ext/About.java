@@ -70,4 +70,13 @@ public class About extends Fragment implements Window{
 	public boolean onMenuItemClick(int id) {
 		return false;
 	}
+
+	@Override
+	public String[] getResumeCmd() {
+		return null;
+	}
+
+	@Override
+	public void resumeByCmd(String []cmd) {
+	}
 }

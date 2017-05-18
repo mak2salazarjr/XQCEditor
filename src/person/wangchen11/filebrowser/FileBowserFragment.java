@@ -44,6 +44,7 @@ public class FileBowserFragment extends Fragment implements OnItemClickListener,
 {
 	public static File mDefaultFile=Environment.getExternalStorageDirectory();
 	protected static final String TAG="FileBowserFragment";
+	private String mDefaultPath=null;
 	OnOpenListener mOpenListener=null;
 	FileListAdapter mFileListAdapter=null;
 	TextView mTextView=null;
@@ -73,7 +74,7 @@ public class FileBowserFragment extends Fragment implements OnItemClickListener,
 		mListView.setOnScrollListener(this);
 		mTextView=(TextView)view.findViewById(R.id.prompt);
 		mFileListAdapter.SetCallBack(this);
-		mFileListAdapter.OpenPath(mDefaultFile);
+		mFileListAdapter.OpenPath(mDefaultPath!=null?new File(mDefaultPath):mDefaultFile);
 		mRenameLayout=(LinearLayout)view.findViewById(R.id.rename);
 		mOptionLayout=(LinearLayout)view.findViewById(R.id.option);
 		mPasteLayout=(LinearLayout)view.findViewById(R.id.pastelayout);
@@ -566,5 +567,9 @@ public class FileBowserFragment extends Fragment implements OnItemClickListener,
 	public File[] getSelectedFiles()
 	{
 		return mFileListAdapter.GetSelectedFiles();
+	}
+	
+	public void setDefaultPath(String path){
+		mDefaultPath = path;
 	}
 }

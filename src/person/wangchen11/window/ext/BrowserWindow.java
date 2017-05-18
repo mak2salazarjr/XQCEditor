@@ -109,4 +109,23 @@ public class BrowserWindow extends Browser implements Window, WindowsManagerLint
 	public void onCloseWindow(WindowsManager manager, WindowPointer pointer) {
 	}
 
+	@Override
+	public String[] getResumeCmd() {
+		String[] cmd= new String[2];
+		cmd[0] = mName;
+		cmd[1] = this.mUrl;
+		return cmd;
+	}
+
+	@Override
+	public void resumeByCmd(String []cmd) {
+		if(cmd==null)
+			return;
+		if(cmd.length!=2)
+			return;
+
+		mName = cmd[0];
+		mUrl  = cmd[0];
+	}
+
 }

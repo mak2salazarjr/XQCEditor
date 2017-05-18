@@ -1,21 +1,27 @@
 package person.wangchen11.window;
 
+import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
-
 import person.wangchen11.help.Help;
 import person.wangchen11.window.ext.About;
+import person.wangchen11.window.ext.BrowserWindow;
+import person.wangchen11.window.ext.CEditor;
 import person.wangchen11.window.ext.Console;
 import person.wangchen11.window.ext.FileBrowser;
 import person.wangchen11.window.ext.NetAssist;
 import person.wangchen11.window.ext.PHPServerConfig;
 import person.wangchen11.window.ext.Setting;
+import person.wangchen11.window.ext.VideoPlayer;
 import person.wangchen11.xqceditor.R;
 
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.graphics.Color;
 import android.support.v7.widget.PopupMenu;
 import android.util.Log;
@@ -81,6 +87,7 @@ public class WindowsManager implements View.OnClickListener, android.support.v7.
 	}
 	
 	public boolean closeAllWindow(){
+		saveWindowState();
 		boolean ret = true;
 		LinkedList<WindowPointer> linkedList = new LinkedList<WindowPointer>();
 		linkedList.addAll(mWindowPointers);
@@ -390,6 +397,130 @@ public class WindowsManager implements View.OnClickListener, android.support.v7.
 			mTitleListView.addView(pointer.mTitleView,layoutParams);//,LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT);
 		}
 		Setting.applySettingConfigToAllView(mTitleListView);
+	}
+	
+	public int size(){
+		return mWindowPointers.size();
+	}
+	
+	public void saveWindowState(){
+		SharedPreferences sharedPreferences = mContext.getSharedPreferences("WindowState", Context.MODE_PRIVATE);
+		Editor editor = sharedPreferences.edit();
+		editor.clear();
+		int i=0;
+		for( WindowPointer windowPointer : mWindowPointers ){
+			String[] resumeCmd = windowPointer.mWindow.getResumeCmd();
+			editor.putString(""+i+"_class", windowPointer.mWindow.getClass().getName() );
+			editor.putString(""+i+"_cmd", encodeStringArray(resumeCmd) );
+			i++;
+		}
+		editor.commit();
+	}
+	public void clearWindowState(){
+		SharedPreferences sharedPreferences = mContext.getSharedPreferences("WindowState", Context.MODE_PRIVATE);
+		Editor editor = sharedPreferences.edit();
+		editor.clear();
+		editor.commit();
+	}
+	
+	@SuppressWarnings("deprecation")
+	private String encodeStringArray(String []array){
+		if(array==null)
+			return null;
+		StringBuilder stringBuilder = new StringBuilder();
+		for(int i=0;i<array.length;i++){
+			if(i>0)
+				stringBuilder.append("&");
+			String string = array[i];
+			stringBuilder.append("%");
+			if(string!=null)
+				stringBuilder.append( URLEncoder.encode(string) );
+			else
+				stringBuilder.append( "%null%" );
+		}
+		return stringBuilder.toString();
+	}
+
+	@SuppressWarnings("deprecation")
+	private String[] decodeStringArray(String string){
+		Log.i(TAG, ""+string);
+		if(string==null)
+			return null;
+		String array[] = string.split("&");
+		for(int i=0;i<array.length;i++){
+			if(array[i].length()>0)
+				array[i] = array[i].substring(1);
+			if(array[i].equals("%null%"))
+				array[i] = null;
+			if(array[i]!=null)
+				array[i] = URLDecoder.decode(array[i]);
+			Log.i(TAG, "###:"+array[i]);
+		}
+		return array;
+	}
+	
+	public int resumeWindowState(){
+		SharedPreferences sharedPreferences = mContext.getSharedPreferences("WindowState", Context.MODE_PRIVATE);
+		
+		int i=0;
+		while(true){
+			String className = sharedPreferences.getString(""+i+"_class", null );
+			if(className==null)
+				break;
+			String cmd = sharedPreferences.getString(""+i+"_cmd", null );
+			try {
+				String []cmds = decodeStringArray(cmd);
+				addSavedWindow(className,cmds);
+			} catch (Throwable e) {
+				e.printStackTrace();
+			}
+			i++;
+		}
+		return i;
+	}
+	
+	private boolean addSavedWindow(String className,String []cmds){
+		if(className.equals( BrowserWindow.class.getName() )){
+			Window window = new BrowserWindow(this,"","");
+			window.resumeByCmd(cmds);
+			return addWindow(window);
+		}
+		if(className.equals( CEditor.class.getName() )){
+			Window window = new CEditor(this,null);
+			window.resumeByCmd(cmds);
+			return addWindow(window);
+		}
+		if(className.equals( FileBrowser.class.getName() )){
+			Window window = new FileBrowser(this);
+			window.resumeByCmd(cmds);
+			return addWindow(window);
+		}
+		if(className.equals( NetAssist.class.getName() )){
+			Window window = new NetAssist();
+			window.resumeByCmd(cmds);
+			return addWindow(window);
+		}
+		if(className.equals( PHPServerConfig.class.getName() )){
+			Window window = new PHPServerConfig();
+			window.resumeByCmd(cmds);
+			return addWindow(window);
+		}
+		if(className.equals( Setting.class.getName() )){
+			Window window = new Setting(this);
+			window.resumeByCmd(cmds);
+			return addWindow(window);
+		}
+		if(className.equals( VideoPlayer.class.getName() )){
+			Window window = new VideoPlayer(null);
+			window.resumeByCmd(cmds);
+			return addWindow(window);
+		}
+		if(className.equals( Help.class.getName() )){
+			Window window = new Help();
+			window.resumeByCmd(cmds);
+			return addWindow(window);
+		}
+		return true;
 	}
 }
 

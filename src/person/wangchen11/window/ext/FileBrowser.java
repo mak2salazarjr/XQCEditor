@@ -341,4 +341,20 @@ public class FileBrowser implements Window,OnOpenListener, OnClickListener{
 			break;
 		}
 	}
+
+	@Override
+	public String[] getResumeCmd() {
+		String[] strings = new String[1];
+		strings[0] = mFileBowserFragment.getPath();
+		return strings;
+	}
+
+	@Override
+	public void resumeByCmd(String []cmd) {
+		if(cmd==null)
+			return;
+		if(cmd.length!=1)
+			return;
+		mFileBowserFragment.setDefaultPath(cmd[0]);
+	}
 }

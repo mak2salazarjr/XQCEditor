@@ -13,4 +13,6 @@ public interface Window {
 	public boolean onClose();
 	public List<MenuTag> getMenuTags();
 	public boolean onMenuItemClick(int id);
+	public String[] getResumeCmd();
+	public void     resumeByCmd(String []cmd);
 }

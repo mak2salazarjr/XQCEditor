@@ -56,6 +56,7 @@ import person.wangchen11.editor.codeedittext.OnNeedChangeWants;
 import person.wangchen11.editor.edittext.AfterTextChangeListener;
 import person.wangchen11.gnuccompiler.CheckInfo;
 import person.wangchen11.gnuccompiler.GNUCCodeCheck;
+import person.wangchen11.window.ext.Setting;
 import person.wangchen11.xqceditor.R;
 
 public class EditorFregment extends Fragment implements OnClickListener, AfterTextChangeListener, OnNeedChangeWants, OnItemClickListener, OnItemSelectedListener{
@@ -87,12 +88,12 @@ public class EditorFregment extends Fragment implements OnClickListener, AfterTe
 	}
 
 	public EditorFregment(File file) {
-		mFile=file.getAbsoluteFile();
+		mFile=file;
 	}
 	
 	public EditorFregment(File file,String charset) {
 		mCharset=charset;
-		mFile=file.getAbsoluteFile();
+		mFile=file;
 	}
 	
 	public File getFile(){
@@ -108,7 +109,11 @@ public class EditorFregment extends Fragment implements OnClickListener, AfterTe
 	@Override
 	public View onCreateView(LayoutInflater inflater,
 			@Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-		mRelativeLayout = (RelativeLayout) inflater.inflate(R.layout.fragment_ceditor, null);
+		if(Setting.mConfig.mOtherConfig.mCtrlAtHead){
+			mRelativeLayout = (RelativeLayout) inflater.inflate(R.layout.fragment_ceditor, null);
+		}else{
+			mRelativeLayout = (RelativeLayout) inflater.inflate(R.layout.fragment_ceditor_cdt, null);
+		}
 		mListView= (ListView) mRelativeLayout.findViewById(R.id.listView1);
 		mListView.setVisibility(View.GONE);
 		mListView.setOnItemClickListener(this);
@@ -245,9 +250,9 @@ public class EditorFregment extends Fragment implements OnClickListener, AfterTe
 				mCodeCheck.stop();
 		}
 		File file = getFile();
-		mCodeCheck = new GNUCCodeCheck(getActivity(), file);
 		if(file!=null)
 		{
+			mCodeCheck = new GNUCCodeCheck(getActivity(), file);
 			String name = file.getName().toLowerCase();
 			if(name.endsWith(".c")||name.endsWith(".cpp"))
 			{

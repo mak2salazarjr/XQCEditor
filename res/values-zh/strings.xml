@@ -179,4 +179,15 @@
     <string name="_updatemsg">更新说明</string>
     <string name="warn">警告</string>
     <string name="error">错误</string>
+    
+    <string name="installing">正在安装...</string>
+    <string name="free_example">释放例程</string>
+    <string name="install_gcc">安装gcc</string>
+    <string name="free_gcc_res">释放gcc资源</string>
+    <string name="free_gpp_res">释放g++资源</string>
+    <string name="install_done">安装完成</string>
+    <string name="install_failed">安装失败</string>
+    <string name="unziping">正在解压...</string>
+    <string name="title_at_head">标题栏在上方</string>
+    <string name="ctrl_at_head">控制栏在上方</string>
 </resources>
