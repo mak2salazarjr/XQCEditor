@@ -524,6 +524,8 @@ public class CEditor implements Window, EditorFregment.ChangeFlagChanged, OnClic
 		if(cmd.length!=2)
 			return;
 		mCEditorFregment = new EditorFregment(new File(cmd[0]));
+		mCEditorFregment.setChangeFlagChanged(this);
+		mCEditorFregment.setOnRunButtonClickListener(this);
 	}
 
 }
