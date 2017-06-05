@@ -80,6 +80,14 @@ public class FileBrowser implements Window,OnOpenListener, OnClickListener{
 				;// TODO show install failed!
 			return true;
 		}
+		if(name.endsWith(".hp")){
+			mWindowsManager.addWindow(new CEditor(mWindowsManager,file));
+			return true;
+		}
+		if(name.endsWith(".hpp")){
+			mWindowsManager.addWindow(new CEditor(mWindowsManager,file));
+			return true;
+		}
 		if(name.endsWith(".sh")){
 			mWindowsManager.addWindow(new CEditor(mWindowsManager,file));
 			return true;

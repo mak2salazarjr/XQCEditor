@@ -421,7 +421,7 @@ public class Setting extends Fragment implements Window, TextWatcher, OnClickLis
 			TextPaint textPaint = myEditText.getPaint();
 			textPaint.setColor(config.mEditorConfig.mBaseFontColor);
 			textPaint.setTypeface(Typeface.MONOSPACE);
-			textPaint.setAntiAlias(useNiceFont);
+			textPaint.setAntiAlias(true);
 			textPaint.setDither(useNiceFont);
 			textPaint.setFakeBoldText(useNiceFont);
 			textPaint.setSubpixelText(useNiceFont);

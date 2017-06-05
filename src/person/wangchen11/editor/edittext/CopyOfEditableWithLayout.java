@@ -20,7 +20,7 @@ import android.text.TextWatcher;
 import android.text.style.ForegroundColorSpan;
 import android.util.Log;
 
-public class EditableWithLayout implements Editable,MyLayout {
+public class CopyOfEditableWithLayout implements Editable,MyLayout {
 	protected static final String TAG="EditableWithLayout";
 	public static boolean mEnableHightLight=true;
 	private int mLength=0;
@@ -43,7 +43,7 @@ public class EditableWithLayout implements Editable,MyLayout {
     private List<LineBody> mLineBodies=new ArrayList<LineBody>();
     private List<SpanBody> mSpanBodies=new ArrayList<SpanBody>();
     private List<WarnAndError> mWarnAndErrors=new ArrayList<WarnAndError>();
-	public EditableWithLayout() {
+	public CopyOfEditableWithLayout() {
 		setPaint(new TextPaint());
 		analysisLines();
 	}
@@ -399,11 +399,13 @@ public class EditableWithLayout implements Editable,MyLayout {
 
 	@Override
 	public Editable append(CharSequence text, int start, int end) {
+		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public Editable append(char text) {
+		// TODO Auto-generated method stub
 		return null;
 	}
 
@@ -508,6 +510,91 @@ public class EditableWithLayout implements Editable,MyLayout {
 			line=getLineCount()-1;
 		return line;
 	}
+	
+	/*
+	//¾ÍËãÊ¹ÓÃÁË»æÍ¼»º³å£¬»æÍ¼ËÙ¶ÈÒÀÈ»ÂýÈçÎÏÅ£¡£  
+	Bitmap mCacheBitmap=null;
+	Bitmap mCacheBitmapBk=null;
+	Rect mPerRect=new Rect();
+	Rect mNowRect=new Rect();
+	@Override
+	public void draw(Canvas canvas)
+	{
+		//»æÍ¼»º³å 
+		canvas.getClipBounds(mNowRect);
+		if( mCacheBitmap==null || mPerRect.width()!=mNowRect.width() || mPerRect.height()!=mNowRect.height() )
+		{//size change 
+			mPerRect.set(0, 0, 0, 0);
+			try {
+				mCacheBitmap=null;
+				mCacheBitmapBk=null;
+				mCacheBitmap=Bitmap.createBitmap(mNowRect.width(), mNowRect.height(), Config.ARGB_4444);
+				mCacheBitmapBk=Bitmap.createBitmap(mNowRect.width(), mNowRect.height(), Config.ARGB_4444);
+			} catch (Exception e) {
+				mCacheBitmap=null;
+				mCacheBitmapBk=null;
+			} catch (Error e) {
+				mCacheBitmap=null;
+				mCacheBitmapBk=null;
+			}
+		}
+		if(mCacheBitmap!=null)
+		{
+			Bitmap tempBitmap=mCacheBitmap;
+			mCacheBitmap=mCacheBitmapBk;
+			mCacheBitmapBk=tempBitmap;
+			
+			Canvas canvas2=new Canvas(mCacheBitmap);
+			canvas2.drawColor(Color.TRANSPARENT, Mode.CLEAR);
+			if(mPerRect.width()>0||mPerRect.height()>0)
+			{
+				int dx=mPerRect.left-mNowRect.left;
+				int dy=mPerRect.top-mNowRect.top;
+				canvas2.drawBitmap(mCacheBitmapBk, dx, dy, mSpanPaint);
+				canvas2.translate(-mNowRect.left, -mNowRect.top);
+				if(dy>0)
+				{
+					canvas2.save();
+					canvas2.clipRect(mNowRect.left, mNowRect.top, mNowRect.right, mPerRect.top);
+					drawReal(canvas2);
+					canvas2.restore();
+				}
+				else
+				if(dy<0)
+				{
+					canvas2.save();
+					canvas2.clipRect(mNowRect.left, mPerRect.bottom, mNowRect.right, mNowRect.bottom);
+					drawReal(canvas2);
+					canvas2.restore();
+				}
+				else  //if(dy==0)
+				{
+					Log.i(TAG, "if(dy==0)");
+					if(dx>0)
+					{
+						canvas2.clipRect(mNowRect.left, mNowRect.top, mPerRect.left, mNowRect.bottom );
+						drawReal(canvas2);
+					}
+					else
+					if(dx<0)
+					{
+						canvas2.clipRect(mPerRect.right, mNowRect.top,mNowRect.right, mNowRect.bottom );
+						drawReal(canvas2);
+					}
+				}
+			}
+			else
+			{
+				canvas2.translate(-mNowRect.left, -mNowRect.top);
+				drawReal(canvas2);
+			}
+			canvas.drawBitmap(mCacheBitmap, mNowRect.left, mNowRect.top, mSpanPaint);
+			mPerRect.set(mNowRect);
+		}
+		else
+			drawReal(canvas);
+	}
+	*/
 	
 	public void draw(Canvas canvas) {
 		canvas.getClipBounds(mRect);
@@ -806,7 +893,7 @@ public class EditableWithLayout implements Editable,MyLayout {
 	public List<WarnAndError> getWarnAndErrors(){
 		return mWarnAndErrors;
 	}
-
+	
 	class LineBody {
 		int mStart;
 		int mEnd;
@@ -905,4 +992,6 @@ public class EditableWithLayout implements Editable,MyLayout {
 			return false;
 		}
 	}
+
 }
+

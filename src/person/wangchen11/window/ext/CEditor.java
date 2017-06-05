@@ -151,6 +151,8 @@ public class CEditor implements Window, EditorFregment.ChangeFlagChanged, OnClic
 					name.endsWith(".cpp")||
 					name.endsWith(".s")||
 					name.endsWith(".h")||
+					name.endsWith(".hp")||
+					name.endsWith(".hpp")||
 					name.endsWith(".xml")||
 					name.endsWith(".project") )
 			{
@@ -484,6 +486,8 @@ public class CEditor implements Window, EditorFregment.ChangeFlagChanged, OnClic
 					name.endsWith(".cpp")||
 					name.endsWith(".s")||
 					name.endsWith(".h")||
+					name.endsWith(".hp")||
+					name.endsWith(".hpp")||
 					name.endsWith(".xml")||
 					name.endsWith(".project") )
 			{

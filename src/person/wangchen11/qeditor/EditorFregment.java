@@ -134,7 +134,7 @@ public class EditorFregment extends Fragment implements OnClickListener, AfterTe
 			{
 				mCodeTypeSpinner.setSelection(1);
 			}else
-			if(name.endsWith(".h")||name.endsWith(".cpp")|| !name.contains("."))
+			if(name.endsWith(".h")||name.endsWith(".hp")||name.endsWith(".hpp")||name.endsWith(".cpp")|| !name.contains("."))
 			{
 				mCodeTypeSpinner.setSelection(2);
 			}else
