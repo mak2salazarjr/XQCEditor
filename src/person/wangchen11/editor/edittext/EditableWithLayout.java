@@ -171,7 +171,7 @@ public class EditableWithLayout implements Editable,MyLayout {
 	}
 	
 	private List<SpanBody> getColorSpanBodies(int start, int end){
-		LinkedList<SpanBody> bodies=new LinkedList<SpanBody>();
+		ArrayList<SpanBody> bodies=new ArrayList<SpanBody>();
 		int startSpan=0;
 		int endSpan=mSpanBodies.size()-1;
 		int pos=0;

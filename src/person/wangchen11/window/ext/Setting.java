@@ -18,6 +18,7 @@ import person.wangchen11.window.TitleView;
 import person.wangchen11.window.Window;
 import person.wangchen11.window.WindowsManager;
 import person.wangchen11.xqceditor.R;
+import person.wangchen11.xqceditor.State;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -92,7 +93,10 @@ public class Setting extends Fragment implements Window, TextWatcher, OnClickLis
 		((SwitchCompat)(mRelativeLayout.findViewById(R.id.title_at_head))).setOnCheckedChangeListener(this);
 		((SwitchCompat)(mRelativeLayout.findViewById(R.id.ctrl_at_head))).setOnCheckedChangeListener(this);
 		((SwitchCompat)(mRelativeLayout.findViewById(R.id.animation))).setOnCheckedChangeListener(this);
-		
+		((SwitchCompat)(mRelativeLayout.findViewById(R.id.auto_update_switch))).setOnCheckedChangeListener(this);
+
+		((Button)(mRelativeLayout.findViewById(R.id.button_check_update))).setOnClickListener(this);
+		((TextView)(mRelativeLayout.findViewById(R.id.text_cur_version))).setText("v"+State.VersionNameNow);
 		return mRelativeLayout;
 	}
 	
@@ -211,16 +215,19 @@ public class Setting extends Fragment implements Window, TextWatcher, OnClickLis
 	{
 		mConfig.mCEditorConfig.mEnableHighLight=((SwitchCompat)mRelativeLayout.findViewById(R.id.high_light_switch)).isChecked();
 		mConfig.mEditorConfig.mUseNiceFont=((SwitchCompat)mRelativeLayout.findViewById(R.id.use_nice_font_switch)).isChecked();
+		mConfig.mEditorConfig.mAutoUpdate=((SwitchCompat)mRelativeLayout.findViewById(R.id.auto_update_switch)).isChecked();
 		mConfig.mOtherConfig.mQuickCloseEnable=((SwitchCompat)mRelativeLayout.findViewById(R.id.quick_close_window_switch)).isChecked();
 		mConfig.mOtherConfig.mNewConsoleEnable=((SwitchCompat)mRelativeLayout.findViewById(R.id.use_new_console_switch)).isChecked();
 		mConfig.mOtherConfig.mTitleAtHead=((SwitchCompat)mRelativeLayout.findViewById(R.id.title_at_head)).isChecked();
 		mConfig.mOtherConfig.mCtrlAtHead=((SwitchCompat)mRelativeLayout.findViewById(R.id.ctrl_at_head)).isChecked();
+		mConfig.mOtherConfig.mAnimation=((SwitchCompat)mRelativeLayout.findViewById(R.id.animation)).isChecked();
 		mConfig.mOtherConfig.mAnimation=((SwitchCompat)mRelativeLayout.findViewById(R.id.animation)).isChecked();
 	}
 	
 	public void refSwitchView(){
 		((SwitchCompat)mRelativeLayout.findViewById(R.id.high_light_switch)).setChecked(mConfig.mCEditorConfig.mEnableHighLight);
 		((SwitchCompat)mRelativeLayout.findViewById(R.id.use_nice_font_switch)).setChecked(mConfig.mEditorConfig.mUseNiceFont);
+		((SwitchCompat)mRelativeLayout.findViewById(R.id.auto_update_switch)).setChecked(mConfig.mEditorConfig.mAutoUpdate);
 		((SwitchCompat)mRelativeLayout.findViewById(R.id.quick_close_window_switch)).setChecked(mConfig.mOtherConfig.mQuickCloseEnable);
 		((SwitchCompat)mRelativeLayout.findViewById(R.id.use_new_console_switch)).setChecked(mConfig.mOtherConfig.mNewConsoleEnable);
 		((SwitchCompat)mRelativeLayout.findViewById(R.id.title_at_head)).setChecked(mConfig.mOtherConfig.mTitleAtHead);
@@ -313,10 +320,13 @@ public class Setting extends Fragment implements Window, TextWatcher, OnClickLis
 			}
 		});
 	}
-
+	
 	@Override
 	public void onClick(View v) {
 		switch (v.getId()) {
+		case R.id.button_check_update:
+			new CheckUpdate(mWindowsManager.getContext()).checkForUpdate();
+			break;
 		case R.id.button_close_ad:
 			if(Key.hasRealKey(mRelativeLayout.getContext()))
 			{
@@ -476,6 +486,7 @@ public class Setting extends Fragment implements Window, TextWatcher, OnClickLis
 	}
 	
 	public static class EditorConfig{
+		public boolean mAutoUpdate = true ; 
 		public boolean mUseNiceFont = true ; 
 		public int mBackGroundColor = Color.TRANSPARENT ;
 		public int mBaseFontColor = Color.BLACK ;
@@ -483,6 +494,7 @@ public class Setting extends Fragment implements Window, TextWatcher, OnClickLis
 		public float mLineScale = 1.0f ;
 		public static EditorConfig load(SharedPreferences sharedPreferences){
 			EditorConfig editorConfig=new EditorConfig();
+			editorConfig.mAutoUpdate=sharedPreferences.getBoolean("mAutoUpdate",true);
 			editorConfig.mUseNiceFont=sharedPreferences.getBoolean("mUseNiceFont",true);
 			editorConfig.mBackGroundColor=sharedPreferences.getInt("mBackGroundColor", Color.TRANSPARENT);
 			editorConfig.mBaseFontColor=sharedPreferences.getInt("mBaseFontColor", Color.BLACK);
@@ -491,6 +503,7 @@ public class Setting extends Fragment implements Window, TextWatcher, OnClickLis
 			return editorConfig;
 		}
 		public void save(Editor editor){
+			editor.putBoolean("mAutoUpdate",mAutoUpdate );
 			editor.putBoolean("mUseNiceFont",mUseNiceFont );
 			editor.putInt("mBackGroundColor",mBackGroundColor );
 			editor.putInt("mBaseFontColor",mBaseFontColor );
@@ -578,5 +591,4 @@ public class Setting extends Fragment implements Window, TextWatcher, OnClickLis
 		// TODO Auto-generated method stub
 		
 	}
-
 }

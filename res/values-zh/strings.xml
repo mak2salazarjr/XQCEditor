@@ -191,4 +191,18 @@
     <string name="title_at_head">标题栏在上方</string>
     <string name="ctrl_at_head">控制栏在上方</string>
     <string name="animation">切换动画</string>
+    
+    
+    <string name="check_for_update">检查更新</string>
+    <string name="cur_version">当前版本:</string>
+    <string name="default_version">v1.0.0</string>
+    
+    <string name="is_the_latest_version">已是最新版本</string>
+    <string name="is_the_latest_version_thanku">当前版本已是最新版本，感谢您的支持！</string>
+    <string name="find_new_version">发现新版本</string>
+    <string name="update_now">立即更新</string>
+    <string name="checking">已经在检查了，不要重复点击哟！</string>
+    <string name="can_not_get_version_info">无法获取最新版本信息！</string>
+    <string name="version_update">版本更新</string>
+    <string name="auto_update">自动检测更新</string>
 </resources>

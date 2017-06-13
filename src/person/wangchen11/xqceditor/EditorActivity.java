@@ -24,6 +24,7 @@ import person.wangchen11.window.MenuTag;
 import person.wangchen11.window.WindowPointer;
 import person.wangchen11.window.WindowsManager;
 import person.wangchen11.window.ext.CEditor;
+import person.wangchen11.window.ext.CheckUpdate;
 import person.wangchen11.window.ext.Console;
 import person.wangchen11.window.ext.FileBrowser;
 import person.wangchen11.window.ext.Setting;
@@ -117,6 +118,8 @@ public class EditorActivity extends FragmentActivity implements OnClickListener,
 		
 		fragmentTransaction.commit();
 		onContentChanged();
+		if(Setting.mConfig.mEditorConfig.mAutoUpdate)
+			new CheckUpdate(this,true).checkForUpdate();
 	}
 	
 	@Override

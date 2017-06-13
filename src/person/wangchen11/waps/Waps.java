@@ -70,8 +70,10 @@ public class Waps {
 	
 	public static boolean isTimeToShow()
 	{
-		Date timeNow=new Date();
+		if(APP_PID.equals("google"))
+			return false;
 		
+		Date timeNow=new Date();
 		if(timeNow.after(mDurTime))
 			return true;
 		return false;
