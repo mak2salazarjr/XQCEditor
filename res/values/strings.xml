@@ -208,5 +208,7 @@
     <string name="can_not_get_version_info">Can not get version info.</string>
     <string name="version_update">Update</string>
     <string name="auto_update">Auto update</string>
+    <string name="selected_and_copy">选择复制</string>
+    <string name="into_copy_mode">已进入复制模式</string>
     
 </resources>

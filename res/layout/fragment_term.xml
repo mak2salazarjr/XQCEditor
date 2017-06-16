@@ -4,26 +4,73 @@
     android:layout_height="match_parent" >
 
     <LinearLayout
-        android:visibility="gone"
         android:id="@+id/control"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentRight="true" >
+        android:orientation="vertical" >
 
-        <Button
-            android:id="@+id/button1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="->|" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
+            <Button
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="Esc" />
+            <Button
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="$" />
+            <Button
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="↑" />
+            <Button
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="&quot;" />
 
-        <Button
-            android:id="@+id/button2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Ctrl" />
+            <Button
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Fn" />
 
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
+            <Button
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="Ctrl" />
+            <Button
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="←" />
+            <Button
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="↓" />
+            <Button
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="→" />
+            <Button
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="Alt" />
+        </LinearLayout>
     </LinearLayout>
 
     <RelativeLayout
@@ -35,6 +82,9 @@
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true" >
 
+        <person.wangchen11.editor.edittext.ViewToShowPopupMenu
+            android:layout_width="0dp"
+            android:layout_height="0dp" />
     </RelativeLayout>
 
 </RelativeLayout>
