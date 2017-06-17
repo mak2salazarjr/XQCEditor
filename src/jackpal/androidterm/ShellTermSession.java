@@ -132,6 +132,7 @@ public class ShellTermSession extends TermSession {
         env[0] = "TERM=" + settings.getTermType();
         env[1] = "PATH=" + path;
         env[2] = "HOME=" + settings.getHomePath();
+        Log.i(TAG, "HOME:"+env[2]);
 
         createSubprocess(processId, settings.getShell(), env);
         mProcId = processId[0];

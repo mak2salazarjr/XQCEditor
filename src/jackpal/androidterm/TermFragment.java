@@ -6,6 +6,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 
 import person.wangchen11.busybox.Busybox;
+import person.wangchen11.filebrowser.FileBowserFragment;
 import person.wangchen11.gnuccompiler.GNUCCompiler;
 import person.wangchen11.plugins.PluginsManager;
 import person.wangchen11.xqceditor.R;
@@ -231,7 +232,7 @@ public class TermFragment extends Fragment implements FinishCallback{
     			+GNUCCompiler.getAbiPath(getActivity())+":"
     			+GNUCCompiler.getGccPath(getActivity())
     			);
-    	mTermSettings.setHomePath(mHome);
+    	mTermSettings.setHomePath(FileBowserFragment.mDefaultFile.getAbsolutePath());
     	TermSession session = createTermSession(getActivity(), settings, getInitCmdEx(mInitCmd) );
         return session;
     }
