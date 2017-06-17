@@ -36,6 +36,7 @@ public class TermFragment extends Fragment implements FinishCallback{
 	@SuppressLint("SdCardPath") 
 	private String mHome="/sdcard/";
 	private Handler mHandler = null;
+	private String mChangePS1Cmd = new File("/system/bin/basename").canExecute() ? "export PS1='$USER:`basename $PWD`\\$';" : ";";
 	public TermFragment() {
 	}
 
@@ -56,7 +57,7 @@ public class TermFragment extends Fragment implements FinishCallback{
 			{R.id.termButton_2,0,0,KeyEvent.KEYCODE_TAB},
 			{R.id.termButton_3,0,0,KeyEvent.KEYCODE_DPAD_UP},
 			{R.id.termButton_4,0,'$',0},
-			{R.id.termButton_5,0,'"',0},
+			{R.id.termButton_5,0,'`',0},
 			
 			{R.id.termButton_6,0,0,KeyEvent.KEYCODE_CTRL_LEFT},
 			{R.id.termButton_7,0,0,KeyEvent.KEYCODE_DPAD_LEFT},
@@ -65,7 +66,7 @@ public class TermFragment extends Fragment implements FinishCallback{
 			{R.id.termButton_10,0,'\'',0},
 	};
 	private int mFristKeyDelay = 200;
-	private int mKeyDelay = 100;
+	private int mKeyDelay = 60;
 	
 	private Runnable mKeyLoopRunnable = null;
 	private void setAllViewListener(View view){
@@ -154,8 +155,9 @@ public class TermFragment extends Fragment implements FinishCallback{
 	{
 		if(cmd == null||cmd.length()<0)
 			cmd="";
+		cmd = "cd;"+mChangePS1Cmd+cmd;
 		cmd = PluginsManager.getCmd(getActivity())+cmd;
-		String ret = "";//"cd $HOME\n";
+		String ret = "clear;";//"cd $HOME\n";
 		File file = getNextRunnableSh(this.getActivity());
 		try {
 			FileOutputStream fileOutputStream = new FileOutputStream(file);
