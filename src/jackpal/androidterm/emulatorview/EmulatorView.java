@@ -197,8 +197,8 @@ public class EmulatorView extends View implements GestureDetector.OnGestureListe
             } else {
                 mCursorVisible = true;
             }
-            // Perhaps just invalidate the character with the cursor.
-            invalidate();
+            // Perhaps just postInvalidate the character with the cursor.
+            postInvalidate();
         }
     };
 
@@ -219,7 +219,7 @@ public class EmulatorView extends View implements GestureDetector.OnGestureListe
             int newTopRow = mScroller.getCurrY();
             if (newTopRow != mTopRow) {
                 mTopRow = newTopRow;
-                invalidate();
+                postInvalidate();
             }
 
             if (more) {
@@ -486,7 +486,7 @@ public class EmulatorView extends View implements GestureDetector.OnGestureListe
             }
             mEmulator.clearScrollCounter();
             ensureCursorVisible();
-            invalidate();
+            postInvalidate();
         }
     };
 
@@ -921,7 +921,7 @@ public class EmulatorView extends View implements GestureDetector.OnGestureListe
 
     private void setImeBuffer(String buffer) {
         if (!buffer.equals(mImeBuffer)) {
-            invalidate();
+            postInvalidate();
         }
         mImeBuffer = buffer;
     }
@@ -1048,7 +1048,7 @@ public class EmulatorView extends View implements GestureDetector.OnGestureListe
         mTopRow =
                 Math.min(0, Math.max(-(mEmulator.getScreen()
                         .getActiveTranscriptRows()), mTopRow + mRows * delta));
-        invalidate();
+        postInvalidate();
     }
 
     /**
@@ -1061,7 +1061,7 @@ public class EmulatorView extends View implements GestureDetector.OnGestureListe
         mLeftColumn =
                 Math.max(0, Math.min(mLeftColumn + deltaColumns, mColumns
                         - mVisibleColumns));
-        invalidate();
+        postInvalidate();
     }
 
     /**
@@ -1169,7 +1169,7 @@ public class EmulatorView extends View implements GestureDetector.OnGestureListe
         mTopRow =
             Math.min(0, Math.max(-(mEmulator.getScreen()
                     .getActiveTranscriptRows()), mTopRow + deltaRows));
-        invalidate();
+        postInvalidate();
 
         return true;
     }
@@ -1180,14 +1180,14 @@ public class EmulatorView extends View implements GestureDetector.OnGestureListe
     public boolean onJumpTapDown(MotionEvent e1, MotionEvent e2) {
        // Scroll to bottom
        mTopRow = 0;
-       invalidate();
+       postInvalidate();
        return true;
     }
 
     public boolean onJumpTapUp(MotionEvent e1, MotionEvent e2) {
         // Scroll to top
         mTopRow = -mEmulator.getScreen().getActiveTranscriptRows();
-        invalidate();
+        postInvalidate();
         return true;
     }
 
@@ -1268,11 +1268,11 @@ public class EmulatorView extends View implements GestureDetector.OnGestureListe
                 clip.setText(getSelectedText().trim());
                 toggleSelectingText();
             }
-            invalidate();
+            postInvalidate();
             break;
         default:
             toggleSelectingText();
-            invalidate();
+            postInvalidate();
             break;
         }
         return true;
@@ -1310,7 +1310,7 @@ public class EmulatorView extends View implements GestureDetector.OnGestureListe
                     TermKeyListener.isEventFromToggleDevice(event));
             if (mKeyListener.getCombiningAccent() != oldCombiningAccent
                     || mKeyListener.getCursorMode() != oldCursorMode) {
-                invalidate();
+                postInvalidate();
             }
         } catch (IOException e) {
             // Ignore I/O exceptions
@@ -1390,7 +1390,7 @@ public class EmulatorView extends View implements GestureDetector.OnGestureListe
                 Log.w(TAG, "handleControlKey " + keyCode);
             }
             mKeyListener.handleControlKey(down);
-            invalidate();
+            postInvalidate();
             return true;
         }
         return false;
@@ -1404,7 +1404,7 @@ public class EmulatorView extends View implements GestureDetector.OnGestureListe
             }
             boolean down = event.getAction() == KeyEvent.ACTION_DOWN;
             mKeyListener.handleHardwareControlKey(down);
-            invalidate();
+            postInvalidate();
             return true;
         }
         return false;
@@ -1416,7 +1416,7 @@ public class EmulatorView extends View implements GestureDetector.OnGestureListe
                 Log.w(TAG, "handleFnKey " + keyCode);
             }
             mKeyListener.handleFnKey(down);
-            invalidate();
+            postInvalidate();
             return true;
         }
         return false;
@@ -1430,12 +1430,12 @@ public class EmulatorView extends View implements GestureDetector.OnGestureListe
         if (mIsControlKeySent) {
             mIsControlKeySent = false;
             mKeyListener.handleControlKey(false);
-            invalidate();
+            postInvalidate();
         }
         if (mIsFnKeySent) {
             mIsFnKeySent = false;
             mKeyListener.handleFnKey(false);
-            invalidate();
+            postInvalidate();
         }
     }
 
@@ -1490,7 +1490,7 @@ public class EmulatorView extends View implements GestureDetector.OnGestureListe
         mTopRow = 0;
         mLeftColumn = 0;
 
-        invalidate();
+        postInvalidate();
     }
 
     /**
@@ -1629,7 +1629,7 @@ public class EmulatorView extends View implements GestureDetector.OnGestureListe
     public void sendControlKey() {
         mIsControlKeySent = true;
         mKeyListener.handleControlKey(true);
-        invalidate();
+        postInvalidate();
     }
 
     /**
@@ -1639,7 +1639,7 @@ public class EmulatorView extends View implements GestureDetector.OnGestureListe
     public void sendFnKey() {
         mIsFnKeySent = true;
         mKeyListener.handleFnKey(true);
-        invalidate();
+        postInvalidate();
     }
 
     /**
@@ -1666,6 +1666,10 @@ public class EmulatorView extends View implements GestureDetector.OnGestureListe
         mControlKeyCode = keyCode;
     }
 
+    public int getControlKeyCode() {
+        return mControlKeyCode;
+    }
+    
     /**
      * Set the keycode corresponding to the Fn key.
      */
@@ -1720,5 +1724,9 @@ public class EmulatorView extends View implements GestureDetector.OnGestureListe
             return link.getURL();
         else
             return null;
+    }
+    
+    public TermKeyListener getKeyListener(){
+    	return mKeyListener;
     }
 }

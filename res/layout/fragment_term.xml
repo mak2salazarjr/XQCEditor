@@ -14,31 +14,36 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content" >
             <Button
+                android:id="@+id/termButton_1"
                 android:layout_weight="1"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:text="Esc" />
             <Button
+                android:id="@+id/termButton_2"
                 android:layout_weight="1"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="$" />
+                android:text="Tab" />
             <Button
+                android:id="@+id/termButton_3"
                 android:layout_weight="1"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:text="↑" />
             <Button
+                android:id="@+id/termButton_4"
                 android:layout_weight="1"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="&quot;" />
+                android:text="$" />
 
             <Button
+                android:id="@+id/termButton_5"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Fn" />
+                android:text="&quot;" />
 
         </LinearLayout>
 
@@ -46,30 +51,35 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content" >
             <Button
+                android:id="@+id/termButton_6"
                 android:layout_weight="1"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:text="Ctrl" />
             <Button
+                android:id="@+id/termButton_7"
                 android:layout_weight="1"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:text="←" />
             <Button
+                android:id="@+id/termButton_8"
                 android:layout_weight="1"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:text="↓" />
             <Button
+                android:id="@+id/termButton_9"
                 android:layout_weight="1"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:text="→" />
             <Button
+                android:id="@+id/termButton_10"
                 android:layout_weight="1"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="Alt" />
+                android:text="'" />
         </LinearLayout>
     </LinearLayout>
 

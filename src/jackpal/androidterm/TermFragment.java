@@ -17,19 +17,25 @@ import jackpal.androidterm.util.TermSettings;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.DisplayMetrics;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.RelativeLayout;
 
 public class TermFragment extends Fragment implements FinishCallback{
-	TermSession mTermSession = null;
-	String mInitCmd="cd /sdcard/\nls\n";
+	private TermSession mTermSession = null;
+	private String mInitCmd="cd /sdcard/\nls\n";
+	private EmulatorView mEmulatorView = null;
 	@SuppressLint("SdCardPath") 
 	private String mHome="/sdcard/";
+	private Handler mHandler = null;
 	public TermFragment() {
 	}
 
@@ -42,6 +48,106 @@ public class TermFragment extends Fragment implements FinishCallback{
 	public TermFragment(String cmd,boolean runAsSu,String home){
 		mInitCmd=cmd;
 		mHome = home;
+	}
+	
+	private int [][] mButonMap = {
+			//id	isdown	char	key
+			{R.id.termButton_1,0,0,KeyEvent.KEYCODE_ESCAPE},
+			{R.id.termButton_2,0,0,KeyEvent.KEYCODE_TAB},
+			{R.id.termButton_3,0,0,KeyEvent.KEYCODE_DPAD_UP},
+			{R.id.termButton_4,0,'$',0},
+			{R.id.termButton_5,0,'"',0},
+			
+			{R.id.termButton_6,0,0,KeyEvent.KEYCODE_CTRL_LEFT},
+			{R.id.termButton_7,0,0,KeyEvent.KEYCODE_DPAD_LEFT},
+			{R.id.termButton_8,0,0,KeyEvent.KEYCODE_DPAD_DOWN},
+			{R.id.termButton_9,0,0,KeyEvent.KEYCODE_DPAD_RIGHT},
+			{R.id.termButton_10,0,'\'',0},
+	};
+	private int mFristKeyDelay = 200;
+	private int mKeyDelay = 100;
+	
+	private Runnable mKeyLoopRunnable = null;
+	private void setAllViewListener(View view){
+		mHandler = new Handler();
+		if(view instanceof ViewGroup){
+			ViewGroup viewGroup = (ViewGroup) view;
+			for(int i=0;i<viewGroup.getChildCount();i++){
+				setAllViewListener(viewGroup.getChildAt(i));
+			}
+		}
+
+		if(view instanceof Button){
+			view.setOnTouchListener(new View.OnTouchListener() {				
+				@Override
+				public boolean onTouch(View v, MotionEvent event) {
+					mButonMap[5][3] = mEmulatorView.getControlKeyCode();
+					for(final int[] key:mButonMap){
+						if(key[0]==v.getId()){
+							switch (event.getAction()) {
+							case MotionEvent.ACTION_DOWN:
+								key[1] = 1;
+								break;
+							case MotionEvent.ACTION_UP:
+								key[1] = 0;
+								break;
+							default:
+								break;
+							}
+							
+							if(key[2]!=0){
+								if(event.getAction()==MotionEvent.ACTION_DOWN){
+									mEmulatorView.getTermSession().write(key[2]);
+									if(mKeyLoopRunnable!=null){
+										mHandler.removeCallbacks(mKeyLoopRunnable);
+									}
+									mKeyLoopRunnable = new Runnable() {
+										@Override
+										public void run() {
+											if(key[1] == 1){
+												mEmulatorView.getTermSession().write(key[2]);
+												mHandler.postDelayed(this,mKeyDelay);
+											}
+										}
+									};
+									mHandler.postDelayed(mKeyLoopRunnable,mFristKeyDelay);
+								}
+							}else
+							switch (event.getAction()) {
+							case MotionEvent.ACTION_DOWN:{
+									final KeyEvent keyEvent = new KeyEvent(KeyEvent.ACTION_DOWN, key[3]);
+									mEmulatorView.onKeyDown(keyEvent.getKeyCode(), keyEvent);
+									if(mKeyLoopRunnable!=null){
+										mHandler.removeCallbacks(mKeyLoopRunnable);
+									}
+									mKeyLoopRunnable = new Runnable() {
+										@Override
+										public void run() {
+											if(key[1] == 1){
+												mEmulatorView.onKeyDown(keyEvent.getKeyCode(), keyEvent);
+												mHandler.postDelayed(this,mKeyDelay);
+											}
+										}
+									};
+									mHandler.postDelayed(mKeyLoopRunnable,mFristKeyDelay);
+								}
+								break;
+
+							case MotionEvent.ACTION_UP:{
+									final KeyEvent keyEvent = new KeyEvent(KeyEvent.ACTION_UP, key[3]);
+									mEmulatorView.onKeyUp(keyEvent.getKeyCode(), keyEvent);
+								}
+								break;
+							default:
+								break;
+							}
+						}
+					}
+					
+					return v.onTouchEvent(event);
+				}
+			});
+		}
 	}
 	
 	public String getInitCmdEx(String cmd)
@@ -97,8 +203,9 @@ public class TermFragment extends Fragment implements FinishCallback{
 		RelativeLayout workSpaceLayout = (RelativeLayout) relativeLayout.findViewById(R.id.layout_work_space);
 		mTermSession = createTermSession();
 		mTermSession.setFinishCallback(this);
-		workSpaceLayout.addView(createEmulatorView(mTermSession), ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
-		
+		mEmulatorView = createEmulatorView(mTermSession);
+		workSpaceLayout.addView(mEmulatorView, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+		setAllViewListener(relativeLayout);
 		return relativeLayout;
 	}
 
