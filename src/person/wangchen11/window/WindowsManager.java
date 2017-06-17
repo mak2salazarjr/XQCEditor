@@ -131,7 +131,7 @@ public class WindowsManager implements View.OnClickListener, android.support.v7.
 		return closeWindow(pointer);
 	}
 
-	public boolean closeWindow(WindowPointer pointer)
+	private boolean closeWindow(WindowPointer pointer)
 	{
 		if(pointer!=null)
 		{
@@ -217,25 +217,22 @@ public class WindowsManager implements View.OnClickListener, android.support.v7.
 	}
 
 	private void sendAddWindow(WindowPointer pointer){
-		Iterator< WindowsManagerLintener> iterator=mLinteners.iterator();
-		while(iterator.hasNext()){
-			WindowsManagerLintener windowsManagerLintener=iterator.next();
+		for(int i=mLinteners.size()-1;i>=0;i--){
+			WindowsManagerLintener windowsManagerLintener=mLinteners.get(i);
 			windowsManagerLintener.onAddWindow(this,pointer);
 		}
 	}
 	
 	private void sendCloseWindow(WindowPointer pointer){
-		Iterator< WindowsManagerLintener> iterator=mLinteners.iterator();
-		while(iterator.hasNext()){
-			WindowsManagerLintener windowsManagerLintener=iterator.next();
+		for(int i=mLinteners.size()-1;i>=0;i--){
+			WindowsManagerLintener windowsManagerLintener=mLinteners.get(i);
 			windowsManagerLintener.onCloseWindow(this,pointer);
 		}
 	}
 	
 	private void sendChangeWindow(){
-		Iterator< WindowsManagerLintener> iterator=mLinteners.iterator();
-		while(iterator.hasNext()){
-			WindowsManagerLintener windowsManagerLintener=iterator.next();
+		for(int i=mLinteners.size()-1;i>=0;i--){
+			WindowsManagerLintener windowsManagerLintener=mLinteners.get(i);
 			windowsManagerLintener.onChangeWindow(this);
 		}
 	}

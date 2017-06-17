@@ -27,20 +27,22 @@ public class Console implements Window, OnConsoleColseListener,WindowsManagerLin
 	private WindowsManager mWindowsManager;
 	private String mProcessName=null;
 	public static File mDefaultFile=Environment.getExternalStorageDirectory();
+	private String mKey = null;
 	
 	public Console(WindowsManager windowsManager) {
-		this(windowsManager,"",mDefaultFile.getPath());
+		this(windowsManager,"",mDefaultFile.getPath(),null);
 	}
 	
-	public Console(WindowsManager windowsManager,String initCmd,String home) {
-		this(windowsManager,initCmd,true,home);
+	public Console(WindowsManager windowsManager,String initCmd,String home,String key) {
+		this(windowsManager,initCmd,true,home,key);
 	}
 	
-	public Console(WindowsManager windowsManager,String initCmd,boolean needErrorInput,String home) {
-		this(windowsManager,initCmd,needErrorInput,false,home);
+	public Console(WindowsManager windowsManager,String initCmd,boolean needErrorInput,String home,String key) {
+		this(windowsManager,initCmd,needErrorInput,false,home,key);
 	}
 	
-	public Console(WindowsManager windowsManager,String initCmd,boolean needErrorInput,boolean runAsSu,String home) {
+	public Console(WindowsManager windowsManager,String initCmd,boolean needErrorInput,boolean runAsSu,String home,String key) {
+		mKey = key;
 		mWindowsManager=windowsManager;
 		
 		if(Setting.mConfig.mOtherConfig.mNewConsoleEnable)
@@ -126,6 +128,15 @@ public class Console implements Window, OnConsoleColseListener,WindowsManagerLin
 
 	@Override
 	public void onAddWindow(WindowsManager manager, WindowPointer pointer) {
+		if(pointer.mWindow == this)
+			return;
+		if(mKey!=null)
+		if(pointer.mWindow instanceof Console ){
+			Console console = (Console) pointer.mWindow;
+			if(mKey.equals(console.mKey)){
+				manager.closeWindow( this );
+			}
+		}
 	}
 
 	@Override
