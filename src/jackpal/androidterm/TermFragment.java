@@ -36,7 +36,7 @@ public class TermFragment extends Fragment implements FinishCallback{
 	@SuppressLint("SdCardPath") 
 	private String mHome="/sdcard/";
 	private Handler mHandler = null;
-	private String mChangePS1Cmd = new File("/system/bin/basename").canExecute() ? "export PS1='$USER:`basename $PWD`\\$';" : ";";
+	private String mChangePS1Cmd = new File("/system/bin/basename").canExecute() ? "export PS1='$USER:`basename \"$PWD\"`\\$';" : ";";
 	public TermFragment() {
 	}
 
@@ -80,6 +80,7 @@ public class TermFragment extends Fragment implements FinishCallback{
 
 		if(view instanceof Button){
 			view.setOnTouchListener(new View.OnTouchListener() {				
+				@SuppressLint("ClickableViewAccessibility")
 				@Override
 				public boolean onTouch(View v, MotionEvent event) {
 					mButonMap[5][3] = mEmulatorView.getControlKeyCode();
