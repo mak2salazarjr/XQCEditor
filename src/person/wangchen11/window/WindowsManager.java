@@ -104,6 +104,27 @@ public class WindowsManager implements View.OnClickListener, android.support.v7.
 		}
 		return ret;
 	}
+
+	public boolean closeOtherWindow(Window ept){
+		saveWindowState();
+		boolean ret = true;
+		LinkedList<WindowPointer> linkedList = new LinkedList<WindowPointer>();
+		linkedList.addAll(mWindowPointers);
+		
+		Iterator<WindowPointer> iterator = linkedList.iterator();
+		
+		while(iterator.hasNext())
+		{
+			WindowPointer pointer = iterator.next();
+			if(pointer.mWindow == ept)
+				continue;
+			if(! closeWindow(pointer.mWindow))
+			{
+				ret = false;
+			}
+		}
+		return ret;
+	}
 	
 	public boolean closeWindow(Window window){
 		WindowPointer pointer = getWindowPointer(window);
@@ -261,6 +282,7 @@ public class WindowsManager implements View.OnClickListener, android.support.v7.
 				popupMenu.setOnMenuItemClickListener(this);
 				Menu menu=popupMenu.getMenu();
 				menu.add(0,R.string.close,0, mContext.getResources().getText(R.string.close));
+				menu.add(0,R.string.close_others,0, mContext.getResources().getText(R.string.close_others));
 				menu.add(0,R.string.move_to_left,0, mContext.getResources().getText(R.string.move_to_left));
 				menu.add(0,R.string.move_to_right,0, mContext.getResources().getText(R.string.move_to_right));
 				popupMenu.show();
@@ -302,6 +324,9 @@ public class WindowsManager implements View.OnClickListener, android.support.v7.
 			break;
 		case R.string.close:
 			closeSelectWindow();
+			break;
+		case R.string.close_others:
+			closeOtherWindow(getSelectWindow().mWindow);
 			break;
 		case R.string.about:
 			addWindow(new About());
