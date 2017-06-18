@@ -37,7 +37,7 @@ public class TermFragment extends Fragment implements FinishCallback{
 	@SuppressLint("SdCardPath") 
 	private String mHome="/sdcard/";
 	private Handler mHandler = null;
-	private String mChangePS1Cmd = new File("/system/bin/basename").canExecute() ? "export PS1='$USER:`basename \"$PWD\"`\\$';" : ";";
+	private String mChangePS1Cmd = new File("/system/bin/basename").canExecute() ? "export PS1='$USER:`basename \"$PWD\"`\\$';" : "";
 	public TermFragment() {
 	}
 
