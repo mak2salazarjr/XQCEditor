@@ -12,6 +12,7 @@ import java.util.zip.ZipInputStream;
 
 import person.wangchen11.plugins.WaitingProcess;
 import person.wangchen11.util.FileUtil;
+import person.wangchen11.waps.Waps;
 import person.wangchen11.xqceditor.R;
 import person.wangchen11.xqceditor.State;
 
@@ -27,11 +28,12 @@ public class GNUCCompiler {
 	private final static int BUFFER=4096; 
 
 	public static void freeResourceIfNeed(final Context context){
-		new WaitingProcess(context,"ÊÍ·Å×ÊÔ´") {
+		new WaitingProcess(context,R.string.free_res) {
 			@Override
 			public void run() {
 				setProcess(0);
 				setMsg(R.string.free_example);
+				if(!Waps.isGoogle())
 				if( State.isUpdated() || !new File(getWorkSpaceDir()).isDirectory() )
 				{
 					freeZip(context, "workspace.zip", getSystemDir() );

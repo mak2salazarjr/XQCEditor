@@ -211,5 +211,6 @@
     <string name="selected_and_copy">Select&amp;copy</string>
     <string name="into_copy_mode">Toggle selecting text</string>
     <string name="close_others">Close others</string>
+    <string name="free_res">Free resource</string>
     
 </resources>

@@ -21,6 +21,12 @@
             android:layout_height="match_parent"
             android:orientation="vertical" >
             
+        	<LinearLayout
+            	android:id="@+id/layout_update"
+            	android:layout_width="match_parent"
+            	android:layout_height="wrap_content"
+            	android:orientation="vertical" >
+            
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -97,6 +103,8 @@
         			android:layout_height="wrap_content"
         			android:text="@string/check_for_update" />
                 
+            </LinearLayout>
+            
             </LinearLayout>
             
             <TextView
@@ -715,6 +723,7 @@
             </LinearLayout>
             
             <LinearLayout
+                android:id="@+id/layout_ad"
             	android:paddingTop="8dp"
             	android:paddingBottom="8dp"
                 android:layout_width="match_parent"

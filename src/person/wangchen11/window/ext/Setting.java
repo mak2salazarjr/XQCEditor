@@ -60,6 +60,12 @@ public class Setting extends Fragment implements Window, TextWatcher, OnClickLis
 	public View onCreateView(LayoutInflater inflater,
 			@Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 		mRelativeLayout=(RelativeLayout) inflater.inflate(R.layout.fragment_setting, null);
+		if(Waps.isGoogle()){
+			mRelativeLayout.findViewById(R.id.layout_update).setVisibility(View.GONE);
+		}
+		if(!Waps.isTimeToShow()){
+			mRelativeLayout.findViewById(R.id.layout_ad).setVisibility(View.GONE);
+		}
 		Waps.updatePoints(mRelativeLayout.getContext(), this);
 		mConfig=loadConfig(getActivity());
 		refEditView();

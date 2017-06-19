@@ -12,6 +12,7 @@ public class Waps {
 	static final String TAG="Waps";
 	private static String APP_ID="f29592b5daa7915e1048e659e7e930cf";
 	private static String APP_PID="qq";
+	//private static String APP_PID="google";
 	
 	private static Date mDurTime;
 	static{
@@ -68,9 +69,13 @@ public class Waps {
 		}
 	}
 	
+	public static boolean isGoogle(){
+		return APP_PID.equals("google");
+	}
+	
 	public static boolean isTimeToShow()
 	{
-		if(APP_PID.equals("google"))
+		if(isGoogle())
 			return false;
 		
 		Date timeNow=new Date();

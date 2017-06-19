@@ -20,6 +20,7 @@ import android.os.Handler;
 import android.util.Log;
 import android.widget.Toast;
 
+import person.wangchen11.waps.Waps;
 import person.wangchen11.xqceditor.R;
 import person.wangchen11.xqceditor.State;
 
@@ -40,6 +41,8 @@ public class CheckUpdate {
 		//State.VersionNameNow = "2.1.1";
 	}
 	public void checkForUpdate(){
+		if(Waps.isGoogle())
+			return;
 		if(mChecking == true){
 			showToast(R.string.checking);
 			return ;

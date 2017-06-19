@@ -208,4 +208,5 @@
     <string name="selected_and_copy">选择复制</string>
     <string name="into_copy_mode">已进入复制模式</string>
     <string name="close_others">关闭其它</string>
+    <string name="free_res">正在释放资源</string>
 </resources>
