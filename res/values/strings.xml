@@ -32,7 +32,7 @@
     <string name="new_project">New Project</string>
     <string name="refresh">Refresh</string>
     <string name="info">Info</string>
-    <string name="by_wangchen11">By WangChen11\nhttp://www.kxdmwc.com</string>
+    <string name="by_wangchen11">By WangChen11\n1012371864@qq.com\nhttp://www.kxdmwc.com</string>
     <string name="editor_set">Editor Setting:</string>
     <string name="background_color">Background Color</string>
     <string name="font_color">Font Color</string>
@@ -183,7 +183,8 @@
     <string name="_nonext">There\'s nothing to do.\n</string>
     <string name="_wait">Wait</string>
     <string name="_back">Back</string>
-    <string name="_updatemsg">UpdateMsg</string>
+    <string name="_updatemsg">Update message</string>
+    <string name="_updateinfo">Nothing!</string>
     <string name="warn">Warning</string>
     <string name="error">Error</string>
     <string name="installing">Installing...</string>

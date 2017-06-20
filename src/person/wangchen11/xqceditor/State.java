@@ -66,39 +66,16 @@ public class State {
 		editor.commit();
 	}
 	
-	public static String mUpdateMsg = 
-			"2.1.3:\n" +
-			"(1)增加自动更新。\n" +
-			"(2)修复stdbool.h中缺少分号导致的c++编译失败。\n" +
-			"(3)新版控制台加入快捷按钮。\n" +
-			"(4)控制台体验优化。\n" +
-			"(5)修复printf出现的异常。\n" +
-			"\n" +
-			"2.1.2:\n" +
-			"(1)加入控件。\n" +
-			"(2)修复前一版本中的不稳定因素。\n" +
-			"(3)新建项目使用新版控制台。\n" +
-			"\n" +
-			"2.1.1:\n" +
-			"(1)优化include处理逻辑。\n" +
-			"(2)修改GUI的绘图API。\n" +
-			"(3)增加状态保存恢复功能。\n" +
-			"(4)增加切换动画功能。\n" +
-			"\n" +
-			"2.1.0:\n" +
-			"(1)增加实时查错功能。\n" +
-			"(2)优化提示功能。\n" +
-			"\n" +
-			"2.0.9:\n" +
-			"(1)修复makefile部分问题。\n" +
-			"(2)添加物理键盘支持。\n" +
-			"(3)可以从其它应用中通过快写代码打开代码。\n" +
-			"(4)增加PHP代码提示功能。";
 	public static void showUpdateMsg(Context context)
 	{
+		String updateMsg = context.getString(R.string._updateinfo);
+		if(updateMsg.length()<=10){
+			Log.i(TAG, "updateMsg.length()<=10");
+			return ;
+		}
 		AlertDialog.Builder builder=new Builder(context);
 		builder.setTitle(R.string._updatemsg);
-		builder.setMessage(mUpdateMsg);
+		builder.setMessage(updateMsg);
 		builder.setCancelable(false);
 		builder.setPositiveButton(android.R.string.ok, null);
 		builder.create();
