@@ -148,6 +148,28 @@ public class FileBowserFragment extends Fragment implements OnItemClickListener,
 		Waps.showBanner(view.getContext(), (LinearLayout)view.findViewById(R.id.banner));
 		return view;
 	}
+	
+	@Override
+	public void onHiddenChanged(boolean hidden) {
+		super.onHiddenChanged(hidden);
+		refCopyOrCut();
+	}
+	
+	@Override
+	public void onResume() {
+		super.onResume();
+		refCopyOrCut();
+	};
+	
+	private static CopyOrCutOption mCopyOrCutOption = null;
+	public void refCopyOrCut(){
+		if(mCopyOrCutOption==null){
+			mPasteLayout.setVisibility(View.GONE);
+		}else{
+			mPasteLayout.setVisibility(View.VISIBLE);
+		}
+	}
+	
 	Boolean mStopFlag=false;
 	public void ShowInfo(final File[] files)
 	{
@@ -389,28 +411,32 @@ public class FileBowserFragment extends Fragment implements OnItemClickListener,
 		switch (arg0.getId()) {
 		case R.id.copy:
 			files=mFileListAdapter.GetSelectedFiles();
-			mPasteLayout.setTag(new CopyOrCutOption(files, true));
-			mPasteLayout.setVisibility(View.VISIBLE);
+			mCopyOrCutOption = new CopyOrCutOption(files, true);
 			mFileListAdapter.StopSelect();
+			refCopyOrCut();
 			break;
 		case R.id.cut:
 			files=mFileListAdapter.GetSelectedFiles();
-			mPasteLayout.setTag(new CopyOrCutOption(files, false));
-			mPasteLayout.setVisibility(View.VISIBLE);
+			mCopyOrCutOption = new CopyOrCutOption(files, false);
 			mFileListAdapter.StopSelect();
+			refCopyOrCut();
 			break;
 		case R.id.paste:
-			CopyOrCutInfo copyInfo=((CopyOrCutOption)mPasteLayout.getTag()).Do(mFileListAdapter.mPath,false);
-			if(mToast!=null)
-				mToast.cancel();
-			mToast=Toast.makeText(getActivity(), getText(R.string.success).toString()+copyInfo.mSuccessNum+"\n"+
-				getActivity().getText(R.string.fail)+copyInfo.mFailedNum+"\n"+
-				getActivity().getText(R.string.exist)+copyInfo.mExistNum, 1000);
-			mToast.show();
-			mFileListAdapter.Refresh();
+			if(mCopyOrCutOption!=null){
+				CopyOrCutInfo copyInfo=mCopyOrCutOption.Do(mFileListAdapter.mPath,false);//((CopyOrCutOption)mPasteLayout.getTag()).Do(mFileListAdapter.mPath,false);
+				mCopyOrCutOption = null;
+				if(mToast!=null)
+					mToast.cancel();
+				mToast=Toast.makeText(getActivity(), getText(R.string.success).toString()+copyInfo.mSuccessNum+"\n"+
+					getActivity().getText(R.string.fail)+copyInfo.mFailedNum+"\n"+
+					getActivity().getText(R.string.exist)+copyInfo.mExistNum, 1000);
+				mToast.show();
+				mFileListAdapter.Refresh();
+				refCopyOrCut();
+			}
 		case R.id.cancel:
-			mPasteLayout.setTag(null);
-			mPasteLayout.setVisibility(View.GONE);
+			mCopyOrCutOption = null;
+			refCopyOrCut();
 			break;
 		case R.id.share:
 			files=mFileListAdapter.GetSelectedFiles();
