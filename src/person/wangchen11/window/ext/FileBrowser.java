@@ -358,11 +358,9 @@ public class FileBrowser implements Window,OnOpenListener, OnClickListener{
 	}
 
 	@Override
-	public void resumeByCmd(String []cmd) {
-		if(cmd==null)
-			return;
-		if(cmd.length!=1)
-			return;
+	public void resumeByCmd(String []cmd) throws Exception {
+		if(cmd==null || cmd.length!=1 || cmd[0].equals("/") )
+			throw new Exception("can not resume by cmd!");
 		mFileBowserFragment.setDefaultPath(cmd[0]);
 	}
 }

@@ -503,7 +503,7 @@ public class WindowsManager implements View.OnClickListener, android.support.v7.
 		return i;
 	}
 	
-	private boolean addSavedWindow(String className,String []cmds){
+	private boolean addSavedWindow(String className,String []cmds) throws Exception{
 		if(className.equals( BrowserWindow.class.getName() )){
 			Window window = new BrowserWindow(this,"","");
 			window.resumeByCmd(cmds);

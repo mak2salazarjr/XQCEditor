@@ -14,5 +14,5 @@ public interface Window {
 	public List<MenuTag> getMenuTags();
 	public boolean onMenuItemClick(int id);
 	public String[] getResumeCmd();
-	public void     resumeByCmd(String []cmd);
+	public void     resumeByCmd(String []cmd) throws Exception;
 }
