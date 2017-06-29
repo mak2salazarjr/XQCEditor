@@ -38,7 +38,7 @@ public class CodeEditText extends MyEditText implements CodeStypeAdapterListener
 	public void setCodeType(CodeType type)
 	{
 		mCodeType = type;
-		updateCodeStyle();
+		postUpdateCodeStyle();
 	}
 	
 	public CodeEditText(Context context) {
@@ -68,7 +68,21 @@ public class CodeEditText extends MyEditText implements CodeStypeAdapterListener
 		super.afterTextChanged(s);
 		if(mAfterTextChangeListener!=null)
 			mAfterTextChangeListener.afterTextChange();
-		updateCodeStyle();
+		postUpdateCodeStyle();
+	}
+	
+	private Runnable mUpdateChodeStyleRunnable = new Runnable() {
+		@Override
+		public void run() {
+			updateCodeStyle();
+		}
+	};
+	
+	private void postUpdateCodeStyle(){
+		if(getHandler()!=null){
+			getHandler().removeCallbacks(mUpdateChodeStyleRunnable);
+			getHandler().postDelayed(mUpdateChodeStyleRunnable,20);
+		}
 	}
 	
 	private void updateCodeStyle(){

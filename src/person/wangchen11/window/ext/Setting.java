@@ -426,7 +426,7 @@ public class Setting extends Fragment implements Window, TextWatcher, OnClickLis
 			textView.setTextColor( ((config.mEditorConfig.mBaseFontColor &0xffffff)) | (0xff000000&color) );
 			TextPaint textPaint = textView.getPaint();
 			boolean useNiceFont=config.mEditorConfig.mUseNiceFont;
-			textPaint.setAntiAlias(useNiceFont);
+			textPaint.setAntiAlias(true);
 			textPaint.setDither(useNiceFont);
 			textPaint.setFakeBoldText(useNiceFont);
 			textPaint.setSubpixelText(useNiceFont);

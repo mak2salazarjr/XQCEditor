@@ -54,6 +54,7 @@ public class EditableWithLayout implements Editable,MyLayout {
 		mTabWidth=mTextPaint.measureText("0000");
 		mSpanPaint=new TextPaint(paint);
 		mDefaultColorSpan=new ForegroundColorSpan(mTextPaint.getColor());
+		cleanLineWidthInfo();
 	}
 	
 	public void setLineHeight(float lineHeight){
@@ -509,7 +510,121 @@ public class EditableWithLayout implements Editable,MyLayout {
 		return line;
 	}
 	
-	public void draw(Canvas canvas) {
+	private void cleanLineWidthInfo(){
+		synchronized (mLineBodies) {
+			for(LineBody lineBody:mLineBodies){
+				lineBody.mSpanBodies = null;
+			}
+		}
+	}
+	
+	private ArrayList<ExSpanBody> getLineBodies(int line){
+		LineBody body=mLineBodies.get(line);
+		ArrayList<ExSpanBody> exSpanBodies = body.mSpanBodies;
+		if(exSpanBodies==null)
+			exSpanBodies = new ArrayList<ExSpanBody>();
+		else
+			return exSpanBodies;
+		
+		int lastLine=getLineCount()-1;
+		int proTab=body.mStart;
+		int nextTab;
+		float startX=0;
+		int start;
+		int count;
+		float measureWidth = 0;
+		while(true){
+			nextTab=getNextTab(proTab);
+			if(nextTab==-1)
+				break;
+			if( proTab!=nextTab ){
+				start=proTab;
+				count=nextTab-proTab;
+				List<SpanBody> bodies=getColorSpanBodies(start, start+count);
+				Iterator<SpanBody> iterator=bodies.iterator();
+				while(iterator.hasNext()){
+					SpanBody spanBody=iterator.next();
+					//mSpanPaint.setColor( ((ForegroundColorSpan)spanBody.mSpan).getForegroundColor() );
+					measureWidth = measureText(mText, spanBody.mStart, spanBody.length());
+					float tstartX=startX+measureWidth;
+					exSpanBodies.add(new ExSpanBody(spanBody, measureWidth));
+					//if(tstartX>mRect.left)
+					{
+						//canvas.drawText(mText, spanBody.mStart, spanBody.length(), startX, lineY, mSpanPaint);
+					}
+					startX=tstartX;
+					//if(startX>mRect.right)
+					//	break;
+				}
+				//if(startX>mRect.right)
+				//	break;
+			}
+			measureWidth = mTabWidth-(startX % mTabWidth);
+			exSpanBodies.add(new ExSpanBody(null,0,0,0, measureWidth));
+			startX+=mTabWidth-(startX % mTabWidth);
+			proTab=nextTab+1;
+		}
+		
+		start=proTab;
+		if(lastLine==line)
+			count=body.mEnd-proTab;
+		else
+			count=body.mEnd-proTab-1;
+		
+		if(count>0)
+		{
+			List<SpanBody> bodies=getColorSpanBodies(start, start+count);
+			Iterator<SpanBody> iterator=bodies.iterator();
+			while(iterator.hasNext()){
+				SpanBody spanBody=iterator.next();
+				//mSpanPaint.setColor( ((ForegroundColorSpan)spanBody.mSpan).getForegroundColor() );
+				measureWidth = measureText(mText, spanBody.mStart, spanBody.length());
+				float tstartX=startX+measureWidth;
+				exSpanBodies.add(new ExSpanBody(spanBody, measureWidth));
+				//if(tstartX>mRect.left)
+				{
+					//canvas.drawText(mText, spanBody.mStart, spanBody.length(), startX, lineY, mSpanPaint);
+				}
+				startX=tstartX;
+				//if(startX>mRect.right)
+				//	break;
+			}
+		}
+		body.mSpanBodies = exSpanBodies;
+		return exSpanBodies;
+	}
+	
+	public void draw(Canvas canvas){
+		canvas.getClipBounds(mRect);
+		int startLine=getLineForVertical(mRect.top);
+		int endLine=getLineForVertical(mRect.bottom);
+		float descent=mTextPaint.getFontMetrics().descent;
+		for(int i=startLine;i<=endLine;i++)
+		{
+			getLineBounds(i, mRectLine);
+			float lineY=mRectLine.bottom-descent;
+			ArrayList<ExSpanBody> spanBodies = getLineBodies(i);
+			float startX = 0;
+			if(spanBodies!=null)
+			for(ExSpanBody spanBody:spanBodies){
+				if(spanBody.mSpan==null){
+					startX+=spanBody.mWidth;
+					continue;
+				}
+				if(startX+spanBody.mWidth<=mRect.left){
+					startX+=spanBody.mWidth;
+					continue;
+				}
+				mSpanPaint.setColor( ((ForegroundColorSpan)spanBody.mSpan).getForegroundColor() );
+				canvas.drawText(mText, spanBody.mStart, spanBody.length(), startX, lineY, mSpanPaint);
+				startX+=spanBody.mWidth;
+				if(startX>mRect.right)
+					break;
+			}
+		}
+	}
+	
+	public void drawEx(Canvas canvas) {
 		canvas.getClipBounds(mRect);
 		int lastLine=getLineCount()-1;
 		int startLine=getLineForVertical(mRect.top);
@@ -646,15 +761,17 @@ public class EditableWithLayout implements Editable,MyLayout {
 	}
 	
 	private void analysisLines(){
-		mLineBodies.clear();
-		int start=0;
-		for(int i=0;i<mLength;i++){
-			if(mText[i]=='\n'){
-				mLineBodies.add(new LineBody(start, i+1));
-				start=i+1;
+		synchronized (mLineBodies) {
+			mLineBodies.clear();
+			int start=0;
+			for(int i=0;i<mLength;i++){
+				if(mText[i]=='\n'){
+					mLineBodies.add(new LineBody(start, i+1));
+					start=i+1;
+				}
 			}
+			mLineBodies.add(new LineBody(start, mLength));
 		}
-		mLineBodies.add(new LineBody(start, mLength));
 	}
 	
 	@Override
@@ -715,6 +832,7 @@ public class EditableWithLayout implements Editable,MyLayout {
 		//Log.i(TAG, "applyColorSpans:"+spans);
 		if(mEnableHightLight)
 			mSpanBodies=spans;
+		cleanLineWidthInfo();
 	}
 
 	public void addColorSpan(SpanBody spanBody){
@@ -807,9 +925,22 @@ public class EditableWithLayout implements Editable,MyLayout {
 		return mWarnAndErrors;
 	}
 
+	class ExSpanBody extends SpanBody {
+		public float mWidth;
+		public ExSpanBody(Object span, int start, int end, int flag,float width) {
+			super(span, start, end, flag);
+			mWidth = width;
+		}
+		
+		public ExSpanBody(SpanBody spanBody,float width) {
+			this(spanBody.mSpan,spanBody.mStart,spanBody.mEnd,spanBody.mFlag,width);
+		}
+	}
+	
 	class LineBody {
 		int mStart;
 		int mEnd;
+		ArrayList<ExSpanBody> mSpanBodies = null; 
 
 		public LineBody(int start, int end) {
 			mStart = start;
