@@ -261,7 +261,8 @@ public class EditorFregment extends Fragment implements OnClickListener, AfterTe
 					mHandler.post(new Runnable() {
 						@Override
 						public void run() {
-							mCodeEditText.setWarnAndError( CheckCodeAdapt.getCWarnAndErrors(checkInfos,mFile) );
+							if(mCodeEditText!=null)
+								mCodeEditText.setWarnAndError( CheckCodeAdapt.getCWarnAndErrors(checkInfos,mFile) );
 						}
 					});
 				}
