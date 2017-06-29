@@ -66,7 +66,8 @@ public class EditorActivity extends FragmentActivity implements OnClickListener,
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		Waps.init(this);
+		Waps.init(this);//艹！万普广告居然捕获了异常，还TM是异步设置的，真贱   
+		
 		State.init(this);
 		PluginsManager.init(this);
 		Setting.applyChangeDefault(Setting.loadConfig(this));

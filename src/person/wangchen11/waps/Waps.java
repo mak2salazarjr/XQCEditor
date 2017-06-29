@@ -12,6 +12,7 @@ public class Waps {
 	static final String TAG="Waps";
 	private static String APP_ID="f29592b5daa7915e1048e659e7e930cf";
 	private static String APP_PID="qq";
+	private static boolean mInited = false;
 	//private static String APP_PID="google";
 	
 	private static Date mDurTime;
@@ -32,6 +33,7 @@ public class Waps {
 				//AppConnect.getInstance(context);
 				AppConnect.getInstance(APP_ID, APP_PID, context);
 				AppConnect.getInstance(context).initAdInfo();
+				mInited = true;
 			} catch (Error e) {
 				e.printStackTrace();
 			}
@@ -75,6 +77,9 @@ public class Waps {
 	
 	public static boolean isTimeToShow()
 	{
+		if(!mInited)
+			return false;
+		
 		if(isGoogle())
 			return false;
 		
@@ -86,6 +91,8 @@ public class Waps {
 
 	public static void showOffers(Context context)
 	{
+		if(!isTimeToShow())
+			return ;
 		try{
 			AppConnect.getInstance(context).showAppOffers(context);
 		}catch(Error e) {
@@ -97,6 +104,8 @@ public class Waps {
 	
 	public static void updatePoints(Context context,UpdatePointsListener listener)
 	{
+		if(!isTimeToShow())
+			return ;
 		try{
 			AppConnect.getInstance(context).getPoints(listener);
 		}catch(Error e) {
