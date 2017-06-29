@@ -23,6 +23,8 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -498,6 +500,8 @@ public class Setting extends Fragment implements Window, TextWatcher, OnClickLis
 		public int mBaseFontColor = Color.BLACK ;
 		public float mFontScale = 1.0f ;
 		public float mLineScale = 1.0f ;
+		public String mBackgroundImage = "";
+		public Bitmap mBitmap = null;
 		public static EditorConfig load(SharedPreferences sharedPreferences){
 			EditorConfig editorConfig=new EditorConfig();
 			editorConfig.mAutoUpdate=sharedPreferences.getBoolean("mAutoUpdate",true);
@@ -506,6 +510,7 @@ public class Setting extends Fragment implements Window, TextWatcher, OnClickLis
 			editorConfig.mBaseFontColor=sharedPreferences.getInt("mBaseFontColor", Color.BLACK);
 			editorConfig.mFontScale=sharedPreferences.getFloat("mFontScale", 1.0f);
 			editorConfig.mLineScale=sharedPreferences.getFloat("mLineScale", 1.0f);
+			editorConfig.setImage( sharedPreferences.getString("mBackgroundImage", "") );
 			return editorConfig;
 		}
 		public void save(Editor editor){
@@ -515,6 +520,12 @@ public class Setting extends Fragment implements Window, TextWatcher, OnClickLis
 			editor.putInt("mBaseFontColor",mBaseFontColor );
 			editor.putFloat("mFontScale",mFontScale );
 			editor.putFloat("mLineScale",mLineScale );
+			editor.putString("mBackgroundImage",mBackgroundImage );
+		}
+		
+		public void setImage(String file){
+			mBackgroundImage = file;
+			mBitmap = BitmapFactory.decodeFile(mBackgroundImage);
 		}
 	}
 	
