@@ -153,6 +153,7 @@ public class MyEditText extends View implements OnGestureListener,TextWatcher, O
 	{
 		return mSize;
 	}
+	private float mSpaceWidth = 0;
 	public void setTextSize(float size){
 		mSize=size;
 		mTextPaint.setTextSize(size*mFontScale);
@@ -160,6 +161,7 @@ public class MyEditText extends View implements OnGestureListener,TextWatcher, O
 		mLineNumberPaint=new TextPaint(mTextPaint);
 		mLineNumberPaint.setColor(Color.GRAY);
 		mLineNumberPaint.setTypeface(Typeface.MONOSPACE);
+		mSpaceWidth = mLineNumberPaint.measureText(" ");
 		getLayout().setLineHeight(size*mFontScale*1.2f*mLineScale);
 	}
 	
@@ -312,7 +314,7 @@ public class MyEditText extends View implements OnGestureListener,TextWatcher, O
 				if(mBounds.left>=0)
 				{
 					String value=String.valueOf(i+1);
-					canvas.drawText(value, mBounds.left-mLineNumberPaint.measureText(value+"0"), mBounds.bottom - descent , mLineNumberPaint);
+					canvas.drawText(value, mBounds.left-(mSpaceWidth*(value.length()+1)), mBounds.bottom - descent , mLineNumberPaint);
 				}
 				if(isSelection())
 				{//»­Ñ¡Ôñ¿ò 
@@ -403,12 +405,14 @@ public class MyEditText extends View implements OnGestureListener,TextWatcher, O
 	
 	private float getWidthOfBit(int bit)
 	{
+		/*
 		String str="";
 		for(int i=0;i<bit;i++)
 		{
 			str+='0';
 		}
-		return getPaint().measureText(str);
+		return getPaint().measureText(str);*/
+		return bit * mSpaceWidth;
 	}
 
 	public int getBoundOfLeft(){
