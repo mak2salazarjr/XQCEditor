@@ -599,6 +599,10 @@ public class EditableWithLayout implements Editable,MyLayout {
 		int startLine=getLineForVertical(mRect.top);
 		int endLine=getLineForVertical(mRect.bottom);
 		float descent=mTextPaint.getFontMetrics().descent;
+		
+		Paint warnAndErrorPaint = new Paint();
+		warnAndErrorPaint.setStrokeWidth(mTextPaint.getTextSize()/12);
+		
 		for(int i=startLine;i<=endLine;i++)
 		{
 			getLineBounds(i, mRectLine);
@@ -620,6 +624,28 @@ public class EditableWithLayout implements Editable,MyLayout {
 				startX+=spanBody.mWidth;
 				if(startX>mRect.right)
 					break;
+			}
+			
+			{
+				WarnAndError fullLine = null;
+				LinkedList<WarnAndError> curLines = new LinkedList<WarnAndError>();
+				Iterator<WarnAndError> curLinesIterator = mWarnAndErrors.iterator();
+				while(curLinesIterator.hasNext()){
+					WarnAndError warnAndError = curLinesIterator.next();
+					if(warnAndError.mLine==i){
+						if(warnAndError.mFullLine){
+							if(fullLine==null)
+								fullLine = warnAndError;
+							break;
+						}else{
+							curLines.add(warnAndError);
+						}
+					}
+				}
+				if(fullLine!=null){
+					warnAndErrorPaint.setColor(fullLine.mColor);
+					canvas.drawLine(0, lineY ,startX>0?startX:mRectLine.right, lineY , warnAndErrorPaint);
+				}
 			}
 		}
 	}
