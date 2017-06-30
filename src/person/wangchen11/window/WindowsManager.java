@@ -106,7 +106,6 @@ public class WindowsManager implements View.OnClickListener, android.support.v7.
 	}
 
 	public boolean closeOtherWindow(Window ept){
-		saveWindowState();
 		boolean ret = true;
 		LinkedList<WindowPointer> linkedList = new LinkedList<WindowPointer>();
 		linkedList.addAll(mWindowPointers);
