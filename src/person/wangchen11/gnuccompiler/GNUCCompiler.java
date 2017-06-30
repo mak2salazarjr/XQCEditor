@@ -13,6 +13,7 @@ import java.util.zip.ZipInputStream;
 import person.wangchen11.plugins.WaitingProcess;
 import person.wangchen11.util.FileUtil;
 import person.wangchen11.waps.Waps;
+import person.wangchen11.window.ext.Setting;
 import person.wangchen11.xqceditor.R;
 import person.wangchen11.xqceditor.State;
 
@@ -60,6 +61,11 @@ public class GNUCCompiler {
 				if( State.isUpdated() || !new File(getFixCppObj(context)).isFile() )
 				{
 					freeFile(context, "fix.cpp.o", getFixCppObj(context));
+				}
+				setProcess(99);
+				if( State.isUpdated() || !new File(Setting.getThemeDir()).isDirectory() )
+				{
+					freeZip(context, "themes.zip", Setting.getThemeDir() );
 				}
 				setProcess(100);
 				FileUtil.setFileAllChildsExecutable(new File(getGccPath(context)));

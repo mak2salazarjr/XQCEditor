@@ -177,7 +177,13 @@
     <string name="_wait">再看看</string>
     <string name="_back">返回</string>
     <string name="_updatemsg">更新说明</string>
-    <string name="_updateinfo">2.1.3:\n
+    <string name="_updateinfo">
+2.1.4:\n
+(1)新增主题功能。\n
+(2)捕获崩溃日志。\n
+(3)提升编辑框速度。\n
+\n
+2.1.3:\n
 (1)增加自动更新。\n
 (2)修复stdbool.h中缺少分号导致的c++编译失败。\n
 (3)新版控制台加入快捷按钮。\n
