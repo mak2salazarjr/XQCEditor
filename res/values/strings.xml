@@ -214,11 +214,11 @@
     <string name="close_others">Close others</string>
     <string name="free_res">Free resource</string>
     <string name="save_theme">Save theme</string>
-    <string name="save_cur_teme">保存当前主题</string>
-    <string name="saved_theme">保存的主题</string>
-    <string name="theme_exits">主题已存在!</string>
-    <string name="save_success">保存成功</string>
-    <string name="edit">编辑</string>
-    <string name="theme">打开主题</string>
+    <string name="save_cur_teme">Save cur theme</string>
+    <string name="saved_theme">SavedTheme</string>
+    <string name="theme_exits">Theme exits!</string>
+    <string name="save_success">Save Success</string>
+    <string name="edit">Edit</string>
+    <string name="theme">Theme</string>
     
 </resources>
