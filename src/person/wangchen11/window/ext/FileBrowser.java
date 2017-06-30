@@ -198,15 +198,17 @@ public class FileBrowser implements Window,OnOpenListener, OnClickListener{
 	@Override
 	public List<MenuTag> getMenuTags() {
 		LinkedList<MenuTag> menuTags=new LinkedList<MenuTag>();
-		menuTags.add(new MenuTag(R.string.new_file, mWindowsManager.getContext().getResources().getText(R.string.new_file)));
-		menuTags.add(new MenuTag(R.string.new_dir, mWindowsManager.getContext().getResources().getText(R.string.new_dir)));
-		menuTags.add(new MenuTag(R.string.new_project, mWindowsManager.getContext().getResources().getText(R.string.new_project)));
 		File []files=mFileBowserFragment.getSelectedFiles();
 		if(files!=null && files.length>0)
 		{
+			menuTags.add(new MenuTag(R.string.edit, mWindowsManager.getContext().getResources().getText(R.string.edit)));
 			menuTags.add(new MenuTag(R.string.zip, mWindowsManager.getContext().getResources().getText(R.string.zip)));
 		}
+		menuTags.add(new MenuTag(R.string.new_file, mWindowsManager.getContext().getResources().getText(R.string.new_file)));
+		menuTags.add(new MenuTag(R.string.new_dir, mWindowsManager.getContext().getResources().getText(R.string.new_dir)));
+		menuTags.add(new MenuTag(R.string.new_project, mWindowsManager.getContext().getResources().getText(R.string.new_project)));
 		menuTags.add(new MenuTag(R.string.refresh, mWindowsManager.getContext().getResources().getText(R.string.refresh)));
+		
 		return menuTags;
 	}
 	
@@ -221,6 +223,7 @@ public class FileBrowser implements Window,OnOpenListener, OnClickListener{
 	@SuppressLint("InflateParams")
 	@Override
 	public boolean onMenuItemClick(int id) {
+		File []files=mFileBowserFragment.getSelectedFiles();
 		switch (id) {
 		case R.string.new_file:
 			if(!mFileBowserFragment.newFile())
@@ -249,7 +252,6 @@ public class FileBrowser implements Window,OnOpenListener, OnClickListener{
 			mNewProjectDialog.show();
 			break;
 		case R.string.zip:
-			File []files=mFileBowserFragment.getSelectedFiles();
 			if(files!=null && files.length>0)
 			{
 				if(mZipDialog==null){
@@ -279,6 +281,16 @@ public class FileBrowser implements Window,OnOpenListener, OnClickListener{
 			break;
 		case R.string.refresh:
 			mFileBowserFragment.refresh();
+			break;
+
+		case R.string.edit:
+			if(files!=null && files.length>0)
+			{
+				for(File file:files){
+					if(file.isFile())
+						mWindowsManager.addWindow(new CEditor(mWindowsManager,file));
+				}
+			}
 			break;
 		default:
 			break;

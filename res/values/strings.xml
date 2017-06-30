@@ -218,5 +218,6 @@
     <string name="saved_theme">保存的主题</string>
     <string name="theme_exits">主题已存在!</string>
     <string name="save_success">保存成功</string>
+    <string name="edit">编辑</string>
     
 </resources>
