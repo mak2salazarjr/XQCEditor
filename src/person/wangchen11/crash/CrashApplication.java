@@ -7,6 +7,7 @@ public class CrashApplication extends Application {
 	@Override
 	public void onCreate() {
 		final CrashHandler mCrashHandler = new CrashHandler(getApplicationContext());
+		Thread.setDefaultUncaughtExceptionHandler(mCrashHandler);
 		new Handler().postDelayed(new Runnable() {
 			@Override
 			public void run() {
