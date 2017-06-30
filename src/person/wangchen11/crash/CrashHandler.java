@@ -6,6 +6,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.lang.Thread.UncaughtExceptionHandler;
+import java.util.Date;
 
 import person.wangchen11.gnuccompiler.GNUCCompiler;
 
@@ -41,14 +42,17 @@ public class CrashHandler implements UncaughtExceptionHandler {
 		if(!handleUncaughtException(thread,ex))
 			mDefaultCrashHandler.uncaughtException(thread, ex);
 	}
-	
+
+	@SuppressWarnings("deprecation")
 	public boolean handleUncaughtException(Thread thread, Throwable ex) {
 		ByteArrayOutputStream arrayOutputStream = new ByteArrayOutputStream();
 		PrintStream printStream = new PrintStream(arrayOutputStream);
 		ex.printStackTrace(printStream);
 		printStream.close();
-		String msg = "mVersionCodeNow:"+mVersionCodeNow+"\nmVersionNameNow:"+mVersionNameNow+"\n"+
-					arrayOutputStream.toString();
+		String msg = "mVersionCodeNow:"+mVersionCodeNow
+				+"\nmVersionNameNow:"+mVersionNameNow+"\n"
+				+"\nDate:"+new Date().toLocaleString()+"\n"
+				+arrayOutputStream.toString();
 		Log.i(TAG, "handleUncaughtException:"+msg);
 		try {
 			FileOutputStream fileOutputStream = new FileOutputStream(mCrashLogFile);
