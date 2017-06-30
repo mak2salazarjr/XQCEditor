@@ -219,5 +219,6 @@
     <string name="theme_exits">主题已存在!</string>
     <string name="save_success">保存成功</string>
     <string name="edit">编辑</string>
+    <string name="theme">打开主题</string>
     
 </resources>

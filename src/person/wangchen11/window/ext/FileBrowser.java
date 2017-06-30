@@ -32,9 +32,13 @@ public class FileBrowser implements Window,OnOpenListener, OnClickListener{
 	private FileBowserFragment mFileBowserFragment=new FileBowserFragment();
 	private WindowsManager mWindowsManager;
 	public FileBrowser(WindowsManager windowsManager) {
+		this(windowsManager,null);
+	}
+	
+	public FileBrowser(WindowsManager windowsManager,String path) {
 		mFileBowserFragment.setOnOpenListener(this);
 		mWindowsManager=windowsManager;
-		
+		mFileBowserFragment.setDefaultPath(path);
 	}
 	
 	@Override
@@ -175,7 +179,6 @@ public class FileBrowser implements Window,OnOpenListener, OnClickListener{
 		if(name.endsWith(".qtheme")){
 			if(Setting.applyTheme(mWindowsManager.getContext(), file)){
 				mWindowsManager.sendConfigChanged();
-				Setting.save(mWindowsManager.getContext());
 				ToastUtil.showToast("切换主题成功", Toast.LENGTH_SHORT);
 			}
 			return true;

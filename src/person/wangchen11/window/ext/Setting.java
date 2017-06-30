@@ -4,6 +4,7 @@ import jackpal.androidterm.TermView;
 import jackpal.androidterm.emulatorview.ColorScheme;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
 import cn.waps.UpdatePointsListener;
@@ -68,6 +69,7 @@ public class Setting extends Fragment implements Window, TextWatcher, OnClickLis
 	public void onHiddenChanged(boolean hidden) {
 		super.onHiddenChanged(hidden);
 		if(!hidden){
+			refEditView();
 			refColorView();
 			refSwitchView();
 		}
@@ -289,12 +291,22 @@ public class Setting extends Fragment implements Window, TextWatcher, OnClickLis
 
 	@Override
 	public List<MenuTag> getMenuTags() {
-		return null;
+		List<MenuTag>  menuTags = new ArrayList<MenuTag>();
+		menuTags.add(new MenuTag( R.string.theme, mWindowsManager.getContext().getText(R.string.theme) ));
+		return menuTags;
 	}
 
 	@Override
 	public boolean onMenuItemClick(int id) {
-		return false;
+		switch (id) {
+		case R.string.theme:
+			mWindowsManager.addWindow(new FileBrowser(mWindowsManager,getThemeDir()));
+			break;
+
+		default:
+			break;
+		}
+		return true;
 	}
 	
 	public static Config loadConfig(Context context){
@@ -650,7 +662,7 @@ public class Setting extends Fragment implements Window, TextWatcher, OnClickLis
 	
 	public static boolean saveConfigToFile(Context context,Config config,String file) {
 		String tempName = "temp_config";
-		SharedPreferences sharedPreferences=context.getSharedPreferences(tempName, Context.MODE_PRIVATE);
+		SharedPreferences sharedPreferences=context.getSharedPreferences(tempName, Context.MODE_MULTI_PROCESS );
 		Editor editor = sharedPreferences.edit();
 		config.save(editor);
 		editor.commit();
@@ -663,7 +675,8 @@ public class Setting extends Fragment implements Window, TextWatcher, OnClickLis
 	public static boolean applyTheme(Context context,File file){
 		Config config = loadConfigFromFile(context,file.getAbsolutePath());
 		if(config!=null){
-			mConfig = config;
+			applyChangeDefault(config);
+			save(context);
 			return true;
 		}
 		return false;
@@ -672,11 +685,13 @@ public class Setting extends Fragment implements Window, TextWatcher, OnClickLis
 	private static Config loadConfigFromFile(Context context,String file){
 		String tempName = "temp_config";
 		String configPath = context.getFilesDir().getAbsolutePath()+"/../shared_prefs/"+tempName+".xml";
-		new File(configPath).delete();
+		if(!new File(configPath).delete()){
+			Log.i("Setting","delete failed!" );
+		}
 		FileWork.CopyFile(new File(file), new File(configPath), new byte[1024]);
 		if( new File(configPath).length()<=0)
 			return null;
-		SharedPreferences sharedPreferences=context.getSharedPreferences(tempName, Context.MODE_PRIVATE);
+		SharedPreferences sharedPreferences=context.getSharedPreferences(tempName, Context.MODE_MULTI_PROCESS );
 		return Config.load(sharedPreferences);
 	}
 
