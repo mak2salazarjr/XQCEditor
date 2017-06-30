@@ -13,6 +13,7 @@ import java.util.concurrent.Executors;
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Rect;
 import android.graphics.drawable.ColorDrawable;
@@ -249,10 +250,11 @@ public class EditorFregment extends Fragment implements OnClickListener, AfterTe
 			if(mCodeCheck!=null)
 				mCodeCheck.stop();
 		}
+		Context context = getActivity();
 		File file = getFile();
-		if(file!=null)
+		if(file!=null&&context!=null)
 		{
-			mCodeCheck = new GNUCCodeCheck(getActivity(), file);
+			mCodeCheck = new GNUCCodeCheck(context, file);
 			String name = file.getName().toLowerCase();
 			if(name.endsWith(".c")||name.endsWith(".cpp")||name.endsWith(".h")||name.endsWith(".hpp")||name.endsWith(".hp"))
 			{
