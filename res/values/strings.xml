@@ -91,7 +91,7 @@
     <string name="craete_file_fail">create file fail!</string>
     <string name="create_dir_fail">crate dir fail!</string>
     <string name="fail">fail:</string>
-    <string name="save_failed">save failed</string>
+    <string name="save_failed">保存失败</string>
     <string name="file_name">file name:</string>
     <string name="file_path">file path:</string>
     <string name="project_name">project name:</string>
@@ -213,5 +213,10 @@
     <string name="into_copy_mode">Toggle selecting text</string>
     <string name="close_others">Close others</string>
     <string name="free_res">Free resource</string>
+    <string name="save_theme">Save theme</string>
+    <string name="save_cur_teme">保存当前主题</string>
+    <string name="saved_theme">保存的主题</string>
+    <string name="theme_exits">主题已存在!</string>
+    <string name="save_success">保存成功</string>
     
 </resources>

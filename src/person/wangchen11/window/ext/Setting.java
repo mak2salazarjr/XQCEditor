@@ -3,6 +3,7 @@ package person.wangchen11.window.ext;
 import jackpal.androidterm.TermView;
 import jackpal.androidterm.emulatorview.ColorScheme;
 
+import java.io.File;
 import java.util.List;
 
 import cn.waps.UpdatePointsListener;
@@ -10,7 +11,10 @@ import cn.waps.UpdatePointsListener;
 import person.wangchen11.editor.codeedittext.CodeStyleAdapter;
 import person.wangchen11.editor.edittext.EditableWithLayout;
 import person.wangchen11.editor.edittext.MyEditText;
+import person.wangchen11.filebrowser.FileWork;
+import person.wangchen11.gnuccompiler.GNUCCompiler;
 import person.wangchen11.qeditor.EditorFregment;
+import person.wangchen11.util.ToastUtil;
 import person.wangchen11.waps.Key;
 import person.wangchen11.waps.Waps;
 import person.wangchen11.window.MenuTag;
@@ -20,7 +24,10 @@ import person.wangchen11.window.WindowsManager;
 import person.wangchen11.xqceditor.R;
 import person.wangchen11.xqceditor.State;
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
+import android.app.AlertDialog.Builder;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.graphics.Bitmap;
@@ -55,6 +62,15 @@ public class Setting extends Fragment implements Window, TextWatcher, OnClickLis
 	public Setting(WindowsManager windowsManager)
 	{
 		mWindowsManager = windowsManager;
+	}
+	
+	@Override
+	public void onHiddenChanged(boolean hidden) {
+		super.onHiddenChanged(hidden);
+		if(!hidden){
+			refColorView();
+			refSwitchView();
+		}
 	}
 	
 	@SuppressLint("InflateParams")
@@ -94,6 +110,7 @@ public class Setting extends Fragment implements Window, TextWatcher, OnClickLis
 		((Button)(mRelativeLayout.findViewById(R.id.button_show_ad))).setOnClickListener(this);
 		((Button)(mRelativeLayout.findViewById(R.id.button_ok))).setOnClickListener(this);
 		((Button)(mRelativeLayout.findViewById(R.id.button_to_default))).setOnClickListener(this);
+		((Button)(mRelativeLayout.findViewById(R.id.button_save_theme))).setOnClickListener(this);
 		((SwitchCompat)(mRelativeLayout.findViewById(R.id.high_light_switch))).setOnCheckedChangeListener(this);
 		((SwitchCompat)(mRelativeLayout.findViewById(R.id.use_nice_font_switch))).setOnCheckedChangeListener(this);
 		((SwitchCompat)(mRelativeLayout.findViewById(R.id.quick_close_window_switch))).setOnCheckedChangeListener(this);
@@ -300,8 +317,8 @@ public class Setting extends Fragment implements Window, TextWatcher, OnClickLis
 		mConfig = config;
 	}
 	
-	public void save(){
-		SharedPreferences sharedPreferences = getActivity().getSharedPreferences(ConfigName, Context.MODE_PRIVATE);
+	public static void save(Context context){
+		SharedPreferences sharedPreferences = context.getSharedPreferences(ConfigName, Context.MODE_PRIVATE);
 		Editor editor=sharedPreferences.edit();
 		mConfig.save(editor);
 		editor.commit();
@@ -366,7 +383,7 @@ public class Setting extends Fragment implements Window, TextWatcher, OnClickLis
 			break;
 		case R.id.button_ok:
 			applyChangeDefault(mConfig);
-			save();
+			save(getContext());
 			mWindowsManager.sendConfigChanged();
 			showToast("保存成功！\n部分设置需要重启软件才能生效！");
 			break;
@@ -377,9 +394,44 @@ public class Setting extends Fragment implements Window, TextWatcher, OnClickLis
 			refColorView();
 			refSwitchView();
 			break;
+		case R.id.button_save_theme:
+			showSaveThemeDialog(getContext());
+			break;
 		default:
 			break;
 		}
+	}
+	
+	private AlertDialog mSaveThemeDialog = null;
+	private void showSaveThemeDialog(final Context context){
+		if(mSaveThemeDialog==null)
+		{
+			AlertDialog.Builder builder = new Builder(context);
+			builder.setTitle(R.string.save_cur_teme);
+			builder.setCancelable(true);
+			builder.setNegativeButton(android.R.string.cancel, null );
+			final EditText editText = new EditText(context);
+			editText.setText(R.string.saved_theme);
+			builder.setView(editText);
+			builder.setPositiveButton(android.R.string.ok, new AlertDialog.OnClickListener() {
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					String path = getThemeDir()+"/"+editText.getText()+".qtheme";
+					if(new File(path).exists()){
+						ToastUtil.showToast(R.string.theme_exits, Toast.LENGTH_SHORT);
+					}else{
+						new File(getThemeDir()).mkdirs();
+						if(saveConfigToFile(getContext(), mConfig,path )){
+							ToastUtil.showToast(R.string.save_success, Toast.LENGTH_SHORT);
+						}else{
+							ToastUtil.showToast(R.string.save_failed, Toast.LENGTH_SHORT);
+						}
+					}
+				}
+			});
+			mSaveThemeDialog = builder.create();
+		}
+		mSaveThemeDialog.show();
 	}
 
 	@Override
@@ -595,7 +647,38 @@ public class Setting extends Fragment implements Window, TextWatcher, OnClickLis
 			editor.putBoolean("mAnimation", mAnimation);
 		}
 	}
-
+	
+	public static boolean saveConfigToFile(Context context,Config config,String file) {
+		String tempName = "temp_config";
+		SharedPreferences sharedPreferences=context.getSharedPreferences(tempName, Context.MODE_PRIVATE);
+		Editor editor = sharedPreferences.edit();
+		config.save(editor);
+		editor.commit();
+		String configPath = context.getFilesDir().getAbsolutePath()+"/../shared_prefs/"+tempName+".xml";
+		new File(file).delete();
+		FileWork.CopyFile(new File(configPath), new File(file), new byte[1024]);
+		return new File(file).length()>0;
+	}
+	
+	public static boolean applyTheme(Context context,File file){
+		Config config = loadConfigFromFile(context,file.getAbsolutePath());
+		if(config!=null){
+			mConfig = config;
+			return true;
+		}
+		return false;
+	}
+	
+	private static Config loadConfigFromFile(Context context,String file){
+		String tempName = "temp_config";
+		String configPath = context.getFilesDir().getAbsolutePath()+"/../shared_prefs/"+tempName+".xml";
+		new File(configPath).delete();
+		FileWork.CopyFile(new File(file), new File(configPath), new byte[1024]);
+		if( new File(configPath).length()<=0)
+			return null;
+		SharedPreferences sharedPreferences=context.getSharedPreferences(tempName, Context.MODE_PRIVATE);
+		return Config.load(sharedPreferences);
+	}
 
 	@Override
 	public String[] getResumeCmd() {
@@ -607,5 +690,9 @@ public class Setting extends Fragment implements Window, TextWatcher, OnClickLis
 	public void resumeByCmd(String []cmd) {
 		// TODO Auto-generated method stub
 		
+	}
+	
+	public static String getThemeDir(){
+		return GNUCCompiler.getSystemDir()+"/themes/";
 	}
 }

@@ -19,6 +19,7 @@ import person.wangchen11.drawable.CircleDrawable;
 import person.wangchen11.filebrowser.FileBowserFragment;
 import person.wangchen11.gnuccompiler.GNUCCompiler;
 import person.wangchen11.plugins.PluginsManager;
+import person.wangchen11.util.ToastUtil;
 import person.wangchen11.waps.Waps;
 import person.wangchen11.window.MenuTag;
 import person.wangchen11.window.WindowPointer;
@@ -66,6 +67,7 @@ public class EditorActivity extends FragmentActivity implements OnClickListener,
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		ToastUtil.init(this);
 		Waps.init(this);//艹！万普广告居然捕获了异常，还TM是异步设置的，真贱   
 		
 		State.init(this);

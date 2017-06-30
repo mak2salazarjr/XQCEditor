@@ -68,7 +68,7 @@ public class Mime {
 	    //{".xml",    "text/xml"},  
 	    {".xml",    "text/plain"},  
 	    {".z",        "application/x-compress"},  
-	    {".zip",    "application/zip"},  
+	    {".zip",    "application/zip"},
 	    {"",        "*/*"} 
 	};
 	public static String getMime(String suf)
@@ -79,7 +79,7 @@ public class Mime {
 				return MIME_MapTable[i][1];
 				
 		}
-		return "*/*";
+		return "text/plain";
 	}
 	public static String getMime(File file)
 	{

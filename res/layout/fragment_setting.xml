@@ -755,6 +755,12 @@
                 android:layout_height="wrap_content"
                 android:text="@string/restore_defaults" />
 
+            <Button
+                android:id="@+id/button_save_theme"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/save_theme" />
+            
         </LinearLayout>
     </ScrollView>
 

@@ -10,13 +10,29 @@ import java.lang.Thread.UncaughtExceptionHandler;
 import person.wangchen11.gnuccompiler.GNUCCompiler;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.content.pm.PackageManager.NameNotFoundException;
 import android.util.Log;
 
 public class CrashHandler implements UncaughtExceptionHandler {
 	private static final String TAG = "CrashHandler";
 	@SuppressLint("SdCardPath")
 	private static final String mCrashLogFile = GNUCCompiler.getWorkSpaceDir() + "/qeditor_crash.log";
-	public CrashHandler() {
+	private int mVersionCodeNow = 0;
+	private String mVersionNameNow = "unknown";
+	
+	public CrashHandler(Context context) {
+		PackageManager packageManager=context.getPackageManager();
+		PackageInfo packageInfo;
+		try {
+			packageInfo = packageManager.getPackageInfo(context.getPackageName(), 0);
+			mVersionCodeNow=packageInfo.versionCode;
+			mVersionNameNow=packageInfo.versionName;
+		} catch (NameNotFoundException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	private static UncaughtExceptionHandler mDefaultCrashHandler = Thread.getDefaultUncaughtExceptionHandler();
@@ -31,7 +47,8 @@ public class CrashHandler implements UncaughtExceptionHandler {
 		PrintStream printStream = new PrintStream(arrayOutputStream);
 		ex.printStackTrace(printStream);
 		printStream.close();
-		String msg = arrayOutputStream.toString();
+		String msg = "mVersionCodeNow:"+mVersionCodeNow+"\nmVersionNameNow:"+mVersionNameNow+"\n"+
+					arrayOutputStream.toString();
 		Log.i(TAG, "handleUncaughtException:"+msg);
 		try {
 			FileOutputStream fileOutputStream = new FileOutputStream(mCrashLogFile);

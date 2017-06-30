@@ -6,7 +6,7 @@ import android.os.Handler;
 public class CrashApplication extends Application {
 	@Override
 	public void onCreate() {
-		final CrashHandler mCrashHandler = new CrashHandler();
+		final CrashHandler mCrashHandler = new CrashHandler(getApplicationContext());
 		new Handler().postDelayed(new Runnable() {
 			@Override
 			public void run() {

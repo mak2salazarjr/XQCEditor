@@ -21,6 +21,7 @@ import person.wangchen11.filebrowser.FileBowserFragment;
 import person.wangchen11.filebrowser.OnOpenListener;
 import person.wangchen11.gnuccompiler.GNUCCompiler;
 import person.wangchen11.plugins.PluginsManager;
+import person.wangchen11.util.ToastUtil;
 import person.wangchen11.window.MenuTag;
 import person.wangchen11.window.Window;
 import person.wangchen11.window.WindowsManager;
@@ -169,6 +170,14 @@ public class FileBrowser implements Window,OnOpenListener, OnClickListener{
 		if(!name.contains(".") && file.length()<1024*512 )
 		{
 			mWindowsManager.addWindow(new CEditor(mWindowsManager,file));
+			return true;
+		}
+		if(name.endsWith(".qtheme")){
+			if(Setting.applyTheme(mWindowsManager.getContext(), file)){
+				mWindowsManager.sendConfigChanged();
+				Setting.save(mWindowsManager.getContext());
+				ToastUtil.showToast("切换主题成功", Toast.LENGTH_SHORT);
+			}
 			return true;
 		}
 		return false;

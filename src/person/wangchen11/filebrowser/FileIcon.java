@@ -88,6 +88,10 @@ public class FileIcon {
 			{
 				bmp = BitmapFactory.decodeResource(res, R.drawable.file_plug);
 			} else
+			if(str.compareToIgnoreCase(".qtheme")==0)
+			{
+				bmp = BitmapFactory.decodeResource(res, R.drawable.theme);
+			} else
 			if(str.compareToIgnoreCase(".xls")==0)
 			{
 				bmp = BitmapFactory.decodeResource(res, R.drawable.file_excel);
