@@ -339,4 +339,9 @@ public class EditorActivity extends FragmentActivity implements OnClickListener,
 		return super.onTouchEvent(event);
 	}
 	
+	@Override
+	protected void onSaveInstanceState(Bundle outState) {
+		mWindowsManager.saveWindowState();
+	}
+	
 }
