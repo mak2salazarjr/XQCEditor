@@ -90,6 +90,7 @@ public class EditorActivity extends FragmentActivity implements OnClickListener,
 			FragmentManager fragmentManager = getSupportFragmentManager();
 			List<Fragment> fragments = fragmentManager.getFragments();
 			FragmentTransaction transaction = fragmentManager.beginTransaction();
+			if(fragments!=null)
 			for (int i = 0; i < fragments.size(); i++) {
 				transaction.detach(fragments.get(i));
 			}
@@ -344,4 +345,9 @@ public class EditorActivity extends FragmentActivity implements OnClickListener,
 		mWindowsManager.saveWindowState();
 	}
 	
+	@Override
+	protected void onRestoreInstanceState(Bundle savedInstanceState) {
+		//do nothing
+		//super.onRestoreInstanceState(savedInstanceState);
+	}
 }
