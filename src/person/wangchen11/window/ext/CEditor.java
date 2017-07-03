@@ -515,9 +515,10 @@ public class CEditor implements Window, EditorFregment.ChangeFlagChanged, OnClic
 
 	@Override
 	public String[] getResumeCmd() {
-		String []cmd = new String[2];
+		String []cmd = new String[3];
 		cmd[0] = getFile()!=null?getFile().getPath():null;
-		cmd[1] = null;
+		cmd[1] = ""+mCEditorFregment.getSelectionStart();
+		cmd[2] = ""+mCEditorFregment.getSelectionEnd();
 		return cmd;
 	}
 
@@ -525,11 +526,24 @@ public class CEditor implements Window, EditorFregment.ChangeFlagChanged, OnClic
 	public void resumeByCmd(String []cmd) {
 		if(cmd==null)
 			return;
-		if(cmd.length!=2)
-			return;
-		mCEditorFregment = new EditorFregment(new File(cmd[0]));
-		mCEditorFregment.setChangeFlagChanged(this);
-		mCEditorFregment.setOnRunButtonClickListener(this);
+		if(cmd.length==2){
+			mCEditorFregment = new EditorFregment(new File(cmd[0]));
+			mCEditorFregment.setChangeFlagChanged(this);
+			mCEditorFregment.setOnRunButtonClickListener(this);
+		}
+		if(cmd.length==3){
+			mCEditorFregment = new EditorFregment(new File(cmd[0]));
+			mCEditorFregment.setChangeFlagChanged(this);
+			mCEditorFregment.setOnRunButtonClickListener(this);
+			int start = 0;
+			int end = 0;
+			try {
+				start = Integer.parseInt(cmd[1]);
+				end = Integer.parseInt(cmd[2]);
+			} catch (Exception e) {
+			}
+			mCEditorFregment.setInitSelection(start, end);
+		}
 	}
 
 }

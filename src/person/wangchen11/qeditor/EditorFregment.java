@@ -74,6 +74,8 @@ public class EditorFregment extends Fragment implements OnClickListener, AfterTe
 	private Toast mToast=null;
 	private OnRunButtonClickListener mOnRunButtonClickListener = null;
 	private Handler mHandler = new Handler();
+	private int mInitSelectionStart = 0;
+	private int mInitSelectionEnd = 0;
 	private static String []mCodeTypeNames=new String[]{
 		"TXT",
 		"C",
@@ -99,6 +101,19 @@ public class EditorFregment extends Fragment implements OnClickListener, AfterTe
 	
 	public File getFile(){
 		return mFile;
+	}
+	
+	public void setInitSelection(int start,int end){
+		mInitSelectionStart = start;
+		mInitSelectionEnd   = end;
+	}
+	
+	public int getSelectionStart(){
+		return mCodeEditText.getSelectionStart();
+	}
+	
+	public int getSelectionEnd(){
+		return mCodeEditText.getSelectionEnd();
 	}
 	
 	public void setOnRunButtonClickListener(OnRunButtonClickListener listener)
@@ -165,7 +180,7 @@ public class EditorFregment extends Fragment implements OnClickListener, AfterTe
 			if(str!=null)
 			{
 				mCodeEditText.setText(str);
-				mCodeEditText.setCursor(0);
+				mCodeEditText.setSelection(mInitSelectionStart,mInitSelectionEnd);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
