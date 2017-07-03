@@ -66,6 +66,7 @@ public class BrowserWindow extends Browser implements Window, WindowsManagerLint
 	public List<MenuTag> getMenuTags() {
 		LinkedList<MenuTag> menuTags=new LinkedList<MenuTag>();
 		menuTags.add(new MenuTag(R.string.open_with_browser,mWindowsManager.getContext().getString(R.string.open_with_browser)));
+		menuTags.add(new MenuTag(R.string.refresh,mWindowsManager.getContext().getString(R.string.refresh)));
 		return menuTags;
 	}
 
@@ -86,7 +87,9 @@ public class BrowserWindow extends Browser implements Window, WindowsManagerLint
 		case R.string.open_with_browser:
 			openWithBrowser();
 			break;
-
+		case R.string.refresh:
+			refresh();
+			break;
 		default:
 			break;
 		}
@@ -97,7 +100,7 @@ public class BrowserWindow extends Browser implements Window, WindowsManagerLint
 	public void onChangeWindow(WindowsManager manager) {
 		if(manager.getSelectWindow().mWindow==this)
 		{
-			refresh();
+			//refresh();
 		}
 	}
 
