@@ -6,6 +6,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 
 import person.wangchen11.busybox.Busybox;
+import person.wangchen11.drawable.CircleDrawable;
 import person.wangchen11.filebrowser.FileBowserFragment;
 import person.wangchen11.gnuccompiler.GNUCCompiler;
 import person.wangchen11.plugins.PluginsManager;
@@ -17,6 +18,7 @@ import jackpal.androidterm.emulatorview.TermSession.FinishCallback;
 import jackpal.androidterm.util.TermSettings;
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
@@ -28,6 +30,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 
 public class TermFragment extends Fragment implements FinishCallback{
@@ -38,6 +41,7 @@ public class TermFragment extends Fragment implements FinishCallback{
 	private String mHome="/sdcard/";
 	private Handler mHandler = null;
 	private String mChangePS1Cmd = new File("/system/bin/basename").canExecute() ? "export PS1='$USER:`basename \"$PWD\"`\\$';" : "";
+	private ViewGroup mControlLayout = null;
 	public TermFragment() {
 	}
 
@@ -79,6 +83,38 @@ public class TermFragment extends Fragment implements FinishCallback{
 			}
 		}
 
+		if(view instanceof ImageButton){
+			view.setOnClickListener(new View.OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					if(mControlLayout.getVisibility() == View.VISIBLE){
+						mControlLayout.setVisibility(View.GONE);
+					}else{
+						mControlLayout.setVisibility(View.VISIBLE);
+					}
+				}
+			});
+			view.setOnTouchListener(new View.OnTouchListener() {
+				@SuppressWarnings("deprecation")
+				@SuppressLint("ClickableViewAccessibility")
+				@Override
+				public boolean onTouch(View v, MotionEvent event) {
+					switch(event.getAction() ){
+					case MotionEvent.ACTION_DOWN :
+						v.setBackgroundDrawable(new CircleDrawable(Color.rgb(0x80, 0x80, 0xb0)));
+						break;
+						
+					case MotionEvent.ACTION_UP :
+					case MotionEvent.ACTION_OUTSIDE :
+					case MotionEvent.ACTION_CANCEL :
+						v.setBackgroundColor(Color.TRANSPARENT);
+						break;
+					}
+					return false;
+				}
+			});
+		}
+		
 		if(view instanceof Button){
 			view.setOnTouchListener(new View.OnTouchListener() {				
 				@SuppressLint("ClickableViewAccessibility")
@@ -209,6 +245,8 @@ public class TermFragment extends Fragment implements FinishCallback{
 		mTermSession.setFinishCallback(this);
 		mEmulatorView = createEmulatorView(mTermSession);
 		workSpaceLayout.addView(mEmulatorView, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+		mControlLayout = (ViewGroup) relativeLayout.findViewById(R.id.layout_control);
+		mControlLayout.setVisibility(View.GONE);
 		setAllViewListener(relativeLayout);
 		return relativeLayout;
 	}
