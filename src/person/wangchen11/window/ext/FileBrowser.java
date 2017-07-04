@@ -125,6 +125,10 @@ public class FileBrowser implements Window,OnOpenListener, OnClickListener{
 			mWindowsManager.addWindow(new CEditor(mWindowsManager,file));
 			return true;
 		}
+		if(name.endsWith(".css")){
+			mWindowsManager.addWindow(new CEditor(mWindowsManager,file));
+			return true;
+		}
 		if(name.endsWith(".htm")){
 			mWindowsManager.addWindow(new CEditor(mWindowsManager,file));
 			return true;
