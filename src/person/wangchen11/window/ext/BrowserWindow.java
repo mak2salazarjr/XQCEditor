@@ -100,7 +100,7 @@ public class BrowserWindow extends Browser implements Window, WindowsManagerLint
 	public void onChangeWindow(WindowsManager manager) {
 		if(manager.getSelectWindow().mWindow==this)
 		{
-			//refresh();
+			refresh();
 		}
 	}
 
