@@ -183,7 +183,7 @@ public class FileBrowser implements Window,OnOpenListener, OnClickListener{
 		if(name.endsWith(".qtheme")){
 			if(Setting.applyTheme(mWindowsManager.getContext(), file)){
 				mWindowsManager.sendConfigChanged();
-				ToastUtil.showToast("切换主题成功", Toast.LENGTH_SHORT);
+				ToastUtil.showToast(R.string.change_theme_success, Toast.LENGTH_SHORT);
 			}
 			return true;
 		}

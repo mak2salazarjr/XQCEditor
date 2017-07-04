@@ -91,7 +91,7 @@
     <string name="craete_file_fail">create file fail!</string>
     <string name="create_dir_fail">crate dir fail!</string>
     <string name="fail">fail:</string>
-    <string name="save_failed">保存失败</string>
+    <string name="save_failed">Save failed!</string>
     <string name="file_name">file name:</string>
     <string name="file_path">file path:</string>
     <string name="project_name">project name:</string>
@@ -220,5 +220,6 @@
     <string name="save_success">Save Success</string>
     <string name="edit">Edit</string>
     <string name="theme">Theme</string>
+    <string name="change_theme_success">Change theme success</string>
     
 </resources>
