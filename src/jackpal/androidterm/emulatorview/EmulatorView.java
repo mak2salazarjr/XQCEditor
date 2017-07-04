@@ -25,6 +25,7 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.Hashtable;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
@@ -42,6 +43,8 @@ import android.util.Log;
 import android.view.GestureDetector;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
+import android.view.ScaleGestureDetector;
+import android.view.ScaleGestureDetector.OnScaleGestureListener;
 import android.view.View;
 import android.view.inputmethod.BaseInputConnection;
 import android.view.inputmethod.CompletionInfo;
@@ -64,7 +67,7 @@ import android.widget.Scroller;
  * #EmulatorView(Context, TermSession, DisplayMetrics)} constructor, which will
  * take care of this for you.
  */
-public class EmulatorView extends View implements GestureDetector.OnGestureListener {
+public class EmulatorView extends View implements GestureDetector.OnGestureListener, OnScaleGestureListener {
     private final static String TAG = "EmulatorView";
     private final static boolean LOG_KEY_EVENTS = false;
     private final static boolean LOG_IME = false;
@@ -103,10 +106,11 @@ public class EmulatorView extends View implements GestureDetector.OnGestureListe
      */
     private TextRenderer mTextRenderer;
 
+    private float mFontSize = 8;
     /**
      * Text size. Zero means 4 x 8 font.
      */
-    private int mTextSize = 10;
+    private int   mTextSize = 10;
 
     private int mCursorBlink;
 
@@ -202,6 +206,7 @@ public class EmulatorView extends View implements GestureDetector.OnGestureListe
         }
     };
 
+    private ScaleGestureDetector mScaleGestureDetector = null;
     private GestureDetector mGestureDetector;
     private GestureDetector.OnGestureListener mExtGestureListener;
     private Scroller mScroller;
@@ -228,7 +233,7 @@ public class EmulatorView extends View implements GestureDetector.OnGestureListe
 
         }
     };
-
+    
     /**
      *
      * A hash table of underlying URLs to implement clickable links.
@@ -549,6 +554,7 @@ public class EmulatorView extends View implements GestureDetector.OnGestureListe
         mTopRow = 0;
         mLeftColumn = 0;
         mGestureDetector = new GestureDetector(this);
+        mScaleGestureDetector = new ScaleGestureDetector(getContext(), EmulatorView.this);
         // mGestureDetector.setIsLongpressEnabled(false);
         setVerticalScrollBarEnabled(true);
         setFocusable(true);
@@ -575,7 +581,7 @@ public class EmulatorView extends View implements GestureDetector.OnGestureListe
     public void setDensity(DisplayMetrics metrics) {
         if (mDensity == 0) {
             // First time we've known the screen density, so update font size
-            mTextSize = (int) (mTextSize * metrics.density);
+            mTextSize = (int) (mFontSize * metrics.density);
         }
         mDensity = metrics.density;
         mScaledDensity = metrics.scaledDensity;
@@ -1069,7 +1075,9 @@ public class EmulatorView extends View implements GestureDetector.OnGestureListe
      *
      * @param fontSize the new font size, in density-independent pixels.
      */
-    public void setTextSize(int fontSize) {
+    public void setTextSize(float fontSize) {
+    	Log.i(TAG, "fontSize:"+fontSize);
+    	mFontSize = fontSize;
         mTextSize = (int) (fontSize * mDensity);
         updateText();
     }
@@ -1228,12 +1236,15 @@ public class EmulatorView extends View implements GestureDetector.OnGestureListe
 
     // End GestureDetector.OnGestureListener methods
 
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     public boolean onTouchEvent(MotionEvent ev) {
         if (mIsSelectingText) {
             return onTouchEventWhileSelectingText(ev);
         } else {
-            return mGestureDetector.onTouchEvent(ev);
+            mGestureDetector.onTouchEvent(ev);
+            mScaleGestureDetector.onTouchEvent(ev);
+            return true;
         }
     }
 
@@ -1729,4 +1740,20 @@ public class EmulatorView extends View implements GestureDetector.OnGestureListe
     public TermKeyListener getKeyListener(){
     	return mKeyListener;
     }
+
+	@Override
+	public boolean onScale(ScaleGestureDetector detector) {
+		setTextSize( (mFontSize*detector.getScaleFactor()) );
+		return true;
+	}
+
+	@Override
+	public boolean onScaleBegin(ScaleGestureDetector detector) {
+		return true;
+	}
+
+	@Override
+	public void onScaleEnd(ScaleGestureDetector detector) {
+		
+	}
 }
