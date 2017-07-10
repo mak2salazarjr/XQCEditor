@@ -49,8 +49,10 @@ public class Browser extends Fragment {
 	
 	public void refresh()
 	{
-		if(mWebView!=null)
+		if(mWebView!=null){
+			mWebView.clearCache(true);
 			mWebView.loadUrl(mUrl);
+		}
 	}
 	
 	public boolean back() {
