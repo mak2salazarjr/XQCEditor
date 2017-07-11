@@ -55,7 +55,7 @@ public class DebugApk implements OnClickListener {
 		mScrollView=(ScrollView) viewGroup.findViewById(R.id.scroll_view_package_apk);
 		mConsoleView = (TextView) viewGroup.findViewById(R.id.text_view_console);
 		AlertDialog.Builder builder=new Builder(context);
-		builder.setTitle(R.string.package_and_run);
+		builder.setTitle(R.string.build_and_run);
 		builder.setView(viewGroup);
 		builder.setCancelable(false);
 		builder.setNegativeButton(R.string.cancel, this);
