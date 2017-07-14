@@ -560,20 +560,20 @@ public class Setting extends Fragment implements Window, TextWatcher, OnClickLis
 	public static class EditorConfig{
 		public boolean mAutoUpdate = true ; 
 		public boolean mUseNiceFont = true ; 
-		public int mBackGroundColor = Color.TRANSPARENT ;
-		public int mBaseFontColor = Color.BLACK ;
+		public int mBackGroundColor = Color.rgb(0xff, 0xef, 0xd5) ;
+		public int mBaseFontColor = Color.rgb(0x44, 0x44, 0x44);
 		public float mFontScale = 1.0f ;
 		public float mLineScale = 1.0f ;
 		public String mBackgroundImage = "";
 		public Bitmap mBitmap = null;
 		public static EditorConfig load(SharedPreferences sharedPreferences){
 			EditorConfig editorConfig=new EditorConfig();
-			editorConfig.mAutoUpdate=sharedPreferences.getBoolean("mAutoUpdate",true);
-			editorConfig.mUseNiceFont=sharedPreferences.getBoolean("mUseNiceFont",true);
-			editorConfig.mBackGroundColor=sharedPreferences.getInt("mBackGroundColor", Color.TRANSPARENT);
-			editorConfig.mBaseFontColor=sharedPreferences.getInt("mBaseFontColor", Color.BLACK);
-			editorConfig.mFontScale=sharedPreferences.getFloat("mFontScale", 1.0f);
-			editorConfig.mLineScale=sharedPreferences.getFloat("mLineScale", 1.0f);
+			editorConfig.mAutoUpdate=sharedPreferences.getBoolean("mAutoUpdate",editorConfig.mAutoUpdate);
+			editorConfig.mUseNiceFont=sharedPreferences.getBoolean("mUseNiceFont",editorConfig.mUseNiceFont);
+			editorConfig.mBackGroundColor=sharedPreferences.getInt("mBackGroundColor", editorConfig.mBackGroundColor);
+			editorConfig.mBaseFontColor=sharedPreferences.getInt("mBaseFontColor", editorConfig.mBaseFontColor);
+			editorConfig.mFontScale=sharedPreferences.getFloat("mFontScale", editorConfig.mFontScale);
+			editorConfig.mLineScale=sharedPreferences.getFloat("mLineScale", editorConfig.mLineScale);
 			editorConfig.setImage( sharedPreferences.getString("mBackgroundImage", "") );
 			return editorConfig;
 		}
@@ -602,12 +602,12 @@ public class Setting extends Fragment implements Window, TextWatcher, OnClickLis
 		public int mWordsColor = Color.rgb( 0x80, 0x80, 0x80) ;
 		public static CEditorConfig load(SharedPreferences sharedPreferences){
 			CEditorConfig editorConfig=new CEditorConfig();
-			editorConfig.mCommentsColor=sharedPreferences.getInt("mCommentsColor", Color.rgb( 0x60, 0xa0, 0x60));
-			editorConfig.mConstantColor=sharedPreferences.getInt("mConstantColor", Color.rgb( 0xff, 0x80, 0x80));
-			editorConfig.mKeywordsColor=sharedPreferences.getInt("mKeywordsColor", Color.rgb( 0x80, 0x80, 0xff));
-			editorConfig.mProKeywordsColor=sharedPreferences.getInt("mProKeywordsColor", Color.rgb( 0x80, 0x80, 0xff));
-			editorConfig.mWordsColor=sharedPreferences.getInt("mWordsColor", Color.rgb( 0x80, 0x80, 0x80));
-			editorConfig.mEnableHighLight=sharedPreferences.getBoolean("mEnableHighLight", true );
+			editorConfig.mCommentsColor=sharedPreferences.getInt("mCommentsColor", editorConfig.mCommentsColor);
+			editorConfig.mConstantColor=sharedPreferences.getInt("mConstantColor", editorConfig.mConstantColor);
+			editorConfig.mKeywordsColor=sharedPreferences.getInt("mKeywordsColor", editorConfig.mKeywordsColor);
+			editorConfig.mProKeywordsColor=sharedPreferences.getInt("mProKeywordsColor", editorConfig.mProKeywordsColor);
+			editorConfig.mWordsColor=sharedPreferences.getInt("mWordsColor", editorConfig.mWordsColor);
+			editorConfig.mEnableHighLight=sharedPreferences.getBoolean("mEnableHighLight", editorConfig.mEnableHighLight );
 			return editorConfig;
 		}
 
@@ -625,8 +625,8 @@ public class Setting extends Fragment implements Window, TextWatcher, OnClickLis
 
 	public static class OtherConfig{
 		public String mQuickInput = "\t'\"`$[]{}<>()+-*%=&|!^~,;?:_\\";
-		public int mTitleBarColor = Color.rgb(0xa0, 0xa0, 0xf0);
-		public int mSelectTitleColor = Color.rgb(0xbf, 0xff, 0x80) ;
+		public int mTitleBarColor = Color.rgb(0xff, 0xd3, 0x9b);
+		public int mSelectTitleColor = Color.rgb(0xff, 0xef, 0xd5) ;
 		public boolean mQuickCloseEnable = true;
 		public int mQuickCloseColor = Color.argb(0xff, 0xff, 0x6f, 0x00);
 		public boolean mNewConsoleEnable = true;
@@ -635,15 +635,15 @@ public class Setting extends Fragment implements Window, TextWatcher, OnClickLis
 		public boolean mAnimation = true;
 		public static OtherConfig load(SharedPreferences sharedPreferences){
 			OtherConfig config=new OtherConfig();
-			config.mQuickInput=sharedPreferences.getString("mQuickInput", "\t'\"`$[]{}<>()+-*%=&|!^~,;?:_\\");
-			config.mTitleBarColor=sharedPreferences.getInt("mTitleBarColor",Color.rgb(0xa0, 0xa0, 0xf0));
-			config.mSelectTitleColor=sharedPreferences.getInt("mSelectTitleColor",Color.rgb(0xbf, 0xff, 0x80));
-			config.mQuickCloseEnable=sharedPreferences.getBoolean("mQuickCloseEnable",true);
-			config.mQuickCloseColor=sharedPreferences.getInt("mQuickCloseColor",Color.rgb( 0xff, 0x6f, 0x00));
-			config.mNewConsoleEnable=sharedPreferences.getBoolean("mNewConsoleEnable",true);
-			config.mTitleAtHead=sharedPreferences.getBoolean("mTitleAtHead",true);
-			config.mCtrlAtHead=sharedPreferences.getBoolean("mCtrlAtHead",true);
-			config.mAnimation=sharedPreferences.getBoolean("mAnimation",false);
+			config.mQuickInput=sharedPreferences.getString("mQuickInput", config.mQuickInput);
+			config.mTitleBarColor=sharedPreferences.getInt("mTitleBarColor",config.mTitleBarColor);
+			config.mSelectTitleColor=sharedPreferences.getInt("mSelectTitleColor",config.mSelectTitleColor);
+			config.mQuickCloseEnable=sharedPreferences.getBoolean("mQuickCloseEnable",config.mQuickCloseEnable);
+			config.mQuickCloseColor=sharedPreferences.getInt("mQuickCloseColor",config.mQuickCloseColor);
+			config.mNewConsoleEnable=sharedPreferences.getBoolean("mNewConsoleEnable",config.mNewConsoleEnable);
+			config.mTitleAtHead=sharedPreferences.getBoolean("mTitleAtHead",config.mTitleAtHead);
+			config.mCtrlAtHead=sharedPreferences.getBoolean("mCtrlAtHead",config.mCtrlAtHead);
+			config.mAnimation=sharedPreferences.getBoolean("mAnimation",config.mAnimation);
 			return config;
 		}
 
