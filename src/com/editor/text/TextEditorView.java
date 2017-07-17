@@ -9,34 +9,36 @@ import android.util.*;
 import android.view.*;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.*;
+
+import java.util.Stack;
 import java.util.regex.*;
 
 import person.wangchen11.editor.codeedittext.CodeStyleAdapter;
 import person.wangchen11.editor.edittext.AfterTextChangeListener;
+import person.wangchen11.window.ext.Setting;
 
 public class TextEditorView extends EditText {
 	private static final String TAG = "TextEditorView";
-	private Paint textPaint;
-	private Handler updateHandler ;
+	private Paint mTextPaint;
+	private Handler mUpdateHandler ;
 	private int updateDelay,errorLine;
 	private boolean modified = true;
 	private float mSpaceWidth = 0;
+	
+	private boolean mSaveToHistory = true;
+	private int mMaxSaveHistory = 20;
+	private Stack<ReplaceBody> mUndoBodies = new Stack<ReplaceBody>();
+	private Stack<ReplaceBody> mRedoBodies = new Stack<ReplaceBody>();
 
 	private Pattern line,number,headfile;
 	private Pattern string,keyword;
 	private Pattern pretreatment,builtin ;
 	private Pattern comment,trailingWhiteSpace ;
-
-	private OnTextChangedListener onTextChangedListener;
 	
 	private Runnable updateThread = new Runnable() {
 		@Override
 		public void run() {
 			Editable edit = getText();
-
-			if (onTextChangedListener != null)
-				onTextChangedListener.onTextChanged(edit.toString());
-
 			highlightWithoutChange(edit);
 		}
 	};
@@ -52,22 +54,40 @@ public class TextEditorView extends EditText {
 	}
 
 	public void init(Context context) {
-
 		setGravity(Gravity.TOP);
-		textPaint = new Paint();
-		textPaint.setAntiAlias(false);
-		textPaint.setTypeface(Typeface.MONOSPACE);
-		textPaint.setTextSize(dip2px(context,15));
-		textPaint.setColor(0xff888888);
-		mSpaceWidth = textPaint.measureText(" ");
-		textPaint.getFontMetrics();
+		getPaint().setTypeface(Typeface.MONOSPACE);
+		getPaint().setColor(Setting.mConfig.mEditorConfig.mBaseFontColor);
+		mTextPaint = new Paint();
+		mTextPaint.setAntiAlias(true);
+		mTextPaint.setColor(0xff888888);
 		setHorizontallyScrolling(true);
-		updateHandler = new Handler();
+		mUpdateHandler = new Handler();
 		setFilters(new InputFilter[] {inputFilter});
 		addTextChangedListener(watcher);
+		setTextScale(Setting.mConfig.mEditorConfig.mFontScale);
+		setLineSpacing(0, 1.12f*Setting.mConfig.mEditorConfig.mLineScale);
 		initPattern();
 	}
 
+	private float mTextScale = 1.0f;
+	public void setTextScale(float textScale){
+		mTextScale = textScale;
+		float textSize = dip2px(getContext(),12)*mTextScale;
+		mTextPaint.setTypeface(Typeface.MONOSPACE);
+		mTextPaint.setTextSize(textSize);
+		mSpaceWidth = mTextPaint.measureText(" ");
+		getPaint().setTextSize(textSize);
+		setPadding(getBoundOfLeft(), 0, 0, 0);
+	}
+	
+	@Override
+	public void setText(CharSequence text, BufferType type) {
+		super.setText(text, type);
+		setPadding(getBoundOfLeft(), 0, 0, 0);
+		if(mAfterTextChangeListener != null)
+			mAfterTextChangeListener.afterTextChange();
+	}
+	
 	public void initPattern() {
 		line = Pattern.compile(".*\\n");
 		headfile =Pattern.compile("#\\b(include)\\b\\s*<\\w*(/?.*/?)[\\w+|h]>[^\"]");
@@ -111,25 +131,48 @@ public class TextEditorView extends EditText {
 	};
 
     private TextWatcher watcher = new TextWatcher(){
-
+    	
+    	int beforeStart = 0;
+    	int beforEnd = 0;
+    	CharSequence beforCharSequence = "";
         @Override
         public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            // TODO: Implement this method
+        	Log.i(TAG, "beforeTextChanged"+":"+start+":"+count+":"+after);
+        	beforeStart = start;
+        	beforEnd = start+count;
+        	beforCharSequence = s.subSequence(beforeStart, beforEnd);
         }
 
         @Override
         public void onTextChanged(CharSequence s, int start, int before, int count) {
-            // TODO: Implement this method
+    		//saved to history to be undo or redo 
+    		if(mSaveToHistory){
+    			if(mMaxSaveHistory>0){
+    				if(mUndoBodies.size()>mMaxSaveHistory)
+    					mUndoBodies.remove(0);
+    				ReplaceBody body=new ReplaceBody(beforeStart, beforEnd, beforCharSequence,s.subSequence(start, start+count), 0, count, 0, 0);
+    				if(!mUndoBodies.isEmpty() && mUndoBodies.peek().addBody(body))
+    				{
+    				}
+    				else
+    					mUndoBodies.push(body);
+    			}
+    		}
+    		
+        	Log.i(TAG, "onTextChanged"+":"+start+":"+before+":"+count);
         }
 
         @Override
         public void afterTextChanged(Editable edit) {
+        	Log.i(TAG, "afterTextChanged");
 			setPadding(getBoundOfLeft(), 0, 0, 0);
+			if(mAfterTextChangeListener != null)
+				mAfterTextChangeListener.afterTextChange();
 			
 			cancelUpdate();
 			if (!modified)
 				return;
-			updateHandler.postDelayed(updateThread, updateDelay);
+			mUpdateHandler.postDelayed(updateThread, updateDelay);
         }
 	};
 
@@ -142,9 +185,6 @@ public class TextEditorView extends EditText {
 		modified = false;
 		setText(highlight(new SpannableStringBuilder(text)));
 		modified = true;
-
-		if (onTextChangedListener != null)
-			onTextChangedListener.onTextChanged(text.toString());
 	}
 
 
@@ -161,7 +201,7 @@ public class TextEditorView extends EditText {
 
 	
 	public void cancelUpdate() {
-		updateHandler.removeCallbacks(updateThread);
+		mUpdateHandler.removeCallbacks(updateThread);
 	}
 	
 
@@ -313,23 +353,21 @@ public class TextEditorView extends EditText {
 	}
 	
 	public void drawText(Canvas canvas) {
-		if (getText().length() != 0) {
+		Layout layout = getLayout();
+		if (layout!=null) {
 			for (int i=0;i < getLineCount();i++) {
+				layout.getLineDescent(i);
 				float textX = getPaddingLeft() - getWidthOfBit(getBitOfNum(i+1)+1);
-				float textY = (i + 1) * getLineHeight();
-				canvas.drawText(String.valueOf(i + 1), textX, textY, textPaint);
+				float textY = layout.getLineBaseline(i);//+(i) * getLineHeight();
+				canvas.drawText(String.valueOf(i + 1), textX, textY, mTextPaint);
 			}
-		} else {
-			float textX = getPaddingLeft() - getWidthOfBit(getBitOfNum(0+1)+1);
-			float textY = (0 + 1) * getLineHeight();
-			canvas.drawText(String.valueOf(1), textX, textY, textPaint);
 		}
 		
-		float oldPaintWidth = textPaint.getStrokeWidth();
+		float oldPaintWidth = mTextPaint.getStrokeWidth();
 		float newPaintWidth = mSpaceWidth/8;
-		textPaint.setStrokeWidth(newPaintWidth);
-		canvas.drawLine(getPaddingLeft()-mSpaceWidth/4, 0, getPaddingLeft()-mSpaceWidth/4, (getLineCount()) * getLineHeight(), textPaint);
-		textPaint.setStrokeWidth(oldPaintWidth);
+		mTextPaint.setStrokeWidth(newPaintWidth);
+		canvas.drawLine(getPaddingLeft()-mSpaceWidth/4, 0, getPaddingLeft()-mSpaceWidth/4, (getLineCount()) * getLineHeight(), mTextPaint);
+		mTextPaint.setStrokeWidth(oldPaintWidth);
 	}
 
 	public int getRowHeight() {
@@ -404,36 +442,155 @@ public class TextEditorView extends EditText {
 	    }
 	}
 	
-
 	public void cleanRedo() {
+		mRedoBodies.clear();
 	}
 
 	public void cleanUndo() {
+		mUndoBodies.clear();
 	}
 
 	public void setMaxSaveHistory(int i) {
+		mMaxSaveHistory = i;
 	}
 
 	public boolean canRedo() {
-		return true;
+		return mRedoBodies.size()>0;
 	}
 
 	public boolean canUndo() {
-		return true;
+		return mUndoBodies.size()>0;
 	}
 
 	public boolean redo() {
+		if(!canRedo())
+			return false;
+		ReplaceBody body=mRedoBodies.pop();
+		ReplaceBody replaceBody=body.getRedoBody();
+		if(mMaxSaveHistory>0){
+			if(mUndoBodies.size()>mMaxSaveHistory)
+				mUndoBodies.remove(0);
+			mUndoBodies.push(body);
+		}
+		mSaveToHistory = false;
+		getEditableText().replace(replaceBody.mSt, replaceBody.mEn, replaceBody.mText, replaceBody.mStart, replaceBody.mEnd);
+		mSaveToHistory = true;
+		if(replaceBody.mText==null || replaceBody.mText.length()==0 || replaceBody.mEnd-replaceBody.mStart==0 )
+		{
+			//mSelectionStart=replaceBody.mSt;
+			//mSelectionEnd=mSelectionStart;
+		}
+		else
+		{
+			//mSelectionStart=replaceBody.mSt;
+			//mSelectionEnd=replaceBody.mSt+replaceBody.mEnd-replaceBody.mStart;
+		}
 		return true;
 	}
 	
 	public boolean undo() {
+		if(!canUndo())
+			return false;
+		ReplaceBody body=mUndoBodies.pop();
+		ReplaceBody replaceBody=body.getUndoBody();
+		if(mMaxSaveHistory>0){
+			if(mRedoBodies.size()>mMaxSaveHistory)
+				mRedoBodies.remove(0);
+			mRedoBodies.push(body);
+		}
+		mSaveToHistory = false;
+		getEditableText().replace(replaceBody.mSt, replaceBody.mEn, replaceBody.mText, replaceBody.mStart, replaceBody.mEnd);
+		mSaveToHistory = true;
+		if(replaceBody.mText==null || replaceBody.mText.length()==0 || replaceBody.mEnd-replaceBody.mStart==0 )
+		{
+			//mSelectionStart=replaceBody.mSt;
+			//mSelectionEnd=mSelectionStart;
+		}
+		else
+		{
+			//mSelectionStart=replaceBody.mSt;
+			//mSelectionEnd=replaceBody.mSt+replaceBody.mEnd-replaceBody.mStart;
+		}
 		return true;
 	}
 
 	public void insertText(String string) {
 	}
 
+	private AfterTextChangeListener mAfterTextChangeListener = null;
 	public void setAfterTextChangeListener(AfterTextChangeListener afterTextChangeListener) {
+		mAfterTextChangeListener = afterTextChangeListener;
 	}
 
+
+	class ReplaceBody {
+		int mSt;
+		int mEn;
+		CharSequence mSubtext;
+		CharSequence mText;
+		int mStart;
+		int mEnd;
+		int mSelectionStart;
+		int mSelectionEnd;
+
+		public ReplaceBody(int st, int en, CharSequence subtext,
+				CharSequence text, int start, int end, int selectionStart,
+				int selectionEnd) {
+			mSt = st;
+			mEn = en;
+			mSubtext = subtext;
+			mText = text;
+			mStart = start;
+			mEnd = end;
+			mSelectionStart = selectionStart;
+			mSelectionEnd = selectionEnd;
+		}
+
+		public ReplaceBody getUndoBody() {
+			return new ReplaceBody(mSt, mSt + mEnd - mStart, mText, mSubtext,
+					0, mSubtext.length(), mSelectionStart, mSelectionEnd);
+		}
+
+		public ReplaceBody getRedoBody() {
+			return this;
+		}
+
+		public boolean isDelete() {
+			if (mEn - mSt > 0 && mStart == 0 && mEnd == 0)
+				return true;
+			return false;
+		}
+
+		public boolean isInsert() {
+			if (mSt == mEn && mText != null && mText.length() != 0
+					&& mEnd - mStart > 0)
+				return true;
+			Log.i("isInsert", "false");
+			return false;
+		}
+
+		public boolean addBody(ReplaceBody body) {
+			if (isDelete() && body.isDelete() && mSt == body.mEn) {// 合并相连的删除
+				this.mSt = body.mSt;
+				this.mSubtext = body.mSubtext.toString() + this.mSubtext;
+				this.mSelectionStart = body.mSelectionStart;
+				return true;
+			}
+			Log.i("addBody", "addBody");
+			if (isInsert() && body.isInsert()
+					&& mSt + mText.length() == body.mSt) {// 合并相连的插入
+				Log.i("addBody", "合并相连的插入 ");
+				if (body.mText.toString().contains("\n")) {
+					return false;
+				}
+				this.mText = this.mText
+						+ body.mText.subSequence(body.mStart, body.mEnd)
+								.toString();
+				this.mEnd += body.mEnd - body.mStart;
+				this.mSelectionEnd = body.mSelectionEnd;
+				return true;
+			}
+			return false;
+		}
+	}
 }
