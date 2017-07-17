@@ -630,6 +630,7 @@ public class Setting extends Fragment implements Window, TextWatcher, OnClickLis
 		public boolean mQuickCloseEnable = true;
 		public int mQuickCloseColor = Color.argb(0xff, 0xff, 0x6f, 0x00);
 		public boolean mNewConsoleEnable = true;
+		public boolean mNewEditorEnable = true;
 		public boolean mTitleAtHead = true;
 		public boolean mCtrlAtHead = true;
 		public boolean mAnimation = true;

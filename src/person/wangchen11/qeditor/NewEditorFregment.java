@@ -55,17 +55,18 @@ import person.wangchen11.drawable.CircleDrawable;
 import person.wangchen11.editor.codeedittext.CodeEditText;
 import person.wangchen11.editor.codeedittext.OnNeedChangeWants;
 import person.wangchen11.editor.edittext.AfterTextChangeListener;
+import person.wangchen11.editor.newedittext.NewEditText;
 import person.wangchen11.gnuccompiler.CheckInfo;
 import person.wangchen11.gnuccompiler.GNUCCodeCheck;
 import person.wangchen11.window.ext.Setting;
 import person.wangchen11.xqceditor.R;
 
-public class EditorFregment extends Fragment implements OnClickListener, AfterTextChangeListener, OnNeedChangeWants, OnItemClickListener, OnItemSelectedListener{
+public class NewEditorFregment extends Fragment implements OnClickListener, AfterTextChangeListener, OnNeedChangeWants, OnItemClickListener, OnItemSelectedListener{
 	protected static final String TAG="EditorFregment";
 	public static String mQuickInput="\t{}[]()<>+-*/%=&|!^~,;?:_'\"\\";
 	private File mFile=null;
 	private RelativeLayout mRelativeLayout;
-	private CodeEditText mCodeEditText;
+	private NewEditText mCodeEditText;
 	private LinearLayout mLinearLayoutOfChars;
 	private ListView mListView= null;
 	private Spinner mCodeTypeSpinner=null;
@@ -87,14 +88,14 @@ public class EditorFregment extends Fragment implements OnClickListener, AfterTe
 	};
 	
 	private AlertDialog mFindDialog = null;
-	public EditorFregment() {
+	public NewEditorFregment() {
 	}
 
-	public EditorFregment(File file) {
+	public NewEditorFregment(File file) {
 		mFile=file;
 	}
 	
-	public EditorFregment(File file,String charset) {
+	public NewEditorFregment(File file,String charset) {
 		mCharset=charset;
 		mFile=file;
 	}
@@ -126,9 +127,9 @@ public class EditorFregment extends Fragment implements OnClickListener, AfterTe
 	public View onCreateView(LayoutInflater inflater,
 			@Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 		if(Setting.mConfig.mOtherConfig.mCtrlAtHead){
-			mRelativeLayout = (RelativeLayout) inflater.inflate(R.layout.fragment_ceditor, null);
+			mRelativeLayout = (RelativeLayout) inflater.inflate(R.layout.fragment_new_ceditor, null);
 		}else{
-			mRelativeLayout = (RelativeLayout) inflater.inflate(R.layout.fragment_ceditor_cdt, null);
+			//mRelativeLayout = (RelativeLayout) inflater.inflate(R.layout.fragment_ceditor_cdt, null);
 		}
 		mListView= (ListView) mRelativeLayout.findViewById(R.id.listView1);
 		mListView.setVisibility(View.GONE);
@@ -137,7 +138,7 @@ public class EditorFregment extends Fragment implements OnClickListener, AfterTe
 		mCodeTypeSpinner.setOnItemSelectedListener(this);
 		mCodeTypeSpinner.setAdapter(new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_dropdown_item, mCodeTypeNames));
 		mCodeTypeSpinner.setSelection(0);
-		mCodeEditText=(CodeEditText) mRelativeLayout.findViewById(R.id.ccode_edittext);
+		mCodeEditText=(NewEditText) mRelativeLayout.findViewById(R.id.ccode_edittext);
 		mCodeEditText.setCodeType(CodeEditText.CodeType.TYPE_NONE);
 		if(mFile!=null)
 		{
@@ -211,7 +212,7 @@ public class EditorFregment extends Fragment implements OnClickListener, AfterTe
 				configAllView(((ViewGroup)(view)).getChildAt(i));
 			}
 		}
-		if( view instanceof ImageButton || view instanceof TextView ){
+		if( (view instanceof ImageButton || view instanceof TextView)&&(!(view instanceof NewEditText)) ){
 			view.setOnClickListener(this);
 			view.setOnTouchListener(new View.OnTouchListener() {
 				@SuppressWarnings("deprecation")
@@ -261,7 +262,7 @@ public class EditorFregment extends Fragment implements OnClickListener, AfterTe
 	@SuppressLint("DefaultLocale")
 	private void checkCode()
 	{
-		synchronized (EditorFregment.this) {
+		synchronized (NewEditorFregment.this) {
 			if(mCodeCheck!=null)
 				mCodeCheck.stop();
 		}
@@ -278,14 +279,14 @@ public class EditorFregment extends Fragment implements OnClickListener, AfterTe
 					mHandler.post(new Runnable() {
 						@Override
 						public void run() {
-							if(mCodeEditText!=null)
-								mCodeEditText.setWarnAndError( CheckCodeAdapt.getCWarnAndErrors(checkInfos,mFile) );
+							//if(mCodeEditText!=null)
+							//	mCodeEditText.setWarnAndError( CheckCodeAdapt.getCWarnAndErrors(checkInfos,mFile) );
 						}
 					});
 				}
 			}
 		}
-		synchronized (EditorFregment.this) {
+		synchronized (NewEditorFregment.this) {
 			mCodeCheck = null;
 		}
 	}
@@ -407,7 +408,7 @@ public class EditorFregment extends Fragment implements OnClickListener, AfterTe
 			break;
 		case R.id.button_find:
 			str=((EditText)(mFindDialog.findViewById(R.id.et_find))).getText();
-			if( !mCodeEditText.findString(str.toString()) )
+			//if( !mCodeEditText.findString(str.toString()) )
 			{
 				if(mToast!=null)
 					mToast.cancel();
@@ -417,14 +418,14 @@ public class EditorFregment extends Fragment implements OnClickListener, AfterTe
 			break;
 		case R.id.button_replace:
 			str=((EditText)(mFindDialog.findViewById(R.id.et_replace))).getText();
-			if( !mCodeEditText.replaceString(str.toString()) )
+			//if( !mCodeEditText.replaceString(str.toString()) )
 			{
 			}
 			break;
 		case R.id.button_replace_find:
 			str=((EditText)(mFindDialog.findViewById(R.id.et_find))).getText();
 			str1=((EditText)(mFindDialog.findViewById(R.id.et_replace))).getText();
-			if( !mCodeEditText.replaceFindString(str.toString(),str1.toString()) )
+			//if( !mCodeEditText.replaceFindString(str.toString(),str1.toString()) )
 			{
 				if(mToast!=null)
 					mToast.cancel();
@@ -435,7 +436,7 @@ public class EditorFregment extends Fragment implements OnClickListener, AfterTe
 		case R.id.button_replace_all:
 			str=((EditText)(mFindDialog.findViewById(R.id.et_find))).getText();
 			str1=((EditText)(mFindDialog.findViewById(R.id.et_replace))).getText();
-			if( !mCodeEditText.replaceAll(str.toString(),str1.toString()) )
+			//if( !mCodeEditText.replaceAll(str.toString(),str1.toString()) )
 			{
 				if(mToast!=null)
 					mToast.cancel();
@@ -561,6 +562,9 @@ public class EditorFregment extends Fragment implements OnClickListener, AfterTe
 	public void afterTextChange() {
 		Log.i(TAG, "afterTextChange");
 		mIsChanged=true;
+		if(mChangeFlagChanged!=null)
+			mChangeFlagChanged.onChangeFlagChanged();
+		
 		if(mCodeEditText.canRedo())
 			mRelativeLayout.findViewById(R.id.button_redo).setVisibility(View.VISIBLE);
 		else 
@@ -570,16 +574,15 @@ public class EditorFregment extends Fragment implements OnClickListener, AfterTe
 			mRelativeLayout.findViewById(R.id.button_undo).setVisibility(View.VISIBLE);
 		else 
 			mRelativeLayout.findViewById(R.id.button_undo).setVisibility(View.INVISIBLE);
-		if(mChangeFlagChanged!=null)
-			mChangeFlagChanged.onChangeFlagChanged();
 		onNeedChangeWants(0,0,null);
 		mCodeEditText.requestFocus();
 
-		synchronized (EditorFregment.this) {
+		synchronized (NewEditorFregment.this) {
 			if(mCodeCheck!=null)
 				mCodeCheck.stop();
 		}
-		mCodeEditText.setWarnAndError( null );
+		//mCodeEditText.setWarnAndError( null );
+		
 	}
 	
 	public boolean isChanged(){
@@ -669,6 +672,7 @@ public class EditorFregment extends Fragment implements OnClickListener, AfterTe
 	@Override
 	public void onItemSelected(AdapterView<?> parent, View view, int position,
 			long id) {
+		/*
 		switch (position) {
 		case 0:
 			mCodeEditText.setCodeType(CodeEditText.CodeType.TYPE_NONE);
@@ -694,7 +698,7 @@ public class EditorFregment extends Fragment implements OnClickListener, AfterTe
 		default:
 			mCodeEditText.setCodeType(CodeEditText.CodeType.TYPE_NONE);
 			break;
-		}
+		}*/
 	}
 	
 	public boolean codeFormat()

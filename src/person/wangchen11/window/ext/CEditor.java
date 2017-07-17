@@ -3,6 +3,7 @@ package person.wangchen11.window.ext;
 import java.io.File;
 import java.util.LinkedList;
 import java.util.List;
+
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
@@ -18,7 +19,9 @@ import person.wangchen11.gnuccompiler.GNUCCompiler2;
 import person.wangchen11.packageapk.DebugApk;
 import person.wangchen11.packageapk.PackageApk;
 import person.wangchen11.phpconfig.PHPConfig;
+import person.wangchen11.qeditor.ChangeFlagChanged;
 import person.wangchen11.qeditor.EditorFregment;
+import person.wangchen11.qeditor.NewEditorFregment;
 import person.wangchen11.qeditor.OnRunButtonClickListener;
 import person.wangchen11.window.MenuTag;
 import person.wangchen11.window.Window;
@@ -27,41 +30,133 @@ import person.wangchen11.window.WindowsManager;
 import person.wangchen11.window.WindowsManager.WindowsManagerLintener;
 import person.wangchen11.xqceditor.R;
 
-public class CEditor implements Window, EditorFregment.ChangeFlagChanged, OnClickListener ,WindowsManagerLintener, OnRunButtonClickListener{
+public class CEditor implements Window, ChangeFlagChanged, OnClickListener ,WindowsManagerLintener, OnRunButtonClickListener{
 	protected static final String TAG="CEditor";
-	private EditorFregment mCEditorFregment;
+	private EditorFregment mCEditorFregment = null;
+	private NewEditorFregment mNewCEditorFregment = null;
 	private WindowsManager mWindowsManager;
 	private boolean mIsAlive=true;
 	
 	public CEditor(WindowsManager windowsManager,File file) {
 		mWindowsManager=windowsManager;
-		mCEditorFregment=new EditorFregment(file);
-		mCEditorFregment.setChangeFlagChanged(this);
-		mCEditorFregment.setOnRunButtonClickListener(this);
+		
+		if(!Setting.mConfig.mOtherConfig.mNewEditorEnable){
+			mCEditorFregment=new EditorFregment(file);
+			mCEditorFregment.setChangeFlagChanged(this);
+			mCEditorFregment.setOnRunButtonClickListener(this);
+		}else{
+			mNewCEditorFregment=new NewEditorFregment(file);
+			mNewCEditorFregment.setChangeFlagChanged(this);
+			mNewCEditorFregment.setOnRunButtonClickListener(this);
+		}
 		mWindowsManager.addListener(this);
 	}
 	
 	public CEditor(WindowsManager windowsManager) {
 		mWindowsManager=windowsManager;
-		mCEditorFregment=new EditorFregment();
-		mCEditorFregment.setChangeFlagChanged(this);
-		mCEditorFregment.setOnRunButtonClickListener(this);
+		
+		if(!Setting.mConfig.mOtherConfig.mNewEditorEnable){
+			mCEditorFregment=new EditorFregment();
+			mCEditorFregment.setChangeFlagChanged(this);
+			mCEditorFregment.setOnRunButtonClickListener(this);
+		}else{
+			mNewCEditorFregment=new NewEditorFregment();
+			mNewCEditorFregment.setChangeFlagChanged(this);
+			mNewCEditorFregment.setOnRunButtonClickListener(this);
+		}
 		mWindowsManager.addListener(this);
 	}
 
 	public File getFile(){
-		return mCEditorFregment.getFile();
+		if(mCEditorFregment!=null)
+			return mCEditorFregment.getFile();
+		if(mNewCEditorFregment!=null)
+			return mNewCEditorFregment.getFile();
+		return null;
 	}
+	
+	public boolean isChanged(){
+		if(mCEditorFregment!=null)
+			return mCEditorFregment.isChanged();
+		if(mNewCEditorFregment!=null)
+			return mNewCEditorFregment.isChanged();
+		return false;
+	}
+	
+	public int getSelectionStart(){
+		if(mCEditorFregment!=null)
+			return mCEditorFregment.getSelectionStart();
+		if(mNewCEditorFregment!=null)
+			return mNewCEditorFregment.getSelectionStart();
+		return 0;
+	}
+
+	public int getSelectionEnd(){
+		if(mCEditorFregment!=null)
+			return mCEditorFregment.getSelectionEnd();
+		if(mNewCEditorFregment!=null)
+			return mNewCEditorFregment.getSelectionEnd();
+		return 0;
+	}
+	
+	public void closeInputMethod(){
+		if(mCEditorFregment!=null)
+			mCEditorFregment.closeInputMethod();
+		if(mNewCEditorFregment!=null)
+			mNewCEditorFregment.closeInputMethod();
+	}
+	
+	public Context getContext(){
+		return mWindowsManager.getContext();
+	}
+	
+	public CharSequence getText(int resId){
+		Context context = getContext();
+		if(context != null)
+			return context.getText(resId);
+		return null;
+	}
+	
+	public void codeFormat(){
+		if(mCEditorFregment!=null)
+			mCEditorFregment.codeFormat();
+		if(mNewCEditorFregment!=null)
+			mNewCEditorFregment.codeFormat();
+	}
+	
+	public boolean save(){
+		if(mCEditorFregment!=null)
+			return mCEditorFregment.save();
+		if(mNewCEditorFregment!=null)
+			return mNewCEditorFregment.save();
+		return true;
+	}
+
+	public void setInitSelection(int start,int end){
+		if(mCEditorFregment!=null)
+			mCEditorFregment.setInitSelection(start,end);
+		if(mNewCEditorFregment!=null)
+			mNewCEditorFregment.setInitSelection(start,end);
+	}
+	
 	@Override
 	public Fragment getFragment() {
-		return mCEditorFregment;
+		if(mCEditorFregment!=null)
+			return mCEditorFregment;
+		if(mNewCEditorFregment!=null)
+			return mNewCEditorFregment;
+		return null;
 	}
 
 	@Override
 	public CharSequence getTitle(Context context) {
-		if(mCEditorFregment.getFile()==null)
+		if(getFile()==null)
 			return context.getText(R.string.no_title);
-		return (mCEditorFregment.isChanged()?"*":"")+mCEditorFregment.getFile().getName();
+		if(mCEditorFregment!=null)
+			return (mCEditorFregment.isChanged()?"*":"")+mCEditorFregment.getFile().getName();
+		if(mNewCEditorFregment!=null)
+			return (mNewCEditorFregment.isChanged()?"*":"")+mNewCEditorFregment.getFile().getName();
+		return "";
 	}
 
 	@Override
@@ -83,17 +178,18 @@ public class CEditor implements Window, EditorFregment.ChangeFlagChanged, OnClic
 	@Override
 	public boolean onClose() {
 		mWindowsManager.removeListener(this);
-		mCEditorFregment.closeInputMethod();
+		closeInputMethod();
 		if(mIsAlive)
-		if(mCEditorFregment.isChanged() && mCEditorFregment.getFile()!=null){
+		if(isChanged() && getFile()!=null)
+		{
 			Builder alertDialog=new AlertDialog.Builder(mWindowsManager.getContext());
 			alertDialog.setCancelable(false);
 			alertDialog.setTitle(R.string.file_not_save);
 			alertDialog.setMessage( 
 					mWindowsManager.getContext().getText(R.string.file)+
-					mCEditorFregment.getFile().getName()+
+					getFile().getName()+
 					mWindowsManager.getContext().getText(R.string.unsaved)+"\n"+
-					mCEditorFregment.getFile().getPath());
+					getFile().getPath());
 			alertDialog.setNegativeButton(
 					mWindowsManager.getContext().getText(R.string.cancel)
 					, this);
@@ -114,28 +210,28 @@ public class CEditor implements Window, EditorFregment.ChangeFlagChanged, OnClic
 	@Override
 	public List<MenuTag> getMenuTags() {
 		LinkedList<MenuTag> menuTags=new LinkedList<MenuTag>();
-		File file=mCEditorFregment.getFile();
+		File file=getFile();
 		if(file!=null)
 		{
 			String name = file.getName().toLowerCase();
 			if(name.equals("makefile"))
 			{
-				menuTags.add(new MenuTag( R.string.make_j8,mCEditorFregment.getText(R.string.make_j8)));
-				menuTags.add(new MenuTag( R.string.make_b_j8,mCEditorFregment.getText(R.string.make_b_j8)));
-				menuTags.add(new MenuTag( R.string.make_clean,mCEditorFregment.getText(R.string.make_clean)));
-				menuTags.add(new MenuTag( R.string.make_option,mCEditorFregment.getText(R.string.make_option)));
+				menuTags.add(new MenuTag( R.string.make_j8,getText(R.string.make_j8)));
+				menuTags.add(new MenuTag( R.string.make_b_j8,getText(R.string.make_b_j8)));
+				menuTags.add(new MenuTag( R.string.make_clean,getText(R.string.make_clean)));
+				menuTags.add(new MenuTag( R.string.make_option,getText(R.string.make_option)));
 				return menuTags;
 			}
 			
 			if(name.endsWith(".lua"))
 			{
-				menuTags.add(new MenuTag( R.string.run_lua,mCEditorFregment.getText(R.string.run_lua)));
+				menuTags.add(new MenuTag( R.string.run_lua,getText(R.string.run_lua)));
 				return menuTags;
 			}
 			if(name.endsWith(".sh"))
 			{
-				menuTags.add(new MenuTag( R.string.run_shell, mCEditorFregment.getText(R.string.run_shell) ));
-				menuTags.add(new MenuTag( R.string.run_shell_as_root, mCEditorFregment.getText(R.string.run_shell_as_root )));
+				menuTags.add(new MenuTag( R.string.run_shell, getText(R.string.run_shell) ));
+				menuTags.add(new MenuTag( R.string.run_shell_as_root, getText(R.string.run_shell_as_root )));
 				return menuTags;
 			}
 			
@@ -143,8 +239,8 @@ public class CEditor implements Window, EditorFregment.ChangeFlagChanged, OnClic
 					name.endsWith(".html")||
 					name.endsWith(".htm") )
 			{
-				menuTags.add(new MenuTag(R.string.remote_browsing,mCEditorFregment.getText(R.string.remote_browsing)));
-				menuTags.add(new MenuTag(R.string.local_browsing,mCEditorFregment.getText(R.string.local_browsing)));
+				menuTags.add(new MenuTag(R.string.remote_browsing,getText(R.string.remote_browsing)));
+				menuTags.add(new MenuTag(R.string.local_browsing,getText(R.string.local_browsing)));
 			}
 			
 			if( name.endsWith(".c")||
@@ -156,7 +252,7 @@ public class CEditor implements Window, EditorFregment.ChangeFlagChanged, OnClic
 					name.endsWith(".xml")||
 					name.endsWith(".project") )
 			{
-				CProject cProject=CProject.findCProjectByFile(mCEditorFregment.getFile());
+				CProject cProject=CProject.findCProjectByFile(getFile());
 				if(cProject!=null)
 				{/*
 					if(cProject.isGuiProject()&&(cProject.getDebugType()!=null&&cProject.getDebugType().length()>0))
@@ -164,26 +260,26 @@ public class CEditor implements Window, EditorFregment.ChangeFlagChanged, OnClic
 					}
 					//else*/
 					{
-						menuTags.add(new MenuTag(R.string.build_and_run,mCEditorFregment.getActivity().getResources().getText(R.string.build_and_run) ));
+						menuTags.add(new MenuTag(R.string.build_and_run,getText(R.string.build_and_run) ));
 					}
 					
-					menuTags.add(new MenuTag( R.string.pack_and_run, mCEditorFregment.getActivity().getResources().getText(R.string.pack_and_run) ));
+					menuTags.add(new MenuTag( R.string.pack_and_run, getText(R.string.pack_and_run) ));
 				}
 				else
 				{
-					menuTags.add(new MenuTag(R.string.build_and_run,mCEditorFregment.getActivity().getResources().getText(R.string.build_and_run) ));
+					menuTags.add(new MenuTag(R.string.build_and_run,getText(R.string.build_and_run) ));
 				}
-				menuTags.add(new MenuTag(R.string.build_so,mCEditorFregment.getActivity().getResources().getText(R.string.build_so) ));
+				menuTags.add(new MenuTag(R.string.build_so,getText(R.string.build_so) ));
 				
 				if(name.endsWith(".c")||
 						name.endsWith(".cpp"))
 				{
-					menuTags.add(new MenuTag(R.string.complie_to_s,mCEditorFregment.getActivity().getResources().getText(R.string.complie_to_s) ));
-					menuTags.add(new MenuTag(R.string.code_format, mCEditorFregment.getActivity().getResources().getText(R.string.code_format)));
+					menuTags.add(new MenuTag(R.string.complie_to_s,getText(R.string.complie_to_s) ));
+					menuTags.add(new MenuTag(R.string.code_format, getText(R.string.code_format)));
 				}
 				if(cProject!=null)
 				{
-					menuTags.add(new MenuTag(R.string.clean_objs, mCEditorFregment.getActivity().getResources().getText(R.string.clean_objs)));
+					menuTags.add(new MenuTag(R.string.clean_objs, getText(R.string.clean_objs)));
 				}
 			}
 		}
@@ -233,8 +329,8 @@ public class CEditor implements Window, EditorFregment.ChangeFlagChanged, OnClic
 		case R.string.run_shell_as_root:
 		case R.string.complie_to_s:
 		case R.string.build_so:
-			if(mCEditorFregment.isChanged())
-			if(!mCEditorFregment.save()){
+			if(isChanged())
+			if(!save()){
 				Toast.makeText(mWindowsManager.getContext(), R.string.save_fail, Toast.LENGTH_SHORT).show();
 			}
 			break;
@@ -243,7 +339,7 @@ public class CEditor implements Window, EditorFregment.ChangeFlagChanged, OnClic
 		}
 		
 		CProject cProject;
-		File file = mCEditorFregment.getFile();
+		File file = getFile();
 		switch(id){
 		case R.string.remote_browsing:
 			if(file!=null)
@@ -259,20 +355,20 @@ public class CEditor implements Window, EditorFregment.ChangeFlagChanged, OnClic
 		case R.string.local_browsing:
 			if(file!=null)
 			{
-				mWindowsManager.addWindow(new BrowserWindow(mWindowsManager, "file://"+mCEditorFregment.getFile().getAbsolutePath(), "file:"+file.getName() ));
+				mWindowsManager.addWindow(new BrowserWindow(mWindowsManager, "file://"+getFile().getAbsolutePath(), "file:"+file.getName() ));
 			}
 			break;
 		case R.string.pack_and_run:
-			cProject=CProject.findCProjectByFile(mCEditorFregment.getFile());
+			cProject=CProject.findCProjectByFile(getFile());
 			if(cProject!=null )
 			{
 				new PackageApk(mWindowsManager.getContext(), cProject).start();
 			}
 			break;
 		case R.string.build_and_run:
-			if(mCEditorFregment.getFile()!=null)
+			if(getFile()!=null)
 			{
-				cProject=CProject.findCProjectByFile(mCEditorFregment.getFile());
+				cProject=CProject.findCProjectByFile(getFile());
 				String cmd="";
 				String processName=null;
 				if(cProject!=null)
@@ -301,9 +397,9 @@ public class CEditor implements Window, EditorFregment.ChangeFlagChanged, OnClic
 				}
 				else{
 					//not a project 
-					cmd = GNUCCompiler.getCompilerAndRunCmd(mWindowsManager.getContext(), mCEditorFregment.getFile(),null);
+					cmd = GNUCCompiler.getCompilerAndRunCmd(mWindowsManager.getContext(), getFile(),null);
 					processName=GNUCCompiler.getRunCmdProcessName();
-					//cmd=TinyCCompiler.getCompilerAndRunCmd(mWindowsManager.getContext(), mCEditorFregment.getFile(),null);
+					//cmd=TinyCCompiler.getCompilerAndRunCmd(mWindowsManager.getContext(), getFile(),null);
 				}
 				Console console=new Console(mWindowsManager,cmd,true,getFile().getParent(), cProject!=null ? cProject.getBinFilePath(): getFile().getPath() );
 				console.setKillProcessName(processName);
@@ -311,33 +407,33 @@ public class CEditor implements Window, EditorFregment.ChangeFlagChanged, OnClic
 			}
 			break;
 		case R.string.run_shell:
-			if(mCEditorFregment.getFile()!=null)
+			if(getFile()!=null)
 			{
 				String cmd="";
-				cmd+=GNUCCompiler.getRunCmd(mCEditorFregment.getActivity(), mCEditorFregment.getFile());
+				cmd+=GNUCCompiler.getRunCmd(getContext(), getFile());
 				mWindowsManager.addWindow(new Console(mWindowsManager,cmd,true,getFile().getParent(),getFile().getPath()));
 			}
 			break;
 		case R.string.run_shell_as_root:
-			if(mCEditorFregment.getFile()!=null)
+			if(getFile()!=null)
 			{
 				String cmd="";
 				//cmd+="export APP_PATH=\""+mWindowsManager.getContext().getFilesDir().getAbsolutePath()+"\"\n";
-				cmd+=GNUCCompiler.getRunCmd(mCEditorFregment.getActivity(), mCEditorFregment.getFile());
+				cmd+=GNUCCompiler.getRunCmd(getContext(), getFile());
 				mWindowsManager.addWindow(new Console(mWindowsManager,cmd,true,true,getFile().getParent(),getFile().getPath()));
 			}
 			break;
 		case R.string.complie_to_s:
-			if(mCEditorFregment.getFile()!=null)
+			if(getFile()!=null)
 			{
-				cProject=CProject.findCProjectByFile(mCEditorFregment.getFile());
+				cProject=CProject.findCProjectByFile(getFile());
 				String cmd="";
 				if(cProject!=null)
 				{
 					List<File > files=cProject.getAllCFiles();
 					if(files.size()>0)
 					{
-						file = mCEditorFregment.getFile();
+						file = getFile();
 						File fileTo = new File(cProject.getBinPath()+"/"+file.getName()+".s");
 						cmd = GNUCCompiler.getCompilerSCmd(mWindowsManager.getContext(),file ,fileTo,null);
 					}
@@ -347,7 +443,7 @@ public class CEditor implements Window, EditorFregment.ChangeFlagChanged, OnClic
 								"'\n";
 				}else
 				{
-					file = mCEditorFregment.getFile();
+					file = getFile();
 					File fileTo = new File(file.getAbsolutePath()+".s");
 					cmd = GNUCCompiler.getCompilerSCmd(mWindowsManager.getContext(),file ,fileTo,null);
 				}
@@ -355,9 +451,9 @@ public class CEditor implements Window, EditorFregment.ChangeFlagChanged, OnClic
 			}
 			break;
 		case R.string.build_so:
-			if(mCEditorFregment.getFile()!=null)
+			if(getFile()!=null)
 			{
-				cProject=CProject.findCProjectByFile(mCEditorFregment.getFile());
+				cProject=CProject.findCProjectByFile(getFile());
 				String cmd="";
 				if(cProject!=null)
 				{
@@ -373,18 +469,18 @@ public class CEditor implements Window, EditorFregment.ChangeFlagChanged, OnClic
 								"'\n";
 				}else
 				{
-					cmd = GNUCCompiler.getCompilerSoCmd(mWindowsManager.getContext(), mCEditorFregment.getFile(),null);
+					cmd = GNUCCompiler.getCompilerSoCmd(mWindowsManager.getContext(), getFile(),null);
 				}
 				mWindowsManager.addWindow(new Console(mWindowsManager,cmd,true,getFile().getParent() , cProject!=null ? cProject.getSoFilePath(): getFile().getPath()));
 			}
 			break;
 		case R.string.code_format:
-			mCEditorFregment.codeFormat();
+			codeFormat();
 			break;
 		case R.string.clean_objs:
-			if(mCEditorFregment.getFile()!=null)
+			if(getFile()!=null)
 			{
-				cProject=CProject.findCProjectByFile(mCEditorFregment.getFile());
+				cProject=CProject.findCProjectByFile(getFile());
 				if(cProject!=null)
 				{
 					FileWork.deleteFile(new File(cProject.getObjPath()));
@@ -415,7 +511,7 @@ public class CEditor implements Window, EditorFregment.ChangeFlagChanged, OnClic
 			
 			break;
 		case DialogInterface.BUTTON_NEUTRAL://quit & save
-			if(mCEditorFregment.save()){
+			if(save()){
 				mIsAlive=false;
 				mWindowsManager.closeWindow(this);
 			}else{
@@ -434,8 +530,7 @@ public class CEditor implements Window, EditorFregment.ChangeFlagChanged, OnClic
 
 	@Override
 	public void onChangeWindow(WindowsManager manager) {
-		if(mCEditorFregment!=null)
-			mCEditorFregment.closeInputMethod();
+		closeInputMethod();
 	}
 
 	@Override
@@ -450,7 +545,7 @@ public class CEditor implements Window, EditorFregment.ChangeFlagChanged, OnClic
 	@Override
 	public boolean onRunButtonClick() {
 		
-		File file=mCEditorFregment.getFile();
+		File file=getFile();
 		if(file!=null)
 		{
 			String name = file.getName().toLowerCase();
@@ -491,7 +586,7 @@ public class CEditor implements Window, EditorFregment.ChangeFlagChanged, OnClic
 					name.endsWith(".xml")||
 					name.endsWith(".project") )
 			{
-				CProject cProject=CProject.findCProjectByFile(mCEditorFregment.getFile());
+				CProject cProject=CProject.findCProjectByFile(getFile());
 				if(cProject!=null)
 				{
 					/*
@@ -518,8 +613,8 @@ public class CEditor implements Window, EditorFregment.ChangeFlagChanged, OnClic
 	public String[] getResumeCmd() {
 		String []cmd = new String[3];
 		cmd[0] = getFile()!=null?getFile().getPath():null;
-		cmd[1] = ""+mCEditorFregment.getSelectionStart();
-		cmd[2] = ""+mCEditorFregment.getSelectionEnd();
+		cmd[1] = ""+getSelectionStart();
+		cmd[2] = ""+getSelectionEnd();
 		return cmd;
 	}
 
@@ -528,14 +623,26 @@ public class CEditor implements Window, EditorFregment.ChangeFlagChanged, OnClic
 		if(cmd==null)
 			return;
 		if(cmd.length==2){
-			mCEditorFregment = new EditorFregment(new File(cmd[0]));
-			mCEditorFregment.setChangeFlagChanged(this);
-			mCEditorFregment.setOnRunButtonClickListener(this);
+			if(!Setting.mConfig.mOtherConfig.mNewEditorEnable){
+				mCEditorFregment = new EditorFregment(new File(cmd[0]));
+				mCEditorFregment.setChangeFlagChanged(this);
+				mCEditorFregment.setOnRunButtonClickListener(this);
+			}else{
+				mNewCEditorFregment = new NewEditorFregment(new File(cmd[0]));
+				mNewCEditorFregment.setChangeFlagChanged(this);
+				mNewCEditorFregment.setOnRunButtonClickListener(this);
+			}
 		}
 		if(cmd.length==3){
-			mCEditorFregment = new EditorFregment(new File(cmd[0]));
-			mCEditorFregment.setChangeFlagChanged(this);
-			mCEditorFregment.setOnRunButtonClickListener(this);
+			if(!Setting.mConfig.mOtherConfig.mNewEditorEnable){
+				mCEditorFregment = new EditorFregment(new File(cmd[0]));
+				mCEditorFregment.setChangeFlagChanged(this);
+				mCEditorFregment.setOnRunButtonClickListener(this);
+			}else{
+				mNewCEditorFregment = new NewEditorFregment(new File(cmd[0]));
+				mNewCEditorFregment.setChangeFlagChanged(this);
+				mNewCEditorFregment.setOnRunButtonClickListener(this);
+			}
 			int start = 0;
 			int end = 0;
 			try {
@@ -543,7 +650,7 @@ public class CEditor implements Window, EditorFregment.ChangeFlagChanged, OnClic
 				end = Integer.parseInt(cmd[2]);
 			} catch (Exception e) {
 			}
-			mCEditorFregment.setInitSelection(start, end);
+			setInitSelection(start, end);
 		}
 	}
 

@@ -260,7 +260,7 @@ public class EditableWithLayout implements Editable,MyLayout {
 			return mSelectionEnd;
 		if(tag == MyInputConnection.COMPOSING )
 			return mComposingStart;
-		return 0;
+		return -1;
 	}
 
 	@Override
@@ -271,7 +271,7 @@ public class EditableWithLayout implements Editable,MyLayout {
 			return mSelectionStart;
 		if(tag == MyInputConnection.COMPOSING )
 			return mComposingEnd;
-		return 0;
+		return -1;
 	}
 
 	@Override
