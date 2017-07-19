@@ -3,6 +3,40 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
 
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_alignBottom="@+id/editor_button_more"
+        android:layout_below="@+id/linearlayout_toolbars" >
+
+        <com.editor.text.ScrollViewText
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent" >
+
+            <com.editor.text.HorScrollViewText
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:scrollbars="none" >
+
+                <com.editor.text.CodeEditor
+                    android:id="@+id/codeEditor"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent" >
+
+                    <person.wangchen11.editor.newedittext.NewEditText
+                        android:id="@+id/ccode_edittext"
+                        android:layout_width="fill_parent"
+                        android:layout_height="fill_parent"
+                        android:background="@null"
+                        android:textSize="15sp" >
+
+                        <requestFocus />
+                    </person.wangchen11.editor.newedittext.NewEditText>
+                </com.editor.text.CodeEditor>
+            </com.editor.text.HorScrollViewText>
+        </com.editor.text.ScrollViewText>
+    </RelativeLayout>
+
     <LinearLayout
         android:id="@+id/linearLayout_chars"
         android:layout_width="wrap_content"
@@ -33,8 +67,8 @@
 
     <ImageButton
         android:id="@+id/editor_button_more"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
         android:layout_above="@+id/linearLayout_chars"
         android:layout_alignParentRight="true"
         android:background="#00000000"
@@ -51,6 +85,7 @@
             android:id="@+id/code_type_spinner"
             android:layout_width="0dp"
             android:layout_height="36dp"
+            android:layout_gravity="center_vertical"
             android:layout_weight="2.6" />
 
         <ImageButton
@@ -118,79 +153,5 @@
         android:id="@+id/viewToShowPopupMenu1"
         android:layout_width="0dp"
         android:layout_height="0dp" />
-    
-    <RelativeLayout
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:layout_above="@+id/linearLayout_chars"
-        android:layout_alignParentLeft="true"
-        android:layout_below="@+id/linearlayout_toolbars" >
-
-        
-	<com.editor.text.ScrollViewText
-		android:layout_width="fill_parent"
-		android:layout_height="fill_parent">
-		<com.editor.text.HorScrollViewText
-			android:layout_width="fill_parent"
-			android:layout_height="fill_parent"
-			android:scrollbars="none">
-			<com.editor.text.CodeEditor
-				android:id="@+id/codeEditor"
-				android:layout_width="fill_parent"
-				android:layout_height="fill_parent">
-				<!-- 
-				<include
-					android:layout_width="fill_parent"
-					android:layout_height="50dp"
-					layout="@layout/file_label"/>
-				<View
-					android:layout_width="fill_parent"
-					android:layout_height="2dp"
-					android:background="#29b6f6"/>
-					 -->
-				<person.wangchen11.editor.newedittext.NewEditText
-					android:id="@+id/ccode_edittext"
-					android:layout_width="fill_parent"
-					android:layout_height="fill_parent"
-					android:textSize="15sp"
-					android:background="@null"/>
-			</com.editor.text.CodeEditor>
-			
-		</com.editor.text.HorScrollViewText>
-	</com.editor.text.ScrollViewText>
-	
-        <!-- 
-        <ScrollView
-            android:id="@+id/scrollView1"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent" >
-
-            <LinearLayout
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:orientation="vertical" >
-
-                <HorizontalScrollView
-                    android:id="@+id/horizontalScrollView2"
-                    android:layout_width="fill_parent"
-                    android:layout_height="fill_parent" >
-
-                    <LinearLayout
-                        android:layout_width="fill_parent"
-                        android:layout_height="fill_parent"
-                        android:orientation="horizontal" >
-
-                        <person.wangchen11.editor.newedittext.NewEditText
-                            android:id="@+id/ccode_edittext"
-                            android:layout_width="1000dp"
-                            android:layout_height="fill_parent"
-                            android:background="#00000000"
-                            android:gravity="top"
-                            android:text="NewEditText" />
-                    </LinearLayout>
-                </HorizontalScrollView>
-            </LinearLayout>
-        </ScrollView> -->
-    </RelativeLayout>
 
 </RelativeLayout>

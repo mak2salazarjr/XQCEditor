@@ -279,8 +279,8 @@ public class NewEditorFregment extends Fragment implements OnClickListener, Afte
 					mHandler.post(new Runnable() {
 						@Override
 						public void run() {
-							//if(mCodeEditText!=null)
-							//	mCodeEditText.setWarnAndError( CheckCodeAdapt.getCWarnAndErrors(checkInfos,mFile) );
+							if(mCodeEditText!=null)
+								mCodeEditText.setWarnAndError( CheckCodeAdapt.getCWarnAndErrors(checkInfos,mFile) );
 						}
 					});
 				}
@@ -408,7 +408,7 @@ public class NewEditorFregment extends Fragment implements OnClickListener, Afte
 			break;
 		case R.id.button_find:
 			str=((EditText)(mFindDialog.findViewById(R.id.et_find))).getText();
-			//if( !mCodeEditText.findString(str.toString()) )
+			if( !mCodeEditText.findString(str.toString()) )
 			{
 				if(mToast!=null)
 					mToast.cancel();
@@ -418,14 +418,14 @@ public class NewEditorFregment extends Fragment implements OnClickListener, Afte
 			break;
 		case R.id.button_replace:
 			str=((EditText)(mFindDialog.findViewById(R.id.et_replace))).getText();
-			//if( !mCodeEditText.replaceString(str.toString()) )
+			if( !mCodeEditText.replaceString(str.toString()) )
 			{
 			}
 			break;
 		case R.id.button_replace_find:
 			str=((EditText)(mFindDialog.findViewById(R.id.et_find))).getText();
 			str1=((EditText)(mFindDialog.findViewById(R.id.et_replace))).getText();
-			//if( !mCodeEditText.replaceFindString(str.toString(),str1.toString()) )
+			if( !mCodeEditText.replaceFindString(str.toString(),str1.toString()) )
 			{
 				if(mToast!=null)
 					mToast.cancel();
@@ -436,7 +436,7 @@ public class NewEditorFregment extends Fragment implements OnClickListener, Afte
 		case R.id.button_replace_all:
 			str=((EditText)(mFindDialog.findViewById(R.id.et_find))).getText();
 			str1=((EditText)(mFindDialog.findViewById(R.id.et_replace))).getText();
-			//if( !mCodeEditText.replaceAll(str.toString(),str1.toString()) )
+			if( !mCodeEditText.replaceAll(str.toString(),str1.toString()) )
 			{
 				if(mToast!=null)
 					mToast.cancel();
@@ -514,9 +514,9 @@ public class NewEditorFregment extends Fragment implements OnClickListener, Afte
 				try {
 					byte []data=null;
 					if(mCharset!=null)
-						data=mCodeEditText.getText().toString().getBytes(mCharset);
+						data=mCodeEditText.getTextEx().toString().getBytes(mCharset);
 					else
-						data=mCodeEditText.getText().toString().getBytes();
+						data=mCodeEditText.getTextEx().toString().getBytes();
 					fileOutputStream.write(data);
 					mIsChanged=false;
 					if(mChangeFlagChanged!=null)
@@ -581,7 +581,7 @@ public class NewEditorFregment extends Fragment implements OnClickListener, Afte
 			if(mCodeCheck!=null)
 				mCodeCheck.stop();
 		}
-		//mCodeEditText.setWarnAndError( null );
+		mCodeEditText.setWarnAndError( null );
 		
 	}
 	
@@ -672,7 +672,6 @@ public class NewEditorFregment extends Fragment implements OnClickListener, Afte
 	@Override
 	public void onItemSelected(AdapterView<?> parent, View view, int position,
 			long id) {
-		/*
 		switch (position) {
 		case 0:
 			mCodeEditText.setCodeType(CodeEditText.CodeType.TYPE_NONE);
@@ -698,14 +697,12 @@ public class NewEditorFregment extends Fragment implements OnClickListener, Afte
 		default:
 			mCodeEditText.setCodeType(CodeEditText.CodeType.TYPE_NONE);
 			break;
-		}*/
+		}
 	}
 	
 	public boolean codeFormat()
 	{
-		Editable editable = mCodeEditText.getText();
-		CCodeParser codeParser = new CCodeParser(editable.toString(), new CCodeKeywordsAdapter() {
-			
+		CCodeParser codeParser = new CCodeParser(mCodeEditText.getText().toString(), new CCodeKeywordsAdapter() {
 			@Override
 			public String[] getCCodeProKeywords() {
 				return CCodeKeywords.mProKeyWord;
@@ -719,7 +716,7 @@ public class NewEditorFregment extends Fragment implements OnClickListener, Afte
 		);
 		codeParser.run();
 		CCodeFormat codeFormat = new CCodeFormat(codeParser);
-		editable.replace(0, editable.length(), codeFormat.getFormatedCode());
+		mCodeEditText.setText(codeFormat.getFormatedCode());
 		return true;
 	}
 	

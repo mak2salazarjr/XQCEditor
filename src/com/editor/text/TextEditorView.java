@@ -14,7 +14,6 @@ import java.util.Stack;
 import java.util.regex.*;
 
 import person.wangchen11.editor.codeedittext.CodeStyleAdapter;
-import person.wangchen11.editor.edittext.AfterTextChangeListener;
 import person.wangchen11.window.ext.Setting;
 
 public class TextEditorView extends EditText {
@@ -34,6 +33,8 @@ public class TextEditorView extends EditText {
 	private Pattern string,keyword;
 	private Pattern pretreatment,builtin ;
 	private Pattern comment,trailingWhiteSpace ;
+	
+	private static String mRepaceTab = "    ";
 	
 	private Runnable updateThread = new Runnable() {
 		@Override
@@ -82,10 +83,12 @@ public class TextEditorView extends EditText {
 	
 	@Override
 	public void setText(CharSequence text, BufferType type) {
-		super.setText(text, type);
+		super.setText(replaceAllLineStartTab(text),type);
 		setPadding(getBoundOfLeft(), 0, 0, 0);
-		if(mAfterTextChangeListener != null)
-			mAfterTextChangeListener.afterTextChange();
+	}
+	
+	public String getTextEx(){
+		return replaceAllLineStartSpace(getText());
 	}
 	
 	public void initPattern() {
@@ -119,14 +122,7 @@ public class TextEditorView extends EditText {
 		@Override
 		public CharSequence filter(CharSequence source, int start, int end,
 								   Spanned dest, int dstart, int dend) {
-			if (modified && end - start == 1 && start < source.length()
-				&& dstart < dest.length()) {
-				char c = source.charAt(start);
-
-				if (c == '\n')
-					return autoIndent(source, start, end, dest, dstart,dend);
-			}
-			return source;
+			return autoIndent(source, start, end, dest, dstart,dend);
 		}
 	};
 
@@ -147,16 +143,19 @@ public class TextEditorView extends EditText {
         public void onTextChanged(CharSequence s, int start, int before, int count) {
     		//saved to history to be undo or redo 
     		if(mSaveToHistory){
+    			mRedoBodies.clear();
     			if(mMaxSaveHistory>0){
     				if(mUndoBodies.size()>mMaxSaveHistory)
     					mUndoBodies.remove(0);
-    				ReplaceBody body=new ReplaceBody(beforeStart, beforEnd, beforCharSequence,s.subSequence(start, start+count), 0, count, 0, 0);
+    				ReplaceBody body=new ReplaceBody(beforeStart, beforEnd, beforCharSequence,s.subSequence(start, start+count), 0, count, getSelectionStart(), getSelectionEnd());
     				if(!mUndoBodies.isEmpty() && mUndoBodies.peek().addBody(body))
     				{
     				}
     				else
     					mUndoBodies.push(body);
     			}
+    		}else{
+    			setSelection(start, start+count);
     		}
     		
         	Log.i(TAG, "onTextChanged"+":"+start+":"+before+":"+count);
@@ -166,8 +165,7 @@ public class TextEditorView extends EditText {
         public void afterTextChanged(Editable edit) {
         	Log.i(TAG, "afterTextChanged");
 			setPadding(getBoundOfLeft(), 0, 0, 0);
-			if(mAfterTextChangeListener != null)
-				mAfterTextChangeListener.afterTextChange();
+			TextEditorView.this.afterTextChanged(edit);
 			
 			cancelUpdate();
 			if (!modified)
@@ -175,8 +173,11 @@ public class TextEditorView extends EditText {
 			mUpdateHandler.postDelayed(updateThread, updateDelay);
         }
 	};
+	
 
-
+	public void afterTextChanged(Editable s) {
+	}
+	
 
 	public void setTextHighlighted(CharSequence text) {
 		cancelUpdate();
@@ -274,59 +275,72 @@ public class TextEditorView extends EditText {
 
 	public CharSequence autoIndent(CharSequence source, int start, int end,
 									Spanned dest, int dstart, int dend) {
-		String indent = "";
-		int istart = dstart - 1;
-		int iend = -1;
-
-		boolean dataBefore = false;
-		int pt = 0;
-
-		for (; istart > -1; --istart) {
-			char c = dest.charAt(istart);
-
-			if (c == '\n')
-				break;
-
-			if (c != ' ' && c != '\t') {
-				if (!dataBefore) {
-					if (c == '{' || c == '+' || c == '-' || c == '*'
-						|| c == '/' || c == '%' || c == '^' || c == '=')
-						--pt;
-
-					dataBefore = true;
-				}
-
-				if (c == '(')
-					--pt;
-				else if (c == ')')
-					++pt;
-			}
+		//Log.i(TAG, "autoIndent:"+source+":"+start+":"+end+":"+dest+":"+dstart+":"+dend);
+		if( (end-start==1)&&(source.charAt(start)=='\n')){
+			return newLine(dest,dstart);
 		}
-
-		if (istart > -1) {
-			char charAtCursor = dest.charAt(dstart);
-
-			for (iend = ++istart; iend < dend; ++iend) {
-				char c = dest.charAt(iend);
-
-				if (charAtCursor != '\n' && c == '/' && iend + 1 < dend
-					&& dest.charAt(iend) == c) {
-					iend += 2;
-					break;
-				}
-
-				if (c != ' ' && c != '\t')
-					break;
-			}
-
-			indent += dest.subSequence(istart, iend);
-		}
-
-		if (pt < 0)
-			indent += "\t";
-
-		return source + indent;
+		return source;
 	}
+	
+
+	public CharSequence newLine(CharSequence editable,int position){
+		int numberOfNull=0; //一个'\t' 4个空格 
+		int numberOfK=0;
+		for(int index=position-1;index>=0;index--){
+			//向前查找 '{' 
+			char indexch=editable.charAt(index);
+			if(indexch=='\n')
+				break;
+			if(indexch==' '){
+				numberOfNull++;
+			}else
+			if(indexch=='\t'){
+				numberOfNull+=4;
+			}else
+			if(indexch=='{')
+			{
+				numberOfK+=4;
+			}else{
+				numberOfNull=0;
+			}
+		}
+		
+		for(int index=position;index<editable.length();index++){
+			//向后查找 '}' 
+			char indexch=editable.charAt(index);
+			if(indexch=='\n')
+				break;
+			if(indexch==' '){
+			}else
+			if(indexch=='\t'){
+			}else
+			if(indexch=='}')
+			{
+				numberOfK-=4;
+			}
+		}
+		if(numberOfK<0)
+			numberOfK=0;
+		numberOfNull+=numberOfK;
+		if(numberOfNull<0)
+			numberOfNull=0;
+		int end=position;
+		for(;end<editable.length()-1;end++){
+			char indexch=editable.charAt(end);
+			if( !(indexch == '\t' || indexch == ' ') )
+				break;
+		}
+		String str="\n";
+		for(;numberOfNull>=4;numberOfNull-=4){
+			str+=mRepaceTab;
+		}
+		for(;numberOfNull>0;numberOfNull--){
+			str+=' ';
+		}
+		
+		return str;
+	}
+	
 
 	public boolean gotoLine(int line) {
 		--line;
@@ -475,16 +489,6 @@ public class TextEditorView extends EditText {
 		mSaveToHistory = false;
 		getEditableText().replace(replaceBody.mSt, replaceBody.mEn, replaceBody.mText, replaceBody.mStart, replaceBody.mEnd);
 		mSaveToHistory = true;
-		if(replaceBody.mText==null || replaceBody.mText.length()==0 || replaceBody.mEnd-replaceBody.mStart==0 )
-		{
-			//mSelectionStart=replaceBody.mSt;
-			//mSelectionEnd=mSelectionStart;
-		}
-		else
-		{
-			//mSelectionStart=replaceBody.mSt;
-			//mSelectionEnd=replaceBody.mSt+replaceBody.mEnd-replaceBody.mStart;
-		}
 		return true;
 	}
 	
@@ -501,27 +505,8 @@ public class TextEditorView extends EditText {
 		mSaveToHistory = false;
 		getEditableText().replace(replaceBody.mSt, replaceBody.mEn, replaceBody.mText, replaceBody.mStart, replaceBody.mEnd);
 		mSaveToHistory = true;
-		if(replaceBody.mText==null || replaceBody.mText.length()==0 || replaceBody.mEnd-replaceBody.mStart==0 )
-		{
-			//mSelectionStart=replaceBody.mSt;
-			//mSelectionEnd=mSelectionStart;
-		}
-		else
-		{
-			//mSelectionStart=replaceBody.mSt;
-			//mSelectionEnd=replaceBody.mSt+replaceBody.mEnd-replaceBody.mStart;
-		}
 		return true;
 	}
-
-	public void insertText(String string) {
-	}
-
-	private AfterTextChangeListener mAfterTextChangeListener = null;
-	public void setAfterTextChangeListener(AfterTextChangeListener afterTextChangeListener) {
-		mAfterTextChangeListener = afterTextChangeListener;
-	}
-
 
 	class ReplaceBody {
 		int mSt;
@@ -592,5 +577,144 @@ public class TextEditorView extends EditText {
 			}
 			return false;
 		}
+	}
+	
+	public boolean findString(String string) {
+		int index=getText().toString().indexOf(string, getSelectionEnd());
+		if(index == -1)
+			return false;
+		setSelection(index, index+string.length());
+		return true;
+	}
+
+	public boolean insertText(String str){
+		str = str.replaceAll("\t", mRepaceTab );
+		getText().replace(getSelectionStart(), getSelectionEnd(), str);
+		return true;
+	}
+	
+	public boolean replaceString(String str){
+		if(getSelectionStart()==getSelectionEnd())
+			return false;
+		insertText(str);
+		return true;
+	}
+	
+	public boolean replaceFindString(String find,String replace){
+		if(find.length() <= 0)
+			return false;
+		setSelection(getSelectionStart());
+		if(!findString(find))
+			return false;
+		replaceString(replace);
+		return true;
+	}
+	
+	public boolean replaceAll(String find,String replace){
+		int start=getSelectionStart();
+		int end = getSelectionEnd();
+		boolean finded=false;
+		setSelection(0);
+		while(replaceFindString(find,replace))
+		{
+			finded=true;
+		}
+		if(!finded)
+			setSelection(start, end);
+		return finded;
+	}
+
+	private static String getNStr(int n,String str){
+		StringBuilder builder = new StringBuilder();
+		for(;n>0;n--)
+			builder.append(str);
+		return builder.toString();
+	}
+	
+	private static String replaceAllLineStartTab(CharSequence str){
+		StringBuilder stringBuilder = new StringBuilder();
+		boolean newLine = true;
+		int spaceNumber = 0;
+		for(int i=0;i<str.length();i++){
+			char ch = str.charAt(i);
+			if(ch=='\n'){
+				if(spaceNumber!=0){
+					stringBuilder.append(getNStr(spaceNumber," "));
+					spaceNumber = 0;
+				}
+				
+				newLine = true;
+				stringBuilder.append(ch);
+			}else{
+				if(newLine){
+					if(ch == '\t'){
+						spaceNumber+=mRepaceTab.length();
+					}else if(ch == ' '){
+						spaceNumber++;
+					}else{
+						if(spaceNumber!=0){
+							stringBuilder.append(getNStr(spaceNumber," "));
+							spaceNumber = 0;
+						}
+						
+						newLine = false;
+						stringBuilder.append(ch);
+					}
+				}else{
+					stringBuilder.append(ch);
+				}
+			}
+		}
+		if(spaceNumber!=0){
+			stringBuilder.append(getNStr(spaceNumber," "));
+			spaceNumber = 0;
+		}
+		
+		return stringBuilder.toString();
+	}
+	
+	private static String replaceAllLineStartSpace(CharSequence str){
+		StringBuilder stringBuilder = new StringBuilder();
+		boolean newLine = true;
+		int spaceNumber = 0;
+		for(int i=0;i<str.length();i++){
+			char ch = str.charAt(i);
+			if(ch=='\n'){
+				if(spaceNumber!=0){
+					stringBuilder.append(getNStr(spaceNumber/mRepaceTab.length(),"\t"));
+					stringBuilder.append(getNStr(spaceNumber%mRepaceTab.length()," "));
+					spaceNumber = 0;
+				}
+				
+				newLine = true;
+				stringBuilder.append(ch);
+			}else{
+				if(newLine){
+					if(ch == '\t'){
+						spaceNumber+=mRepaceTab.length();
+					}else if(ch == ' '){
+						spaceNumber++;
+					}else{
+						if(spaceNumber!=0){
+							stringBuilder.append(getNStr(spaceNumber/mRepaceTab.length(),"\t"));
+							stringBuilder.append(getNStr(spaceNumber%mRepaceTab.length()," "));
+							spaceNumber = 0;
+						}
+						
+						newLine = false;
+						stringBuilder.append(ch);
+					}
+				}else{
+					stringBuilder.append(ch);
+				}
+			}
+		}
+		if(spaceNumber!=0){
+			stringBuilder.append(getNStr(spaceNumber/mRepaceTab.length(),"\t"));
+			stringBuilder.append(getNStr(spaceNumber%mRepaceTab.length()," "));
+			spaceNumber = 0;
+		}
+		
+		return stringBuilder.toString();
 	}
 }

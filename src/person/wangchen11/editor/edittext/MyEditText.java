@@ -1158,7 +1158,14 @@ public class MyEditText extends View implements OnGestureListener,TextWatcher, O
 		return setSelection(index, index+str.length());
 	}
 	
+	public boolean insertText(String str){
+		getText().replace(getSelectionStart(), getSelectionEnd(), str);
+		return true;
+	}
+	
 	public boolean replaceString(String str){
+		if(getSelectionStart()==getSelectionEnd())
+			return false;
 		getText().replace(getSelectionStart(), getSelectionEnd(), str);
 		return true;
 	}
