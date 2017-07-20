@@ -1,7 +1,6 @@
 package person.wangchen11.editor.newedittext;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
@@ -19,7 +18,6 @@ import person.wangchen11.editor.codeedittext.OnNeedChangeWants;
 import person.wangchen11.editor.codeedittext.PHPCodeStyleAdapter;
 import person.wangchen11.editor.codeedittext.ShellCodeStyleAdapter;
 import person.wangchen11.editor.edittext.AfterTextChangeListener;
-import person.wangchen11.editor.edittext.EditableWithLayout;
 import person.wangchen11.editor.edittext.SpanBody;
 import person.wangchen11.editor.edittext.WarnAndError;
 import person.wangchen11.gnuccompiler.GNUCCompiler;
@@ -119,9 +117,9 @@ public class NewEditText extends TextEditorView implements CodeStypeAdapterListe
 			}
 			else
 			{
-				EditableWithLayout editableWithLayout=(EditableWithLayout)getText();
-				editableWithLayout.applyColorSpans(new ArrayList<SpanBody>());
-				postInvalidate();
+				//EditableWithLayout editableWithLayout=getText();
+				//editableWithLayout.applyColorSpans(new ArrayList<SpanBody>());
+				//postInvalidate();
 			}
 			if(runnable!=null)
 				mExecutor.execute(runnable);
