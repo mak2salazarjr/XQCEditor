@@ -4,46 +4,24 @@ import android.content.*;
 import android.graphics.*;
 import android.os.*;
 import android.text.*;
-import android.text.style.*;
 import android.util.*;
 import android.view.*;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.*;
 
 import java.util.Stack;
-import java.util.regex.*;
-
-import person.wangchen11.editor.codeedittext.CodeStyleAdapter;
 import person.wangchen11.window.ext.Setting;
 
 public class TextEditorView extends EditText {
 	private static final String TAG = "TextEditorView";
 	private Paint mTextPaint;
-	private Handler mUpdateHandler ;
-	private int updateDelay,errorLine;
-	private boolean modified = true;
 	private float mSpaceWidth = 0;
 	
 	private boolean mSaveToHistory = true;
 	private int mMaxSaveHistory = 20;
 	private Stack<ReplaceBody> mUndoBodies = new Stack<ReplaceBody>();
 	private Stack<ReplaceBody> mRedoBodies = new Stack<ReplaceBody>();
-
-	private Pattern line,number,headfile;
-	private Pattern string,keyword;
-	private Pattern pretreatment,builtin ;
-	private Pattern comment,trailingWhiteSpace ;
-	
-	private static String mRepaceTab = "    ";
-	
-	private Runnable updateThread = new Runnable() {
-		@Override
-		public void run() {
-			Editable edit = getText();
-			highlightWithoutChange(edit);
-		}
-	};
-
+	private static String mReplaceTab = "    ";
 
 	public TextEditorView(Context context) {
 		super(context, null);
@@ -62,12 +40,11 @@ public class TextEditorView extends EditText {
 		mTextPaint.setAntiAlias(true);
 		mTextPaint.setColor(0xff888888);
 		setHorizontallyScrolling(true);
-		mUpdateHandler = new Handler();
+		new Handler();
 		setFilters(new InputFilter[] {inputFilter});
 		addTextChangedListener(watcher);
 		setTextScale(Setting.mConfig.mEditorConfig.mFontScale);
 		setLineSpacing(0, 1.12f*Setting.mConfig.mEditorConfig.mLineScale);
-		initPattern();
 	}
 
 	private float mTextScale = 1.0f;
@@ -91,22 +68,6 @@ public class TextEditorView extends EditText {
 		return replaceAllLineStartSpace(getText());
 	}
 	
-	public void initPattern() {
-		line = Pattern.compile(".*\\n");
-		headfile =Pattern.compile("#\\b(include)\\b\\s*<\\w*(/?.*/?)[\\w+|h]>[^\"]");
-		number = Pattern.compile("\\b(\\d*[.]?\\d+)\\b");
-		string = Pattern.compile("\"(\\\"|.)*?\"");
-		keyword = Pattern.compile("[^<,\",|]\\b(auto|int|short|double|float|void|long|signed|unsigned|char|struct|public|protected|private|class|union|bool|string|vector|typename|"
-								   + "do|for|while|if|else|switch|case|default|new|delete|true|false|typedef|static|const|register|extern|volatile|"
-								   + "goto|return|continue|break|using|namespace|try|catch|import|package)\\b[^>,|\"]");
-		pretreatment = Pattern.compile("[^\"]#\\b(ifdef|ifndef|define|undef|if|else|elif|endif|pragma|"
-									   + "error|line)\\b[\\s|\\S].*[^\"]");
-		builtin = Pattern.compile("[^\"]\\b(printf|scanf|std::|cout|cin|cerr|clog|endl|template|"
-								   + "sizeof)\\b[^\"]");		
-		comment = Pattern.compile("/\\*(.|[\r\n])*?(\\*/)|/\\*(.|[\r\n])*|[^\"](?<!:)//.*[^\"]");
-		trailingWhiteSpace = Pattern.compile("[\\t ]+$", Pattern.MULTILINE);
-	}
-
 	public float dip2px(Context context, float dpValue) {
 		float scale =context.getResources().getDisplayMetrics().density;
 		return dpValue * scale + 0.5f;
@@ -166,11 +127,6 @@ public class TextEditorView extends EditText {
         	Log.i(TAG, "afterTextChanged");
 			setPadding(getBoundOfLeft(), 0, 0, 0);
 			TextEditorView.this.afterTextChanged(edit);
-			
-			cancelUpdate();
-			if (!modified)
-				return;
-			mUpdateHandler.postDelayed(updateThread, updateDelay);
         }
 	};
 	
@@ -179,6 +135,7 @@ public class TextEditorView extends EditText {
 	}
 	
 
+	/*
 	public void setTextHighlighted(CharSequence text) {
 		cancelUpdate();
 
@@ -188,14 +145,6 @@ public class TextEditorView extends EditText {
 		modified = true;
 	}
 
-
-
-	public String getCleanText() {
-		return trailingWhiteSpace.matcher(getText()).replaceAll("");
-	}
-
-	
-	
 	public void refresh() {
 		highlightWithoutChange(getText());
 	}
@@ -205,13 +154,13 @@ public class TextEditorView extends EditText {
 		mUpdateHandler.removeCallbacks(updateThread);
 	}
 	
-
 	public void highlightWithoutChange(Editable e) {
 		modified = false;
 		highlight(e);
 		modified = true;
 	}
 
+	
 	public Editable highlight(Editable edit) {
 		Log.i(TAG, "highlight:"+edit.length());
 		try {
@@ -271,7 +220,7 @@ public class TextEditorView extends EditText {
 		for (int n = backSpan.length; n-- > 0;)
 			e.removeSpan(backSpan[n]);
 
-	}
+	}*/
 
 	public CharSequence autoIndent(CharSequence source, int start, int end,
 									Spanned dest, int dstart, int dend) {
@@ -332,7 +281,7 @@ public class TextEditorView extends EditText {
 		}
 		String str="\n";
 		for(;numberOfNull>=4;numberOfNull-=4){
-			str+=mRepaceTab;
+			str+=mReplaceTab;
 		}
 		for(;numberOfNull>0;numberOfNull--){
 			str+=' ';
@@ -359,7 +308,6 @@ public class TextEditorView extends EditText {
 
 	@Override
 	protected void onDraw(Canvas canvas) {
-		// TODO: Implement this method
 		super.onDraw(canvas);
 		canvas.save();
 		drawText(canvas);
@@ -588,7 +536,7 @@ public class TextEditorView extends EditText {
 	}
 
 	public boolean insertText(String str){
-		str = str.replaceAll("\t", mRepaceTab );
+		str = str.replaceAll("\t", mReplaceTab );
 		getText().replace(getSelectionStart(), getSelectionEnd(), str);
 		return true;
 	}
@@ -648,7 +596,7 @@ public class TextEditorView extends EditText {
 			}else{
 				if(newLine){
 					if(ch == '\t'){
-						spaceNumber+=mRepaceTab.length();
+						spaceNumber+=mReplaceTab.length();
 					}else if(ch == ' '){
 						spaceNumber++;
 					}else{
@@ -681,8 +629,8 @@ public class TextEditorView extends EditText {
 			char ch = str.charAt(i);
 			if(ch=='\n'){
 				if(spaceNumber!=0){
-					stringBuilder.append(getNStr(spaceNumber/mRepaceTab.length(),"\t"));
-					stringBuilder.append(getNStr(spaceNumber%mRepaceTab.length()," "));
+					stringBuilder.append(getNStr(spaceNumber/mReplaceTab.length(),"\t"));
+					stringBuilder.append(getNStr(spaceNumber%mReplaceTab.length()," "));
 					spaceNumber = 0;
 				}
 				
@@ -691,13 +639,13 @@ public class TextEditorView extends EditText {
 			}else{
 				if(newLine){
 					if(ch == '\t'){
-						spaceNumber+=mRepaceTab.length();
+						spaceNumber+=mReplaceTab.length();
 					}else if(ch == ' '){
 						spaceNumber++;
 					}else{
 						if(spaceNumber!=0){
-							stringBuilder.append(getNStr(spaceNumber/mRepaceTab.length(),"\t"));
-							stringBuilder.append(getNStr(spaceNumber%mRepaceTab.length()," "));
+							stringBuilder.append(getNStr(spaceNumber/mReplaceTab.length(),"\t"));
+							stringBuilder.append(getNStr(spaceNumber%mReplaceTab.length()," "));
 							spaceNumber = 0;
 						}
 						
@@ -710,8 +658,8 @@ public class TextEditorView extends EditText {
 			}
 		}
 		if(spaceNumber!=0){
-			stringBuilder.append(getNStr(spaceNumber/mRepaceTab.length(),"\t"));
-			stringBuilder.append(getNStr(spaceNumber%mRepaceTab.length()," "));
+			stringBuilder.append(getNStr(spaceNumber/mReplaceTab.length(),"\t"));
+			stringBuilder.append(getNStr(spaceNumber%mReplaceTab.length()," "));
 			spaceNumber = 0;
 		}
 		
