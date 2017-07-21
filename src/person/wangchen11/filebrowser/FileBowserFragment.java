@@ -537,7 +537,7 @@ public class FileBowserFragment extends Fragment implements OnItemClickListener,
 		if(mFileListAdapter.mPath==null)
 			return false;
 		for(int i=0;i<1000;i++){
-			File file = new File(mFileListAdapter.mPath.getPath()+File.separatorChar+(i==0?"newfile.cpp":"newfile("+i+").cpp"));
+			File file = new File(mFileListAdapter.mPath.getPath()+File.separatorChar+(i==0?"newfile.c":"newfile("+i+").c"));
 			if(file.isDirectory()||file.isFile())
 				continue;
 			try {
