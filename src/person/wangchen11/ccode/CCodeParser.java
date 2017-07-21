@@ -290,8 +290,8 @@ public class CCodeParser implements Runnable{
 			for( File tf : incFiles )
 			{
 				String name = tf.getName();
-				Log.i(TAG, "name:"+name.toLowerCase());
-				Log.i(TAG, "end:"+end.toLowerCase());
+				//Log.i(TAG, "name:"+name.toLowerCase());
+				//Log.i(TAG, "end:"+end.toLowerCase());
 				if(name.toLowerCase().startsWith(end.toLowerCase()))
 				{
 					if(tf.isDirectory())
@@ -759,10 +759,10 @@ public class CCodeParser implements Runnable{
 				}
 			}
 		}
-		Log.i(TAG, "getLineByPos:NULL,start:"+start+" end:"+end+" pos:"+pos);
+		//Log.i(TAG, "getLineByPos:NULL,start:"+start+" end:"+end+" pos:"+pos);
 		if(start>pos||end<pos)
 			return "";
-		Log.i(TAG, "getLineByPos:"+new String(mCode,start,end-start));
+		//Log.i(TAG, "getLineByPos:"+new String(mCode,start,end-start));
 		return new String(mCode,start,end-start) ;
 	}
 	

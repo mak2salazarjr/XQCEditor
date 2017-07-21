@@ -118,7 +118,7 @@ public class TextEditorView extends EditText {
     		}else{
     			setSelection(start, start+count);
     		}
-    		
+    		TextEditorView.this.onTextChanged(s,start,before,count);
         	Log.i(TAG, "onTextChanged"+":"+start+":"+before+":"+count);
         }
 
@@ -131,9 +131,11 @@ public class TextEditorView extends EditText {
 	};
 	
 
-	public void afterTextChanged(Editable s) {
+	public void afterTextChanged(Editable edit) {
 	}
 	
+	public void onTextChanged(CharSequence s, int start, int before, int count){
+	}
 
 	/*
 	public void setTextHighlighted(CharSequence text) {
@@ -359,7 +361,7 @@ public class TextEditorView extends EditText {
 		}
 		else
 			setMeasuredDimension(layout.getWidth(), layout.getHeight());
-		Log.i(TAG, "onMeasure used:"+(System.currentTimeMillis()-timeStart));
+		//Log.i(TAG, "onMeasure used:"+(System.currentTimeMillis()-timeStart));
 		
 	}
 

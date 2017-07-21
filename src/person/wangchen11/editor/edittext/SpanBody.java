@@ -1,10 +1,10 @@
 package person.wangchen11.editor.edittext;
 
 public class SpanBody{
-	Object mSpan;
-	int mStart;
-	int mEnd;
-	int mFlag;
+	public Object mSpan;
+	public int mStart;
+	public int mEnd;
+	public int mFlag;
 	public SpanBody(Object span,int start,int end,int flag) {
 		mSpan=span;
 		mStart=start;
