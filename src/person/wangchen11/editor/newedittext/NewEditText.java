@@ -17,10 +17,12 @@ import person.wangchen11.editor.codeedittext.JavaCodeStyleAdapter;
 import person.wangchen11.editor.codeedittext.OnNeedChangeWants;
 import person.wangchen11.editor.codeedittext.PHPCodeStyleAdapter;
 import person.wangchen11.editor.codeedittext.ShellCodeStyleAdapter;
+import person.wangchen11.editor.codeedittext.TextCodeStyleAdapter;
 import person.wangchen11.editor.edittext.AfterTextChangeListener;
 import person.wangchen11.editor.edittext.SpanBody;
 import person.wangchen11.editor.edittext.WarnAndError;
 import person.wangchen11.gnuccompiler.GNUCCompiler;
+import person.wangchen11.window.ext.Setting;
 
 import com.editor.text.TextEditorView;
 
@@ -138,7 +140,8 @@ public class NewEditText extends TextEditorView implements CodeStypeAdapterListe
 			mExecutor=Executors.newSingleThreadExecutor();
 		}
 		try {
-			Log.i(TAG, "mExecutor.execute:"+getText());
+			Log.i(TAG, "mExecutor.execute");
+			Log.i(TAG, "updateCodeStyle:"+mCodeType);
 			File file=(getTag() instanceof File )?((File)getTag()):null;
 			String path="";
 			if(file !=null)
@@ -171,7 +174,7 @@ public class NewEditText extends TextEditorView implements CodeStypeAdapterListe
 			}
 			else
 			{
-				runnable=new JavaCodeStyleAdapter(getText().toString(),getCursor(),"","",getHandler(),this);
+				runnable=new TextCodeStyleAdapter(getHandler(),getText().length(), this);
 				//EditableWithLayout editableWithLayout=getText();
 				//editableWithLayout.applyColorSpans(new ArrayList<SpanBody>());
 				//postInvalidate();
@@ -198,6 +201,14 @@ public class NewEditText extends TextEditorView implements CodeStypeAdapterListe
 	public void parserComplete(CodeStyleAdapter adapter,List<SpanBody> spanBodies) {
 		Log.i(TAG, "parserComplete");
 		long startTime = System.currentTimeMillis();
+		if (!Setting.mConfig.mCEditorConfig.mEnableHighLight) {
+			Editable editable = getText();
+			ForegroundColorSpan foreSpans[] = editable.getSpans(0,
+					editable.length(), ForegroundColorSpan.class);
+			for (int n = foreSpans.length; n-- > 0;)
+				editable.removeSpan(foreSpans[n]);
+		}
+		else
 		if(checkLength()==adapter.length())
 		{
 			Editable editable = getText();
@@ -244,8 +255,10 @@ public class NewEditText extends TextEditorView implements CodeStypeAdapterListe
 	}
 
 	public void setCodeType(CodeType type) {
+		Log.i(TAG, "setCodeType:"+type);
 		mValidHeadLen = 0;
 		mValidTailLen = 0;
 		mCodeType = type;
+		postUpdateCodeStyle();
 	}
 }
