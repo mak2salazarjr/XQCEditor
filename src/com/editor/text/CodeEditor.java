@@ -262,6 +262,7 @@ public class CodeEditor extends ViewGroup {
 
 	public void showIME(boolean show) {
 		if (show) {
+			textEditor.setSelection(textEditor.getText().length());
 			imm.showSoftInput(textEditor, 0);
 
 		} else {
