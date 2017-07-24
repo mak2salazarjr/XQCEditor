@@ -10,6 +10,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.*;
 
 import java.util.Stack;
+
 import person.wangchen11.window.ext.Setting;
 
 public class TextEditorView extends EditText {
@@ -21,7 +22,6 @@ public class TextEditorView extends EditText {
 	private int mMaxSaveHistory = 20;
 	private Stack<ReplaceBody> mUndoBodies = new Stack<ReplaceBody>();
 	private Stack<ReplaceBody> mRedoBodies = new Stack<ReplaceBody>();
-	private static String mReplaceTab = "    ";
 
 	public TextEditorView(Context context) {
 		super(context, null);
@@ -33,6 +33,14 @@ public class TextEditorView extends EditText {
 	}
 
 	public void init(Context context) {
+		setEditableFactory(new Editable.Factory(){
+			@Override
+			public Editable newEditable(CharSequence source) {
+				return new QuicklySpannableStringBuilder(source);
+				//return new MyEditable(source);
+				//return super.newEditable(source);
+			}
+		});
 		setGravity(Gravity.TOP);
 		getPaint().setTypeface(Typeface.MONOSPACE);
 		getPaint().setColor(Setting.mConfig.mEditorConfig.mBaseFontColor);
@@ -60,12 +68,13 @@ public class TextEditorView extends EditText {
 	
 	@Override
 	public void setText(CharSequence text, BufferType type) {
-		super.setText(replaceAllLineStartTab(text),type);
+		super.setText(text,type);
 		setPadding(getBoundOfLeft(), 0, 0, 0);
 	}
 	
 	public String getTextEx(){
-		return replaceAllLineStartSpace(getText());
+		Log.i(TAG, "text:"+getText().getClass());
+		return getText().toString();
 	}
 	
 	public float dip2px(Context context, float dpValue) {
@@ -118,6 +127,16 @@ public class TextEditorView extends EditText {
     		}else{
     			setSelection(start, start+count);
     		}
+    		
+    		//set table span
+    		if(count>0){
+    			for(int i = 0;i<count;i++){
+    				if(s.charAt(start+i)=='\t'){
+    					//getText().setSpan(new TableSpan(), start+i, start+i+1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+    				}
+    			}
+    		}
+    		
     		TextEditorView.this.onTextChanged(s,start,before,count);
         	Log.i(TAG, "onTextChanged"+":"+start+":"+before+":"+count);
         }
@@ -283,7 +302,7 @@ public class TextEditorView extends EditText {
 		}
 		String str="\n";
 		for(;numberOfNull>=4;numberOfNull-=4){
-			str+=mReplaceTab;
+			str+="\t";
 		}
 		for(;numberOfNull>0;numberOfNull--){
 			str+=' ';
@@ -353,7 +372,7 @@ public class TextEditorView extends EditText {
 
 	@Override
 	protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-		long timeStart = System.currentTimeMillis();
+		//long timeStart = System.currentTimeMillis();
 		Layout layout = getLayout();
 		if(layout==null){
 			super.onMeasure(widthMeasureSpec, heightMeasureSpec);
@@ -538,7 +557,6 @@ public class TextEditorView extends EditText {
 	}
 
 	public boolean insertText(String str){
-		str = str.replaceAll("\t", mReplaceTab );
 		getText().replace(getSelectionStart(), getSelectionEnd(), str);
 		return true;
 	}
@@ -572,99 +590,5 @@ public class TextEditorView extends EditText {
 		if(!finded)
 			setSelection(start, end);
 		return finded;
-	}
-
-	private static String getNStr(int n,String str){
-		StringBuilder builder = new StringBuilder();
-		for(;n>0;n--)
-			builder.append(str);
-		return builder.toString();
-	}
-	
-	private static String replaceAllLineStartTab(CharSequence str){
-		StringBuilder stringBuilder = new StringBuilder();
-		boolean newLine = true;
-		int spaceNumber = 0;
-		for(int i=0;i<str.length();i++){
-			char ch = str.charAt(i);
-			if(ch=='\n'){
-				if(spaceNumber!=0){
-					stringBuilder.append(getNStr(spaceNumber," "));
-					spaceNumber = 0;
-				}
-				
-				newLine = true;
-				stringBuilder.append(ch);
-			}else{
-				if(newLine){
-					if(ch == '\t'){
-						spaceNumber+=mReplaceTab.length();
-					}else if(ch == ' '){
-						spaceNumber++;
-					}else{
-						if(spaceNumber!=0){
-							stringBuilder.append(getNStr(spaceNumber," "));
-							spaceNumber = 0;
-						}
-						
-						newLine = false;
-						stringBuilder.append(ch);
-					}
-				}else{
-					stringBuilder.append(ch);
-				}
-			}
-		}
-		if(spaceNumber!=0){
-			stringBuilder.append(getNStr(spaceNumber," "));
-			spaceNumber = 0;
-		}
-		
-		return stringBuilder.toString();
-	}
-	
-	private static String replaceAllLineStartSpace(CharSequence str){
-		StringBuilder stringBuilder = new StringBuilder();
-		boolean newLine = true;
-		int spaceNumber = 0;
-		for(int i=0;i<str.length();i++){
-			char ch = str.charAt(i);
-			if(ch=='\n'){
-				if(spaceNumber!=0){
-					stringBuilder.append(getNStr(spaceNumber/mReplaceTab.length(),"\t"));
-					stringBuilder.append(getNStr(spaceNumber%mReplaceTab.length()," "));
-					spaceNumber = 0;
-				}
-				
-				newLine = true;
-				stringBuilder.append(ch);
-			}else{
-				if(newLine){
-					if(ch == '\t'){
-						spaceNumber+=mReplaceTab.length();
-					}else if(ch == ' '){
-						spaceNumber++;
-					}else{
-						if(spaceNumber!=0){
-							stringBuilder.append(getNStr(spaceNumber/mReplaceTab.length(),"\t"));
-							stringBuilder.append(getNStr(spaceNumber%mReplaceTab.length()," "));
-							spaceNumber = 0;
-						}
-						
-						newLine = false;
-						stringBuilder.append(ch);
-					}
-				}else{
-					stringBuilder.append(ch);
-				}
-			}
-		}
-		if(spaceNumber!=0){
-			stringBuilder.append(getNStr(spaceNumber/mReplaceTab.length(),"\t"));
-			stringBuilder.append(getNStr(spaceNumber%mReplaceTab.length()," "));
-			spaceNumber = 0;
-		}
-		
-		return stringBuilder.toString();
 	}
 }
