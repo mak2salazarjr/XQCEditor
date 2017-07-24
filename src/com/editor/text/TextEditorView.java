@@ -1,5 +1,6 @@
 package com.editor.text;
 
+import android.annotation.SuppressLint;
 import android.content.*;
 import android.graphics.*;
 import android.os.*;
@@ -45,8 +46,50 @@ public class TextEditorView extends EditText {
 		addTextChangedListener(watcher);
 		setTextScale(Setting.mConfig.mEditorConfig.mFontScale);
 		setLineSpacing(0, 1.12f*Setting.mConfig.mEditorConfig.mLineScale);
+		mScaleGestureDetector = new ScaleGestureDetector(context, new ScaleGestureDetector.OnScaleGestureListener() {
+			@Override
+			public void onScaleEnd(ScaleGestureDetector detector) {
+				Log.i(TAG,"onScaleEnd");
+				getParent().requestDisallowInterceptTouchEvent(false);
+			}
+			
+			@Override
+			public boolean onScaleBegin(ScaleGestureDetector detector) {
+				Log.i(TAG,"onScaleBegin");
+				return true;
+			}
+			
+			@Override
+			public boolean onScale(ScaleGestureDetector detector) {
+				Log.i(TAG,"onScale");
+				float scale = mTextScale*detector.getScaleFactor();
+				setTextScale(scale);
+				return true;
+			}
+		});
 	}
-
+	
+	private ScaleGestureDetector mScaleGestureDetector = null;
+	@SuppressLint("ClickableViewAccessibility")
+	@Override
+	public boolean onTouchEvent(MotionEvent event) {
+		if( (event.getAction()&MotionEvent.ACTION_MASK) == MotionEvent.ACTION_DOWN && event.getPointerCount()==2 ){
+			getParent().requestDisallowInterceptTouchEvent(true);
+		}
+		if( (event.getAction()&MotionEvent.ACTION_MASK) == MotionEvent.ACTION_UP && event.getPointerCount()<=1 ){
+			getParent().requestDisallowInterceptTouchEvent(false);
+		}
+		Log.i(TAG,":"+mScaleGestureDetector.onTouchEvent(event));
+		return super.onTouchEvent(event);
+	}
+	
+	@Override
+	protected void onSizeChanged(int w, int h, int oldw, int oldh) {
+		//if(getSelectionStart()==getSelectionEnd() && getSelectionEnd()>=0 )
+		//	bringPointIntoView(getSelectionEnd());
+		super.onSizeChanged(w, h, oldw, oldh);
+	}
+	
 	private float mTextScale = 1.0f;
 	public void setTextScale(float textScale){
 		mTextScale = textScale;

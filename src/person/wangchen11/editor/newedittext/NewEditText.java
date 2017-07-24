@@ -25,7 +25,6 @@ import person.wangchen11.gnuccompiler.GNUCCompiler;
 import person.wangchen11.window.ext.Setting;
 
 import com.editor.text.TextEditorView;
-
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Handler;
@@ -43,6 +42,7 @@ public class NewEditText extends TextEditorView implements CodeStypeAdapterListe
 	private int mValidHeadLen = -1;
 	private int mValidTailLen = -1;
 	private Handler mHandler;
+	private LinkedList<WarnAndError> mWarnAndErrors = null;
 	
 	public NewEditText(Context context) {
 		super(context);
@@ -88,7 +88,12 @@ public class NewEditText extends TextEditorView implements CodeStypeAdapterListe
 	public void afterTextChanged(Editable s) {
 		if(mAfterTextChangeListener!=null)
 			mAfterTextChangeListener.afterTextChange();
-		postUpdateCodeStyle();
+		mHandler.post(new Runnable() {
+			@Override
+			public void run() {
+				postUpdateCodeStyle();
+			}
+		});
 	}
 	
 	@Override
@@ -126,7 +131,7 @@ public class NewEditText extends TextEditorView implements CodeStypeAdapterListe
 	private void postUpdateCodeStyle(){
 		if(getHandler()!=null){
 			getHandler().removeCallbacks(mUpdateChodeStyleRunnable);
-			getHandler().postDelayed(mUpdateChodeStyleRunnable,60);
+			getHandler().postDelayed(mUpdateChodeStyleRunnable,100);
 		}else{
 			Log.i(TAG, "postUpdateCodeStyle getHandler()==null");
 		}
@@ -251,7 +256,9 @@ public class NewEditText extends TextEditorView implements CodeStypeAdapterListe
 		}
 	}
 	
-	public void setWarnAndError(LinkedList<WarnAndError> cWarnAndErrors) {
+	public void setWarnAndError(LinkedList<WarnAndError> warnAndErrors) {
+		mWarnAndErrors = warnAndErrors;
+		invalidate();
 	}
 
 	public void setCodeType(CodeType type) {
@@ -259,6 +266,11 @@ public class NewEditText extends TextEditorView implements CodeStypeAdapterListe
 		mValidHeadLen = 0;
 		mValidTailLen = 0;
 		mCodeType = type;
-		postUpdateCodeStyle();
+		mHandler.post(new Runnable() {
+			@Override
+			public void run() {
+				postUpdateCodeStyle();
+			}
+		});
 	}
 }
