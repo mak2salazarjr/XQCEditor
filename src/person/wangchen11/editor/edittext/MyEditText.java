@@ -3,6 +3,7 @@ package person.wangchen11.editor.edittext;
 import java.util.Iterator;
 import java.util.List;
 
+import person.wangchen11.waps.Waps;
 import person.wangchen11.xqceditor.R;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
@@ -649,7 +650,12 @@ public class MyEditText extends View implements OnGestureListener,TextWatcher, O
 		builder.setTitle(warnAndError.getTitle());
 		builder.setCancelable(true);
 		TextView textView = new TextView(getContext());
-		textView.setText(""+warnAndError.mMsg);
+		String msg = ""+warnAndError.mMsg+"\n";
+		String trasMsg = WarnAndError.translateMsg(warnAndError.mMsg);
+		if(!Waps.isGoogle())
+		if(!warnAndError.mMsg.equals(trasMsg))
+			msg+=""+trasMsg+"\n";
+		textView.setText(msg);
 		textView.setPadding(12, 12, 12, 12);
 		textView.setTextIsSelectable(true);
 		builder.setView(textView);

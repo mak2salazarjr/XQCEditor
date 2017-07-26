@@ -22,18 +22,26 @@ import person.wangchen11.editor.edittext.AfterTextChangeListener;
 import person.wangchen11.editor.edittext.SpanBody;
 import person.wangchen11.editor.edittext.WarnAndError;
 import person.wangchen11.gnuccompiler.GNUCCompiler;
+import person.wangchen11.waps.Waps;
 import person.wangchen11.window.ext.Setting;
 
 import com.editor.text.TextEditorView;
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.graphics.Canvas;
+import android.graphics.Paint;
+import android.graphics.Rect;
 import android.os.Handler;
 import android.text.Editable;
+import android.text.Layout;
 import android.text.Spannable;
 import android.text.style.ForegroundColorSpan;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.view.ContextMenu;
 import android.view.MotionEvent;
+import android.widget.TextView;
 
 public class NewEditText extends TextEditorView implements CodeStypeAdapterListener {
 	protected static final String TAG="NewEditText";
@@ -74,12 +82,62 @@ public class NewEditText extends TextEditorView implements CodeStypeAdapterListe
 		mAfterTextChangeListener = afterTextChangeListener;
 	}
 	
+	@Override
+	protected void onDraw(Canvas canvas) {
+		super.onDraw(canvas);
+		if(mWarnAndErrors!=null){
+			Layout layout = getLayout();
+			for(WarnAndError warnAndError : mWarnAndErrors){
+				if(warnAndError.mDrawUnderLine&&
+						warnAndError.mFullLine&&
+						warnAndError.mLevel==WarnAndError.LEVEL_INFO&&
+						warnAndError.mLine>=0 && warnAndError.mLine<layout.getLineCount()
+						){
+					drawWarnAndError(canvas,warnAndError,layout);
+				}
+			}
+			for(WarnAndError warnAndError : mWarnAndErrors){
+				if(warnAndError.mDrawUnderLine&&
+						warnAndError.mFullLine&&
+						warnAndError.mLevel==WarnAndError.LEVEL_WARN&&
+						warnAndError.mLine>=0 && warnAndError.mLine<layout.getLineCount()
+						){
+					drawWarnAndError(canvas,warnAndError,layout);
+				}
+			}
+			for(WarnAndError warnAndError : mWarnAndErrors){
+				if(warnAndError.mDrawUnderLine&&
+						warnAndError.mFullLine&&
+						warnAndError.mLevel==WarnAndError.LEVEL_ERROR &&
+						warnAndError.mLine>=0 && warnAndError.mLine<layout.getLineCount()
+						){
+					drawWarnAndError(canvas,warnAndError,layout);
+				}
+			}
+		}
+	}
+	
+	private void drawWarnAndError(Canvas canvas,WarnAndError warnAndError,Layout layout){
+		Rect bounds = new Rect();
+		Paint paint = new Paint();
+		paint.setStrokeWidth(getTextSize()/8);
+		paint.setColor(warnAndError.mColor);
+		layout.getLineBounds(warnAndError.mLine, bounds);
+		float left = getPaddingLeft();
+		float right = left+layout.getLineRight(warnAndError.mLine);
+		float bottom = layout.getLineBaseline(warnAndError.mLine);
+		canvas.drawLine(left,bottom,right,bottom, paint);
+	} 
+	
+	private int mTouchDownLine = -1;
 	@SuppressLint("ClickableViewAccessibility")
 	@Override
 	public boolean onTouchEvent(MotionEvent event) {
 		if(event.getAction()==MotionEvent.ACTION_DOWN){
 			if(mOnNeedChangeWants!=null)
 				mOnNeedChangeWants.onNeedChangeWants(0, 0, null);
+			Layout layout = getLayout();
+			mTouchDownLine = layout.getLineForVertical((int) event.getY());
 		}
 		return super.onTouchEvent(event);
 	}
@@ -257,6 +315,8 @@ public class NewEditText extends TextEditorView implements CodeStypeAdapterListe
 	}
 	
 	public void setWarnAndError(LinkedList<WarnAndError> warnAndErrors) {
+		if(warnAndErrors!=null)
+			Log.i(TAG, "setWarnAndError:"+warnAndErrors.size());
 		mWarnAndErrors = warnAndErrors;
 		invalidate();
 	}
@@ -272,5 +332,53 @@ public class NewEditText extends TextEditorView implements CodeStypeAdapterListe
 				postUpdateCodeStyle();
 			}
 		});
+	}
+	
+	@Override
+	protected void onCreateContextMenu(ContextMenu menu) {
+		if(mWarnAndErrors!=null){
+			List<WarnAndError> warnAndErrors = new LinkedList<WarnAndError>();
+			for(WarnAndError warnAndError:mWarnAndErrors){
+				if(warnAndError.mLine==mTouchDownLine){
+					warnAndErrors.add(warnAndError);
+				}
+			}
+			if(warnAndErrors.size()>0){
+				showWarnAndErrors(warnAndErrors);
+				mHandler.post(new Runnable() {
+					@Override
+					public void run() {
+						setSelection(getSelectionEnd());
+					}
+				});
+			}
+		}
+		super.onCreateContextMenu(menu);
+	}
+	
+	protected void showWarnAndErrors(List<WarnAndError> warnAndErrors){
+		if(warnAndErrors.size()<=0)
+			return;
+		AlertDialog alertDialog = null;
+		AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+		builder.setCancelable(true);
+		TextView textView = new TextView(getContext());
+		
+		String msg = "";
+		for(WarnAndError warnAndError:warnAndErrors){
+			msg+=""+getResources().getText(warnAndError.getTitle())+":\n";
+			msg+=""+warnAndError.mMsg+"\n";
+			String trasMsg = WarnAndError.translateMsg(warnAndError.mMsg);
+			if(!Waps.isGoogle())
+			if(!warnAndError.mMsg.equals(trasMsg))
+				msg+=""+trasMsg+"\n";
+			msg+="\n";
+		}
+		textView.setText(msg);
+		textView.setPadding(12, 12, 12, 12);
+		textView.setTextIsSelectable(true);
+		builder.setView(textView);
+		alertDialog = builder.create();
+		alertDialog.show();
 	}
 }
