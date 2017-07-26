@@ -314,7 +314,7 @@ public class NewEditText extends TextEditorView implements CodeStypeAdapterListe
 		}
 	}
 	
-	public void setWarnAndError(LinkedList<WarnAndError> warnAndErrors) {
+	public void setWarnAndErrors(LinkedList<WarnAndError> warnAndErrors) {
 		if(warnAndErrors!=null)
 			Log.i(TAG, "setWarnAndError:"+warnAndErrors.size());
 		mWarnAndErrors = warnAndErrors;

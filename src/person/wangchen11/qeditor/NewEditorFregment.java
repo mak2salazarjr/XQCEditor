@@ -55,7 +55,9 @@ import person.wangchen11.drawable.CircleDrawable;
 import person.wangchen11.editor.codeedittext.CodeEditText;
 import person.wangchen11.editor.codeedittext.OnNeedChangeWants;
 import person.wangchen11.editor.edittext.AfterTextChangeListener;
+import person.wangchen11.editor.edittext.WarnAndError;
 import person.wangchen11.editor.newedittext.NewEditText;
+import person.wangchen11.editor.newedittext.WarnAndErrorScrollBar;
 import person.wangchen11.gnuccompiler.CheckInfo;
 import person.wangchen11.gnuccompiler.GNUCCodeCheck;
 import person.wangchen11.window.ext.Setting;
@@ -67,6 +69,7 @@ public class NewEditorFregment extends Fragment implements OnClickListener, Afte
 	private File mFile=null;
 	private RelativeLayout mRelativeLayout;
 	private NewEditText mCodeEditText;
+	private WarnAndErrorScrollBar mWarnAndErrorScrollBar;
 	private LinearLayout mLinearLayoutOfChars;
 	private ListView mListView= null;
 	private Spinner mCodeTypeSpinner=null;
@@ -138,6 +141,7 @@ public class NewEditorFregment extends Fragment implements OnClickListener, Afte
 		mCodeTypeSpinner.setOnItemSelectedListener(this);
 		mCodeTypeSpinner.setAdapter(new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_dropdown_item, mCodeTypeNames));
 		mCodeTypeSpinner.setSelection(0);
+		mWarnAndErrorScrollBar = (WarnAndErrorScrollBar) mRelativeLayout.findViewById(R.id.warnAndErrorScrollBar1);
 		mCodeEditText=(NewEditText) mRelativeLayout.findViewById(R.id.ccode_edittext);
 		mCodeEditText.setCodeType(CodeEditText.CodeType.TYPE_NONE);
 		if(mFile!=null)
@@ -279,8 +283,11 @@ public class NewEditorFregment extends Fragment implements OnClickListener, Afte
 					mHandler.post(new Runnable() {
 						@Override
 						public void run() {
-							if(mCodeEditText!=null)
-								mCodeEditText.setWarnAndError( CheckCodeAdapt.getCWarnAndErrors(checkInfos,mFile) );
+							if(mCodeEditText!=null){
+								LinkedList<WarnAndError> warnAndErrors = CheckCodeAdapt.getCWarnAndErrors(checkInfos,mFile);
+								mCodeEditText.setWarnAndErrors( warnAndErrors );
+								mWarnAndErrorScrollBar.setWarnAndErrors(warnAndErrors, mCodeEditText.getLineCount());
+							}
 						}
 					});
 				}
@@ -581,7 +588,8 @@ public class NewEditorFregment extends Fragment implements OnClickListener, Afte
 			if(mCodeCheck!=null)
 				mCodeCheck.stop();
 		}
-		mCodeEditText.setWarnAndError( null );
+		mCodeEditText.setWarnAndErrors( null );
+		mWarnAndErrorScrollBar.setWarnAndErrors(null, mCodeEditText.getLineCount());
 		
 	}
 	

@@ -35,6 +35,13 @@
                 </com.editor.text.CodeEditor>
             </com.editor.text.HorScrollViewText>
         </com.editor.text.ScrollViewText>
+
+        <person.wangchen11.editor.newedittext.WarnAndErrorScrollBar
+            android:id="@+id/warnAndErrorScrollBar1"
+            android:layout_width="4dp"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true" />
+
     </RelativeLayout>
 
     <LinearLayout
