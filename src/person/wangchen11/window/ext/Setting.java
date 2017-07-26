@@ -117,6 +117,7 @@ public class Setting extends Fragment implements Window, TextWatcher, OnClickLis
 		((SwitchCompat)(mRelativeLayout.findViewById(R.id.use_nice_font_switch))).setOnCheckedChangeListener(this);
 		((SwitchCompat)(mRelativeLayout.findViewById(R.id.quick_close_window_switch))).setOnCheckedChangeListener(this);
 		((SwitchCompat)(mRelativeLayout.findViewById(R.id.use_new_console_switch))).setOnCheckedChangeListener(this);
+		((SwitchCompat)(mRelativeLayout.findViewById(R.id.use_new_edittext_switch))).setOnCheckedChangeListener(this);
 		((SwitchCompat)(mRelativeLayout.findViewById(R.id.title_at_head))).setOnCheckedChangeListener(this);
 		((SwitchCompat)(mRelativeLayout.findViewById(R.id.ctrl_at_head))).setOnCheckedChangeListener(this);
 		((SwitchCompat)(mRelativeLayout.findViewById(R.id.animation))).setOnCheckedChangeListener(this);
@@ -245,6 +246,7 @@ public class Setting extends Fragment implements Window, TextWatcher, OnClickLis
 		mConfig.mEditorConfig.mAutoUpdate=((SwitchCompat)mRelativeLayout.findViewById(R.id.auto_update_switch)).isChecked();
 		mConfig.mOtherConfig.mQuickCloseEnable=((SwitchCompat)mRelativeLayout.findViewById(R.id.quick_close_window_switch)).isChecked();
 		mConfig.mOtherConfig.mNewConsoleEnable=((SwitchCompat)mRelativeLayout.findViewById(R.id.use_new_console_switch)).isChecked();
+		mConfig.mOtherConfig.mNewEditorEnable=((SwitchCompat)mRelativeLayout.findViewById(R.id.use_new_edittext_switch)).isChecked();
 		mConfig.mOtherConfig.mTitleAtHead=((SwitchCompat)mRelativeLayout.findViewById(R.id.title_at_head)).isChecked();
 		mConfig.mOtherConfig.mCtrlAtHead=((SwitchCompat)mRelativeLayout.findViewById(R.id.ctrl_at_head)).isChecked();
 		mConfig.mOtherConfig.mAnimation=((SwitchCompat)mRelativeLayout.findViewById(R.id.animation)).isChecked();
@@ -257,6 +259,7 @@ public class Setting extends Fragment implements Window, TextWatcher, OnClickLis
 		((SwitchCompat)mRelativeLayout.findViewById(R.id.auto_update_switch)).setChecked(mConfig.mEditorConfig.mAutoUpdate);
 		((SwitchCompat)mRelativeLayout.findViewById(R.id.quick_close_window_switch)).setChecked(mConfig.mOtherConfig.mQuickCloseEnable);
 		((SwitchCompat)mRelativeLayout.findViewById(R.id.use_new_console_switch)).setChecked(mConfig.mOtherConfig.mNewConsoleEnable);
+		((SwitchCompat)mRelativeLayout.findViewById(R.id.use_new_edittext_switch)).setChecked(mConfig.mOtherConfig.mNewEditorEnable);
 		((SwitchCompat)mRelativeLayout.findViewById(R.id.title_at_head)).setChecked(mConfig.mOtherConfig.mTitleAtHead);
 		((SwitchCompat)mRelativeLayout.findViewById(R.id.ctrl_at_head)).setChecked(mConfig.mOtherConfig.mCtrlAtHead);
 		((SwitchCompat)mRelativeLayout.findViewById(R.id.animation)).setChecked(mConfig.mOtherConfig.mAnimation);
@@ -642,6 +645,7 @@ public class Setting extends Fragment implements Window, TextWatcher, OnClickLis
 			config.mQuickCloseEnable=sharedPreferences.getBoolean("mQuickCloseEnable",config.mQuickCloseEnable);
 			config.mQuickCloseColor=sharedPreferences.getInt("mQuickCloseColor",config.mQuickCloseColor);
 			config.mNewConsoleEnable=sharedPreferences.getBoolean("mNewConsoleEnable",config.mNewConsoleEnable);
+			config.mNewEditorEnable=sharedPreferences.getBoolean("mNewConsoleEnable",config.mNewEditorEnable);
 			config.mTitleAtHead=sharedPreferences.getBoolean("mTitleAtHead",config.mTitleAtHead);
 			config.mCtrlAtHead=sharedPreferences.getBoolean("mCtrlAtHead",config.mCtrlAtHead);
 			config.mAnimation=sharedPreferences.getBoolean("mAnimation",config.mAnimation);
@@ -655,6 +659,7 @@ public class Setting extends Fragment implements Window, TextWatcher, OnClickLis
 			editor.putBoolean("mQuickCloseEnable", mQuickCloseEnable);
 			editor.putInt("mQuickCloseColor", mQuickCloseColor);
 			editor.putBoolean("mNewConsoleEnable", mNewConsoleEnable);
+			editor.putBoolean("mNewEditorEnable", mNewEditorEnable);
 			editor.putBoolean("mTitleAtHead", mTitleAtHead);
 			editor.putBoolean("mCtrlAtHead", mCtrlAtHead);
 			editor.putBoolean("mAnimation", mAnimation);

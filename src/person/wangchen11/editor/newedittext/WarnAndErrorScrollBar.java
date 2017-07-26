@@ -37,7 +37,7 @@ public class WarnAndErrorScrollBar extends View {
 	@Override
 	protected void onDraw(Canvas canvas) {
 		if(mLineCount==0){
-			canvas.drawColor(Color.BLACK);
+			//canvas.drawColor(Color.BLACK);
 		}
 		else if(mWarnAndErrors!=null)
 		{

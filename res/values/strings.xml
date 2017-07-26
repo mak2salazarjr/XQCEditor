@@ -221,5 +221,6 @@
     <string name="edit">Edit</string>
     <string name="theme">Theme</string>
     <string name="change_theme_success">Change theme success</string>
+    <string name="use_new_ver_edittext">Use new version EditText</string>
     
 </resources>

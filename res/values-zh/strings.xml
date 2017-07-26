@@ -250,4 +250,5 @@
     <string name="edit">编辑</string>
     <string name="theme">打开主题</string>
     <string name="change_theme_success">切换主题成功</string>
+    <string name="use_new_ver_edittext">使用新版编辑框</string>
 </resources>
