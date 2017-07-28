@@ -51,7 +51,7 @@ public class CCodeStyleAdapter extends CodeStyleAdapter{
 			if(colorSpan!=null)
 			{
 				//Log.i("getStyles", "colorSpan:"+colorSpan.getForegroundColor());
-				SpanBody spanBody=new SpanBody(colorSpan,entity.mStart,entity.mEnd,0);
+				SpanBody spanBody=new SpanBody(colorSpan,entity.mStart,entity.mEnd,entity.mTag);
 				bodies.add(spanBody);
 			}
 		}

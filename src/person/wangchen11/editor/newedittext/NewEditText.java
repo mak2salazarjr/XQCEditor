@@ -290,11 +290,12 @@ public class NewEditText extends TextEditorView implements CodeStypeAdapterListe
 
 			for(SpanBody spanBody:spanBodies){
 				if(		spanBody.mSpan == CodeStyleAdapter.mCommentsColorSpan ||
-						spanBody.mSpan == CodeStyleAdapter.mConstantColorSpan ||
+						//(spanBody.mSpan == CodeStyleAdapter.mConstantColorSpan && 161 != spanBody.mFlag ) ||
 						spanBody.mSpan == CodeStyleAdapter.mKeywordsColorSpan ||
 						spanBody.mSpan == CodeStyleAdapter.mProKeywordsColorSpan
 						)
 				if(spanBody.hasSub(invalidStart, invalidEnd)){
+					//Log.i(TAG, "mFlag:"+spanBody.mFlag);
 					editable.setSpan(new ForegroundColorSpan( ((ForegroundColorSpan)spanBody.mSpan).getForegroundColor() )
 						, spanBody.mStart, spanBody.mEnd, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
 				}
