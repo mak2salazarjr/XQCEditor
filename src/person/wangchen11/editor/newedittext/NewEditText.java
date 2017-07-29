@@ -294,7 +294,7 @@ public class NewEditText extends TextEditorView implements CodeStypeAdapterListe
 
 			for(SpanBody spanBody:spanBodies){
 				if(		spanBody.mSpan == CodeStyleAdapter.mCommentsColorSpan ||
-						(spanBody.mSpan == CodeStyleAdapter.mConstantColorSpan && 161 != spanBody.mFlag ) ||
+						(spanBody.mSpan == CodeStyleAdapter.mConstantColorSpan /*&& 161 != spanBody.mFlag *)/ ||
 						spanBody.mSpan == CodeStyleAdapter.mKeywordsColorSpan ||
 						spanBody.mSpan == CodeStyleAdapter.mProKeywordsColorSpan
 						)
@@ -312,7 +312,7 @@ public class NewEditText extends TextEditorView implements CodeStypeAdapterListe
 
 			for(SpanBody spanBody:spanBodies){
 				if(		spanBody.mSpan == CodeStyleAdapter.mCommentsColorSpan ||
-						(spanBody.mSpan == CodeStyleAdapter.mConstantColorSpan && 161 != spanBody.mFlag ) ||
+						(spanBody.mSpan == CodeStyleAdapter.mConstantColorSpan && /*161 != spanBody.mFlag*/ ) ||
 						spanBody.mSpan == CodeStyleAdapter.mKeywordsColorSpan ||
 						spanBody.mSpan == CodeStyleAdapter.mProKeywordsColorSpan
 						)

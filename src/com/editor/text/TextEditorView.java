@@ -38,7 +38,8 @@ public class TextEditorView extends EditText {
 		setEditableFactory(new Factory(){
 			@Override
 			public Editable newEditable(CharSequence source) {
-				return new QuicklySpannableStringBuilder(source);
+				//return new QuicklySpannableStringBuilder(source);
+				return super.newEditable(source);
 			}
 		});
 		setGravity(Gravity.TOP);
