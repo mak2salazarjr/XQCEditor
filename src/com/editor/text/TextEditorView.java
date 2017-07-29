@@ -45,6 +45,7 @@ public class TextEditorView extends EditText {
 		getPaint().setTypeface(Typeface.MONOSPACE);
 		getPaint().setColor(Setting.mConfig.mEditorConfig.mBaseFontColor);
 		mTextPaint = new Paint();
+		mTextPaint.setTypeface(Typeface.MONOSPACE);
 		mTextPaint.setAntiAlias(true);
 		mTextPaint.setColor(0xff888888);
 		setHorizontallyScrolling(true);
@@ -101,7 +102,6 @@ public class TextEditorView extends EditText {
 	public void setTextScale(float textScale){
 		mTextScale = textScale;
 		float textSize = dip2px(getContext(),12)*mTextScale;
-		mTextPaint.setTypeface(Typeface.MONOSPACE);
 		mTextPaint.setTextSize(textSize);
 		mSpaceWidth = mTextPaint.measureText(" ");
 		getPaint().setTextSize(textSize);

@@ -137,7 +137,8 @@ public class NewEditText extends TextEditorView implements CodeStypeAdapterListe
 			if(mOnNeedChangeWants!=null)
 				mOnNeedChangeWants.onNeedChangeWants(0, 0, null);
 			Layout layout = getLayout();
-			mTouchDownLine = layout.getLineForVertical((int) event.getY());
+			if(layout!=null)
+				mTouchDownLine = layout.getLineForVertical((int) event.getY());
 		}
 		return super.onTouchEvent(event);
 	}
