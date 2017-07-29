@@ -645,7 +645,7 @@ public class Setting extends Fragment implements Window, TextWatcher, OnClickLis
 			config.mQuickCloseEnable=sharedPreferences.getBoolean("mQuickCloseEnable",config.mQuickCloseEnable);
 			config.mQuickCloseColor=sharedPreferences.getInt("mQuickCloseColor",config.mQuickCloseColor);
 			config.mNewConsoleEnable=sharedPreferences.getBoolean("mNewConsoleEnable",config.mNewConsoleEnable);
-			config.mNewEditorEnable=sharedPreferences.getBoolean("mNewConsoleEnable",config.mNewEditorEnable);
+			config.mNewEditorEnable=sharedPreferences.getBoolean("mNewEditorEnable",config.mNewEditorEnable);
 			config.mTitleAtHead=sharedPreferences.getBoolean("mTitleAtHead",config.mTitleAtHead);
 			config.mCtrlAtHead=sharedPreferences.getBoolean("mCtrlAtHead",config.mCtrlAtHead);
 			config.mAnimation=sharedPreferences.getBoolean("mAnimation",config.mAnimation);
