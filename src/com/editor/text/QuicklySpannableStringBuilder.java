@@ -20,7 +20,7 @@ public class QuicklySpannableStringBuilder implements Editable {
 	SpannableStringBuilder s;
 	private int mLength=0;
 	private char []mText=new char[0];
-	private List<SpanBody> mSpanBodies = new ArrayList<SpanBody>();
+	private List<SpanInfo> mSpanInfos = new ArrayList<SpanInfo>();
 	private InputFilter[] mFilters = new InputFilter[0];
 	
 	public QuicklySpannableStringBuilder(CharSequence source) {
@@ -56,21 +56,21 @@ public class QuicklySpannableStringBuilder implements Editable {
             dest[destoff++] = mText[i];
 	}
 	
-	private SpanBody getOrCreateSpanBody(Object what){
-		for(SpanBody spanBody:mSpanBodies){
-			if(spanBody.mSpan == what){
-				return spanBody;
+	private SpanInfo getOrCreateSpanBody(Object what){
+		for(SpanInfo spanInfo:mSpanInfos){
+			if(spanInfo.mSpan == what){
+				return spanInfo;
 			}
 		}
-		SpanBody spanBody = new SpanBody(what, 0, 0, 0);
-		mSpanBodies.add(spanBody);
-		return spanBody ;
+		SpanInfo spanInfo = new SpanInfo(what, 0, 0, 0);
+		mSpanInfos.add(spanInfo);
+		return spanInfo ;
 	}
 
-	private SpanBody getSpanBody(Object what){
-		for(SpanBody spanBody:mSpanBodies){
-			if(spanBody.mSpan == what){
-				return spanBody;
+	private SpanInfo getSpanBody(Object what){
+		for(SpanInfo spanInfo:mSpanInfos){
+			if(spanInfo.mSpan == what){
+				return spanInfo;
 			}
 		}
 		return null ;
@@ -82,26 +82,26 @@ public class QuicklySpannableStringBuilder implements Editable {
 			Log.i(TAG,"getClass:TextWatcher.class");
 		}
 		//Log.i(TAG, "setSpan:"+mSpanBodies.size()+"  :"+what.getClass());
-		SpanBody spanBody = getOrCreateSpanBody(what);
-		spanBody.mSpan = what;
-		spanBody.mStart = start;
-		spanBody.mEnd = end;
-		spanBody.mFlags = flags;
+		SpanInfo spanInfo = getOrCreateSpanBody(what);
+		spanInfo.mSpan = what;
+		spanInfo.mStart = start;
+		spanInfo.mEnd = end;
+		spanInfo.mFlags = flags;
 	}
 
 	@Override
 	public void removeSpan(Object what) {
 		int pos = -1;
 		int index = 0;
-		for(SpanBody spanBody : mSpanBodies){
-			if(spanBody.mSpan == what){
+		for(SpanInfo spanInfo : mSpanInfos){
+			if(spanInfo.mSpan == what){
 				pos = index;
 				break;
 			}
 			index++;
 		}
 		if(pos>=0)
-			mSpanBodies.remove(pos);
+			mSpanInfos.remove(pos);
 	}
 
 	@SuppressWarnings("unchecked")
@@ -110,7 +110,7 @@ public class QuicklySpannableStringBuilder implements Editable {
 		if(type==null)
 			return (T[]) Array.newInstance(type, 0);
 		ArrayList<T> arrayList = new ArrayList<T>();
-		for(SpanBody body:mSpanBodies){
+		for(SpanInfo body:mSpanInfos){
 			if(type.isInstance(body.mSpan)){
 				arrayList.add((T) body.mSpan);
 				
@@ -126,44 +126,44 @@ public class QuicklySpannableStringBuilder implements Editable {
 	
 	@Override
 	public int getSpanStart(Object tag) {
-		SpanBody spanBody = getSpanBody(tag);
-		if(spanBody==null)
+		SpanInfo spanInfo = getSpanBody(tag);
+		if(spanInfo==null)
 			return -1;
-		return spanBody.mStart;
+		return spanInfo.mStart;
 	}
 
 	@Override
 	public int getSpanEnd(Object tag) {
-		SpanBody spanBody = getSpanBody(tag);
-		if(spanBody==null)
+		SpanInfo spanInfo = getSpanBody(tag);
+		if(spanInfo==null)
 			return -1;
-		return spanBody.mEnd;
+		return spanInfo.mEnd;
 	}
 
 	@Override
 	public int getSpanFlags(Object tag) {
-		SpanBody spanBody = getSpanBody(tag);
-		if(spanBody==null)
+		SpanInfo spanInfo = getSpanBody(tag);
+		if(spanInfo==null)
 			return 0;
-		return spanBody.mFlags;
+		return spanInfo.mFlags;
 	}
 
 	@Override
 	public int nextSpanTransition(int start, int limit, Class kind) {
-        int count = mSpanBodies.size();
+        int count = mSpanInfos.size();
         
         if (kind == null) {
             kind = Object.class;
         }
 
         for (int i = 0; i < count; i++) {
-        	SpanBody spanBody = mSpanBodies.get(i);
-            int st = spanBody.mStart;
-            int en = spanBody.mEnd;
+        	SpanInfo spanInfo = mSpanInfos.get(i);
+            int st = spanInfo.mStart;
+            int en = spanInfo.mEnd;
 
-            if (st > start && st < limit && kind.isInstance(spanBody.mSpan))
+            if (st > start && st < limit && kind.isInstance(spanInfo.mSpan))
                 limit = st;
-            if (en > start && en < limit && kind.isInstance(spanBody.mSpan))
+            if (en > start && en < limit && kind.isInstance(spanInfo.mSpan))
                 limit = en;
         }
 
@@ -352,7 +352,7 @@ public class QuicklySpannableStringBuilder implements Editable {
 
 	@Override
 	public void clearSpans() {
-		mSpanBodies.clear();
+		mSpanInfos.clear();
 	}
 	
 	@Override
@@ -384,12 +384,12 @@ public class QuicklySpannableStringBuilder implements Editable {
 	
 }
 
-class SpanBody {
+class SpanInfo {
 	public Object mSpan;
 	public int mStart;
 	public int mEnd;
 	public int mFlags;
-	public SpanBody(Object span,int start,int end,int flags){
+	public SpanInfo(Object span,int start,int end,int flags){
 		mSpan = span;
 		mEnd  = end;
 		mFlags = flags;

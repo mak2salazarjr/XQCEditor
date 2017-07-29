@@ -7,6 +7,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Stack;
 
+
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -27,11 +28,8 @@ public class EditableWithLayout implements Editable,MyLayout {
 	private char []mText=new char[0];
 	private TextPaint mTextPaint ;
 	private TextPaint mSpanPaint ;
-	private TextWatcher mTextWatcher=null;
-    private int mSelectionStart=0;
-    private int mSelectionEnd=0;
-    private int mComposingStart=0;
-    private int mComposingEnd=0;
+    //private int mComposingStart=0;
+    //private int mComposingEnd=0;
     private Rect mRect=new Rect();
     private Rect mRectLine=new Rect();
     private float mLineHeight;
@@ -42,6 +40,8 @@ public class EditableWithLayout implements Editable,MyLayout {
 	private Stack<ReplaceBody> mRedoBodies = new Stack<ReplaceBody>();
     private List<LineBody> mLineBodies=new ArrayList<LineBody>();
     private List<SpanBody> mSpanBodies=new ArrayList<SpanBody>();
+	private List<SpanInfo> mSpanInfos = new ArrayList<SpanInfo>();
+	
     private List<WarnAndError> mWarnAndErrors=new ArrayList<WarnAndError>();
 	public EditableWithLayout() {
 		setPaint(new TextPaint());
@@ -95,15 +95,43 @@ public class EditableWithLayout implements Editable,MyLayout {
         for (int i = start; i < end; i++)
             dest[destoff++] = mText[i];
 	}
-	
+
+	private SpanInfo getOrCreateSpanBody(Object what){
+		for(SpanInfo spanInfo:mSpanInfos){
+			if(spanInfo.mSpan == what){
+				return spanInfo;
+			}
+		}
+		SpanInfo spanInfo = new SpanInfo(what, 0, 0, 0);
+		mSpanInfos.add(spanInfo);
+		return spanInfo ;
+	}
+
+	private SpanInfo getSpanBody(Object what){
+		for(SpanInfo spanInfo:mSpanInfos){
+			if(spanInfo.mSpan == what){
+				return spanInfo;
+			}
+		}
+		return null ;
+	}
+
+	public void setSpanEx(Object what, int start, int end, int flags) {
+		Log.i(TAG, "setSpanEx:"+mSpanInfos.size()+"  :"+what.getClass());
+		SpanInfo spanInfo = getOrCreateSpanBody(what);
+		spanInfo.mSpan = what;
+		spanInfo.mStart = start;
+		spanInfo.mEnd = end;
+		spanInfo.mFlags = flags;
+	}
+
 	@Override
 	public void setSpan(Object what, int start, int end, int flags) {
-		//Log.i(TAG, "setSpan");
-		if( what instanceof TextWatcher )
-		{
-			mTextWatcher=(TextWatcher) what;
+		if(what==MyInputConnection.COMPOSING){
+
+			Log.i(TAG, "setSpan COMPOSING:start:"+start+" end:"+end);
 		}
-		else
+		/*
 		if( what == Selection.SELECTION_START )
 		{
 			Log.i(TAG, "set SELECTION_START");
@@ -124,15 +152,19 @@ public class EditableWithLayout implements Editable,MyLayout {
 			Log.i(TAG, "set COMPOSING");
 			mComposingStart=start;
 			mComposingEnd=end;
+		}else*/
+		{
+			setSpanEx(what,start,end,flags);
 		}
+		
 	}
 
-	public void sendTextBeforeChanged(CharSequence s,int start,int count,int after){
-		if(mTextWatcher!=null)
-			mTextWatcher.beforeTextChanged(s, start, count, after);
+	public void sendTextBeforeChanged(TextWatcher []textWatchers,CharSequence s,int start,int count,int after){
+		for(TextWatcher textWatcher:textWatchers)
+			textWatcher.beforeTextChanged(s, start, count, after);
 	}
 	
-	public void sendOnTextChanged(CharSequence s,int start,int before,int count){
+	public void sendOnTextChanged(TextWatcher []textWatchers,CharSequence s,int start,int before,int count){
 		for(int i=0;i<mSpanBodies.size();i++)
 		{
 			SpanBody spanBody=mSpanBodies.get(i);
@@ -149,26 +181,59 @@ public class EditableWithLayout implements Editable,MyLayout {
 				i--;
 			}
 		}
-		if(mTextWatcher!=null)
-			mTextWatcher.onTextChanged(s, start, before, count);
+		for(TextWatcher textWatcher:textWatchers)
+			textWatcher.onTextChanged(s, start, before, count);
 	}
 	
-	public void sendTextAfterChanged(){
-		if(mTextWatcher!=null)
-		{
-			mTextWatcher.afterTextChanged(this);
-		}
-	}
-	
-	@Override
-	public void removeSpan(Object what) {
+	public void sendTextAfterChanged(TextWatcher []textWatchers){
+		for(TextWatcher textWatcher:textWatchers)
+			textWatcher.afterTextChanged(this);
 	}
 
+	public void removeSpanEx(Object what) {
+		int pos = -1;
+		int index = 0;
+		for(SpanInfo spanInfo : mSpanInfos){
+			if(spanInfo.mSpan == what){
+				pos = index;
+				break;
+			}
+			index++;
+		}
+		if(pos>=0)
+			mSpanInfos.remove(pos);
+	}
+
+	@Override
+	public void removeSpan(Object what) {
+		removeSpanEx(what);
+	}
+
+	@SuppressWarnings("unchecked")
+	public <T> T[] getSpansEx(int start, int end, Class<T> type) {
+		if(type==null)
+			return (T[]) Array.newInstance(type, 0);
+		ArrayList<T> arrayList = new ArrayList<T>();
+		for(SpanInfo body:mSpanInfos){
+			if(type.isInstance(body.mSpan)){
+				arrayList.add((T) body.mSpan);
+				
+				//if(type.equals(TextWatcher.class)){
+				//	Log.i(TAG,""+body.mSpan.getClass());
+				//}
+			}
+		}
+		T[] ts = (T[]) Array.newInstance(type, arrayList.size());
+		arrayList.toArray(ts);
+		return ts;
+	}
+	
 	@SuppressWarnings("unchecked")
 	@Override
 	public <T> T[] getSpans(int start, int end, Class<T> type) {
 		
-		return (T[]) Array.newInstance(type, 0);
+		//return (T[]) Array.newInstance(type, 0);
+		return getSpansEx(start,end,type);
 	}
 	
 	private List<SpanBody> getColorSpanBodies(int start, int end){
@@ -251,38 +316,83 @@ public class EditableWithLayout implements Editable,MyLayout {
 		//Log.i(TAG, "sumLoop:"+sumLoop);
 		return bodies;
 	}
-	
+
+	public int getSpanStartEx(Object tag) {
+		SpanInfo spanInfo = getSpanBody(tag);
+		if(spanInfo==null)
+			return -1;
+		return spanInfo.mStart;
+	}
+
+	public int getSpanEndEx(Object tag) {
+		SpanInfo spanInfo = getSpanBody(tag);
+		if(spanInfo==null)
+			return -1;
+		return spanInfo.mEnd;
+	}
+
+	public int getSpanFlagsEx(Object tag) {
+		SpanInfo spanInfo = getSpanBody(tag);
+		if(spanInfo==null)
+			return 0;
+		return spanInfo.mFlags;
+	}
+
+	public int nextSpanTransitionEx(int start, int limit, Class kind) {
+        int count = mSpanInfos.size();
+        
+        if (kind == null) {
+            kind = Object.class;
+        }
+
+        for (int i = 0; i < count; i++) {
+        	SpanInfo spanInfo = mSpanInfos.get(i);
+            int st = spanInfo.mStart;
+            int en = spanInfo.mEnd;
+
+            if (st > start && st < limit && kind.isInstance(spanInfo.mSpan))
+                limit = st;
+            if (en > start && en < limit && kind.isInstance(spanInfo.mSpan))
+                limit = en;
+        }
+
+        return limit;
+	}
+
 	@Override
 	public int getSpanStart(Object tag) {
+		/*
 		if(tag == Selection.SELECTION_START)
 			return mSelectionStart;
 		if(tag == Selection.SELECTION_END)
 			return mSelectionEnd;
+			
 		if(tag == MyInputConnection.COMPOSING )
-			return mComposingStart;
-		return -1;
+			return mComposingStart;*/
+		return getSpanStartEx(tag);
 	}
 
 	@Override
 	public int getSpanEnd(Object tag) {
+		/*
 		if(tag == Selection.SELECTION_END)
 			return mSelectionEnd;
 		if(tag == Selection.SELECTION_START)
 			return mSelectionStart;
 		if(tag == MyInputConnection.COMPOSING )
-			return mComposingEnd;
-		return -1;
+			return mComposingEnd;*/
+		return getSpanEndEx(tag);
 	}
 
 	@Override
 	public int getSpanFlags(Object tag) {
-		return 0;
+		return getSpanFlagsEx(tag);
 	}
 
 	@SuppressWarnings("rawtypes")
 	@Override
 	public int nextSpanTransition(int start, int limit, Class type) {
-		return 0;
+		return nextSpanTransitionEx(start,limit,type);
 	}
 
 	@Override
@@ -301,6 +411,9 @@ public class EditableWithLayout implements Editable,MyLayout {
 			return this;
 		if(deleteLen==0&&insertLen==0)
 			return this;
+
+		int mSelectionStart = getSpanStart(Selection.SELECTION_START);
+		int mSelectionEnd  =  getSpanEnd(Selection.SELECTION_END);
 		
 		//saved to history to be undo or redo 
 		if(saveToUndo){
@@ -315,9 +428,11 @@ public class EditableWithLayout implements Editable,MyLayout {
 					mUndoBodies.push(body);
 			}
 		}
+
+		TextWatcher []textWatchers = getSpans(start, end, TextWatcher.class);
 		
-		sendOnTextChanged(this, st, length(), addLen);
-		sendTextBeforeChanged(this, st,addLen ,length()+addLen);
+		sendOnTextChanged(textWatchers,this, st, length(), addLen);
+		sendTextBeforeChanged(textWatchers,this, st,addLen ,length()+addLen);
 		
 		if(mSelectionStart==st && mSelectionEnd==en){
 			mSelectionStart=mSelectionEnd=en+addLen;
@@ -352,9 +467,11 @@ public class EditableWithLayout implements Editable,MyLayout {
 			mSelectionStart=mLength;
 		if(mSelectionEnd>mLength)
 			mSelectionEnd=mLength;
-			
+		setSpan(Selection.SELECTION_START, mSelectionStart, mSelectionStart, 0);
+		setSpan(Selection.SELECTION_END, mSelectionEnd, mSelectionEnd, 0);
+		
 		analysisLines();
-		sendTextAfterChanged();
+		sendTextAfterChanged(textWatchers);
 		return this;
 	}
 
@@ -390,7 +507,7 @@ public class EditableWithLayout implements Editable,MyLayout {
 
 	@Override
 	public Editable delete(int st, int en) {
-		return replace(st, en, null, 0, 0);
+		return replace(st, en, "", 0, 0);
 	}
 
 	@Override
@@ -410,16 +527,21 @@ public class EditableWithLayout implements Editable,MyLayout {
 
 	@Override
 	public void clear() {
-		sendOnTextChanged(this, 0, length(), length());
-		sendTextBeforeChanged(this, 0, length(), 0);
+		TextWatcher []textWatchers = getSpans(0, length(), TextWatcher.class);
+		sendOnTextChanged(textWatchers,this, 0, length(), length());
+		sendTextBeforeChanged(textWatchers,this, 0, length(), 0);
 		mLength=0;
-		sendTextAfterChanged();
+		sendTextAfterChanged(textWatchers);
 	}
+	
+	public void clearSpansEx() {
+		mSpanInfos.clear();
+	}
+	
 
 	@Override
 	public void clearSpans() {
-		// TODO Auto-generated method stub
-		
+		clearSpansEx();		
 	}
 
 	@Override
@@ -894,6 +1016,12 @@ public class EditableWithLayout implements Editable,MyLayout {
 			mRedoBodies.push(body);
 		}
 		replace(replaceBody.mSt, replaceBody.mEn, replaceBody.mText, replaceBody.mStart, replaceBody.mEnd, false);
+		
+
+		int mSelectionStart = getSpanStart(Selection.SELECTION_START);
+		int mSelectionEnd  =  getSpanEnd(Selection.SELECTION_END);
+		
+		
 		if(replaceBody.mText==null || replaceBody.mText.length()==0 || replaceBody.mEnd-replaceBody.mStart==0 )
 		{
 			mSelectionStart=replaceBody.mSt;
@@ -904,6 +1032,9 @@ public class EditableWithLayout implements Editable,MyLayout {
 			mSelectionStart=replaceBody.mSt;
 			mSelectionEnd=replaceBody.mSt+replaceBody.mEnd-replaceBody.mStart;
 		}
+		setSpan(Selection.SELECTION_START, mSelectionStart, mSelectionStart, 0);
+		setSpan(Selection.SELECTION_END, mSelectionEnd, mSelectionEnd, 0);
+		
 		return true;
 	}
 	
@@ -928,6 +1059,11 @@ public class EditableWithLayout implements Editable,MyLayout {
 			mUndoBodies.push(body);
 		}
 		replace(replaceBody.mSt, replaceBody.mEn, replaceBody.mText, replaceBody.mStart, replaceBody.mEnd, false);
+		
+
+		int mSelectionStart = getSpanStart(Selection.SELECTION_START);
+		int mSelectionEnd  =  getSpanEnd(Selection.SELECTION_END);
+		
 		if(replaceBody.mText==null || replaceBody.mText.length()==0 || replaceBody.mEnd-replaceBody.mStart==0 )
 		{
 			mSelectionStart=replaceBody.mSt;
@@ -938,6 +1074,9 @@ public class EditableWithLayout implements Editable,MyLayout {
 			mSelectionStart=replaceBody.mSt;
 			mSelectionEnd=replaceBody.mSt+replaceBody.mEnd-replaceBody.mStart;
 		}
+		setSpan(Selection.SELECTION_START, mSelectionStart, mSelectionStart, 0);
+		setSpan(Selection.SELECTION_END, mSelectionEnd, mSelectionEnd, 0);
+		
 		return true;
 	}
 
@@ -1061,5 +1200,17 @@ public class EditableWithLayout implements Editable,MyLayout {
 			}
 			return false;
 		}
+	}
+}
+
+class SpanInfo {
+	public Object mSpan;
+	public int mStart;
+	public int mEnd;
+	public int mFlags;
+	public SpanInfo(Object span,int start,int end,int flags){
+		mSpan = span;
+		mEnd  = end;
+		mFlags = flags;
 	}
 }

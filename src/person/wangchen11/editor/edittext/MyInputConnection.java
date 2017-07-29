@@ -7,6 +7,7 @@ import android.text.Editable;
 import android.text.NoCopySpan;
 import android.text.Selection;
 import android.text.Spannable;
+import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -14,6 +15,7 @@ import android.text.method.MetaKeyKeyListener;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.BaseInputConnection;
 import android.view.inputmethod.CompletionInfo;
 import android.view.inputmethod.CorrectionInfo;
 import android.view.inputmethod.ExtractedText;
@@ -24,7 +26,8 @@ import android.view.inputmethod.InputMethodManager;
 class ComposingText implements NoCopySpan {
 }
 
-public class MyInputConnection implements InputConnection{
+public class MyInputConnection implements InputConnection {
+	BaseInputConnection b;
 	protected static final String TAG="MyInputConnection";
 	private boolean mIsFristCallGetEditable=true;
     private InputMethodManager mIMM;
@@ -66,8 +69,8 @@ public class MyInputConnection implements InputConnection{
 				);
 		//return null;
 		
-		if(mBatchEditNum!=0)
-			return null;
+		//if(mBatchEditNum!=0)
+		//	return null;
 		ExtractedText extractedText=new ExtractedText();
 		Editable editable=getEditable();
 		extractedText.startOffset=0;
@@ -102,14 +105,14 @@ public class MyInputConnection implements InputConnection{
 	public boolean beginBatchEdit() {
 		Log.i(TAG, "beginBatchEdit");
 		mBatchEditNum++;
-		return true;
+		return false;
 	}
 	
 	@Override
 	public boolean endBatchEdit() {
 		Log.i(TAG, "endBatchEdit");
 		mBatchEditNum--;
-		return true;
+		return false;
 	}
 	
 	@Override
@@ -242,18 +245,18 @@ public class MyInputConnection implements InputConnection{
 
 
     public static int getComposingSpanStart(Spannable text) {
-		Log.i(TAG, "getComposingSpanStart:"+text);
+		Log.i(TAG, "getComposingSpanStart:");
         return text.getSpanStart(COMPOSING);
     }
     
     public static int getComposingSpanEnd(Spannable text) {
-		Log.i(TAG, "getComposingSpanEnd:"+text);
+		Log.i(TAG, "getComposingSpanEnd:");
         return text.getSpanEnd(COMPOSING);
     }
     
 	@Override
     public boolean deleteSurroundingText(int beforeLength, int afterLength) {
-		Log.i(TAG, "deleteSurroundingText:"+beforeLength);
+		Log.i(TAG, "deleteSurroundingText:"+beforeLength+" "+afterLength);
         final Editable content = getEditable();
         if (content == null) return false;
 
@@ -288,6 +291,8 @@ public class MyInputConnection implements InputConnection{
             if (start < 0) start = 0;
             content.delete(start, a);
             deleted = a - start;
+            getInputMethodManager().updateSelection(
+            		mView, start, start, 0, 0);
         }
 
         if (afterLength > 0) {
@@ -297,6 +302,8 @@ public class MyInputConnection implements InputConnection{
             if (end > content.length()) end = content.length();
 
             content.delete(b, end);
+            getInputMethodManager().updateSelection(
+            		mView, b, b, 0, 0);
         }
         
         endBatchEdit();
@@ -308,7 +315,7 @@ public class MyInputConnection implements InputConnection{
 	@Override
     public boolean setComposingText(CharSequence text, int newCursorPosition) {
 		Log.i(TAG, "setComposingText:"+text);
-        //replaceText(text, newCursorPosition, true);
+        replaceText(text, newCursorPosition, true);
         return true;
     }
 
@@ -365,9 +372,11 @@ public class MyInputConnection implements InputConnection{
         //replaceText(text, newCursorPosition, false);
 		Editable content=getEditable();
 		content.replace(Selection.getSelectionStart(content),Selection.getSelectionEnd(content) , text);
+        //content.setSpan(COMPOSING, Selection.getSelectionStart(content), Selection.getSelectionStart(content)+text.length(), 0);
 		//int cursor=Selection.getSelectionEnd(content);
         //content.replace(cursor, cursor, text);
         //Selection.setSelection(content, cursor+text.length());
+		//replaceText(text, newCursorPosition, false);
         return true;
 	}
 
@@ -463,7 +472,6 @@ public class MyInputConnection implements InputConnection{
         }
     }
 
-    @SuppressWarnings("unused")
 	private void replaceText(CharSequence text, int newCursorPosition,
             boolean composing) {
         final Editable content = getEditable();
@@ -476,7 +484,7 @@ public class MyInputConnection implements InputConnection{
         // delete composing text set previously.
         int a = getComposingSpanStart(content);
         int b = getComposingSpanEnd(content);
-
+        Log.i(TAG, "replaceText:a:"+a+" b:"+b);
         
         if (b < a) {
             int tmp = a;
@@ -507,15 +515,14 @@ public class MyInputConnection implements InputConnection{
         } else {
             newCursorPosition += a;
         }
-        Log.i(TAG, "replaceText:"+newCursorPosition);
         if (newCursorPosition < 0) newCursorPosition = 0;
         if (newCursorPosition > content.length())
             newCursorPosition = content.length();
-        content.setSpan(COMPOSING, a, b, 0);
+        Log.i(TAG, "replaceText:a:"+a+" b:"+b+" newCur:"+newCursorPosition);
         Selection.setSelection(content, newCursorPosition);
 
-        Log.i(TAG, "replaceText:"+newCursorPosition);
         content.replace(a, b, text);
+        content.setSpan(COMPOSING, a, a+text.length(), 0);
         
         endBatchEdit();
     }
