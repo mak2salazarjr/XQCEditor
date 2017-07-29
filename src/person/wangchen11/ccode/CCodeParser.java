@@ -466,13 +466,13 @@ public class CCodeParser implements Runnable{
 					if(!new File(path).isFile())
 						path=mIncludePathEx+File.separatorChar+new String(code,codeEntity.mStart+1,codeEntity.length()-2);
 					codeWantsInclude=(LinkedList<WantMsg>) addAllIfNotContains(codeWantsInclude,findIncludeFile(path,str,includeNumber));
-					Log.i(TAG, "include <>:"+path);
+					//Log.i(TAG, "include <>:"+path);
 				}else 
 				if( codeEntity.mTag==163 )//include "..."
 				{
 					String path=mPath+File.separatorChar+new String(code,codeEntity.mStart+1,codeEntity.length()-2);
 					codeWantsInclude=(LinkedList<WantMsg>) addAllIfNotContains(codeWantsInclude,findIncludeFile(path,str,includeNumber));
-					Log.i(TAG, "include \"\":"+path);
+					//Log.i(TAG, "include \"\":"+path);
 				}
 			}
 			

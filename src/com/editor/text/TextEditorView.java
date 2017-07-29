@@ -5,6 +5,7 @@ import android.content.*;
 import android.graphics.*;
 import android.os.*;
 import android.text.*;
+import android.text.Editable.Factory;
 import android.util.*;
 import android.view.*;
 import android.view.inputmethod.InputMethodManager;
@@ -34,6 +35,12 @@ public class TextEditorView extends EditText {
 	}
 
 	public void init(Context context) {
+		setEditableFactory(new Factory(){
+			@Override
+			public Editable newEditable(CharSequence source) {
+				return new QuicklySpannableStringBuilder(source);
+			}
+		});
 		setGravity(Gravity.TOP);
 		getPaint().setTypeface(Typeface.MONOSPACE);
 		getPaint().setColor(Setting.mConfig.mEditorConfig.mBaseFontColor);
@@ -168,7 +175,7 @@ public class TextEditorView extends EditText {
         @Override
         public void afterTextChanged(Editable edit) {
         	Log.i(TAG, "afterTextChanged");
-			setPadding(getBoundOfLeft(), 0, 0, 0);
+			//setPadding(getBoundOfLeft(), 0, 0, 0);
 			TextEditorView.this.afterTextChanged(edit);
         }
 	};
@@ -179,93 +186,6 @@ public class TextEditorView extends EditText {
 	
 	public void onTextChanged(CharSequence s, int start, int before, int count){
 	}
-
-	/*
-	public void setTextHighlighted(CharSequence text) {
-		cancelUpdate();
-
-		errorLine = 0;
-		modified = false;
-		setText(highlight(new SpannableStringBuilder(text)));
-		modified = true;
-	}
-
-	public void refresh() {
-		highlightWithoutChange(getText());
-	}
-
-	
-	public void cancelUpdate() {
-		mUpdateHandler.removeCallbacks(updateThread);
-	}
-	
-	public void highlightWithoutChange(Editable e) {
-		modified = false;
-		highlight(e);
-		modified = true;
-	}
-
-	
-	public Editable highlight(Editable edit) {
-		Log.i(TAG, "highlight:"+edit.length());
-		try {
-			clearSpans(edit);
-
-			if (edit.length() == 0)
-				return edit;
-
-			if (errorLine > 0) {
-				line.matcher(edit);
-			}
-
-			for (Matcher m = headfile.matcher(edit); m.find();)
-				edit.setSpan(new ForegroundColorSpan(CodeStyleAdapter.mConstantColor), m.start(),
-							 m.end(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-			
-			for (Matcher m = number.matcher(edit); m.find();)
-				edit.setSpan(new ForegroundColorSpan(CodeStyleAdapter.mConstantColor), m.start(),
-							 m.end(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-
-			for (Matcher m = string.matcher(edit); m.find();)
-				edit.setSpan(new ForegroundColorSpan(CodeStyleAdapter.mConstantColor), m.start(),
-							 m.end(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-
-			for (Matcher m = keyword.matcher(edit); m.find();)
-				edit.setSpan(new ForegroundColorSpan(CodeStyleAdapter.mKeywordsColor), m.start(),
-							 m.end(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-
-			for (Matcher m = pretreatment.matcher(edit); m.find();)
-				edit.setSpan(new ForegroundColorSpan(CodeStyleAdapter.mProKeywordsColor),
-							 m.start(), m.end(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-
-			for (Matcher m = builtin.matcher(edit); m.find();)
-				edit.setSpan(new ForegroundColorSpan(CodeStyleAdapter.mWordsColor), m.start(),
-							 m.end(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-
-			for (Matcher m = comment.matcher(edit); m.find();)
-				edit.setSpan(new ForegroundColorSpan(CodeStyleAdapter.mCommentsColor), m.start(),
-							 m.end(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-		} catch (Exception ex) {
-		}
-
-		return edit;
-	}
-	
-	public void clearSpans(Editable e) {
-
-		ForegroundColorSpan foreSpan[] = e.getSpans(0, e.length(),
-													ForegroundColorSpan.class);
-
-		for (int n = foreSpan.length; n-- > 0;)
-			e.removeSpan(foreSpan[n]);
-
-		BackgroundColorSpan backSpan[] = e.getSpans(0, e.length(),
-													BackgroundColorSpan.class);
-
-		for (int n = backSpan.length; n-- > 0;)
-			e.removeSpan(backSpan[n]);
-
-	}*/
 
 	public CharSequence autoIndent(CharSequence source, int start, int end,
 									Spanned dest, int dstart, int dend) {
@@ -396,7 +316,7 @@ public class TextEditorView extends EditText {
 
 	@Override
 	protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-		long timeStart = System.currentTimeMillis();
+		//long timeStart = System.currentTimeMillis();
 		Layout layout = getLayout();
 		if(layout==null){
 			super.onMeasure(widthMeasureSpec, heightMeasureSpec);
@@ -404,7 +324,7 @@ public class TextEditorView extends EditText {
 		}
 		else
 			setMeasuredDimension(layout.getWidth(), layout.getHeight());
-		Log.i(TAG, "onMeasure used:"+(System.currentTimeMillis()-timeStart));
+		//Log.i(TAG, "onMeasure used:"+(System.currentTimeMillis()-timeStart));
 		
 	}
 

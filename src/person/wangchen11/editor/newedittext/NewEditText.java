@@ -143,40 +143,47 @@ public class NewEditText extends TextEditorView implements CodeStypeAdapterListe
 	}
 
 	@Override
-	public void afterTextChanged(Editable s) {
-		if(mAfterTextChangeListener!=null)
-			mAfterTextChangeListener.afterTextChange();
-		mHandler.post(new Runnable() {
-			@Override
-			public void run() {
-				postUpdateCodeStyle();
-			}
-		});
-	}
-	
-	@Override
 	public void onTextChanged(CharSequence s, int start, int before, int count) {
+		long startTime = System.currentTimeMillis();
 		int end   = start+count;
-
 		Editable editable = getText();
 		ForegroundColorSpan foreSpans[] = editable.getSpans(start,start+count,
 													ForegroundColorSpan.class);
-		
+
+		Log.i(TAG, "onTextChanged get spans used:"+(System.currentTimeMillis()-startTime));
 		for(ForegroundColorSpan foregroundColorSpan:foreSpans){
 			start = Math.min(start, editable.getSpanStart(foregroundColorSpan));
 			end   = Math.max(end  , editable.getSpanEnd  (foregroundColorSpan));
 		}
+		Log.i(TAG, "onTextChanged list spans used:"+(System.currentTimeMillis()-startTime));
 		if(mValidHeadLen==-1){
 			mValidHeadLen = start;
 		} else {
 			mValidHeadLen = Math.min(start, mValidHeadLen);
 		}
 		if(mValidTailLen==-1){
-			mValidTailLen = end;
+			mValidTailLen = s.length()-end;
 		}else{
 			mValidTailLen = Math.min(s.length()-end, mValidTailLen);
 		}
 		super.onTextChanged(s, start, before, count);
+		Log.i(TAG, "onTextChanged used:"+(System.currentTimeMillis()-startTime));
+	}
+
+	@Override
+	public void afterTextChanged(Editable s) {
+		long startTime = System.currentTimeMillis();
+		if(mAfterTextChangeListener!=null)
+			mAfterTextChangeListener.afterTextChange();
+		getHandler().removeCallbacks(mUpdateChodeStyleRunnable);
+		
+		mHandler.postDelayed(new Runnable() {
+			@Override
+			public void run() {
+				postUpdateCodeStyle();
+			}
+		},10);
+		Log.i(TAG, "afterTextChanged used:"+(System.currentTimeMillis()-startTime));
 	}
 	
 	private Runnable mUpdateChodeStyleRunnable = new Runnable() {
@@ -282,6 +289,20 @@ public class NewEditText extends TextEditorView implements CodeStypeAdapterListe
 			}
 			int invalidStart = mValidHeadLen;
 			int invalidEnd   = editable.length()-mValidTailLen;
+			
+
+			for(SpanBody spanBody:spanBodies){
+				if(		spanBody.mSpan == CodeStyleAdapter.mCommentsColorSpan ||
+						(spanBody.mSpan == CodeStyleAdapter.mConstantColorSpan && 161 != spanBody.mFlag ) ||
+						spanBody.mSpan == CodeStyleAdapter.mKeywordsColorSpan ||
+						spanBody.mSpan == CodeStyleAdapter.mProKeywordsColorSpan
+						)
+				if(spanBody.hasSub(invalidStart, invalidEnd)){
+					invalidStart = Math.min(invalidStart, spanBody.mStart);
+					invalidEnd = Math.max(invalidEnd, spanBody.mEnd);
+				}
+			}
+			
 			ForegroundColorSpan foreSpans[] = editable.getSpans(invalidStart, invalidEnd,
 														ForegroundColorSpan.class);
 
@@ -290,7 +311,7 @@ public class NewEditText extends TextEditorView implements CodeStypeAdapterListe
 
 			for(SpanBody spanBody:spanBodies){
 				if(		spanBody.mSpan == CodeStyleAdapter.mCommentsColorSpan ||
-						//(spanBody.mSpan == CodeStyleAdapter.mConstantColorSpan && 161 != spanBody.mFlag ) ||
+						(spanBody.mSpan == CodeStyleAdapter.mConstantColorSpan && 161 != spanBody.mFlag ) ||
 						spanBody.mSpan == CodeStyleAdapter.mKeywordsColorSpan ||
 						spanBody.mSpan == CodeStyleAdapter.mProKeywordsColorSpan
 						)
