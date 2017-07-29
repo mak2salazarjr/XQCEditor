@@ -151,6 +151,7 @@ public class NewEditText extends TextEditorView implements CodeStypeAdapterListe
 													ForegroundColorSpan.class);
 
 		Log.i(TAG, "onTextChanged get spans used:"+(System.currentTimeMillis()-startTime));
+		start = start-1;
 		for(ForegroundColorSpan foregroundColorSpan:foreSpans){
 			start = Math.min(start, editable.getSpanStart(foregroundColorSpan));
 			end   = Math.max(end  , editable.getSpanEnd  (foregroundColorSpan));
@@ -166,7 +167,6 @@ public class NewEditText extends TextEditorView implements CodeStypeAdapterListe
 		}else{
 			mValidTailLen = Math.min(s.length()-end, mValidTailLen);
 		}
-		super.onTextChanged(s, start, before, count);
 		Log.i(TAG, "onTextChanged used:"+(System.currentTimeMillis()-startTime));
 	}
 
