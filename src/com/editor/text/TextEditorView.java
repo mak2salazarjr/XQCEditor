@@ -59,11 +59,13 @@ public class TextEditorView extends EditText {
 			public void onScaleEnd(ScaleGestureDetector detector) {
 				Log.i(TAG,"onScaleEnd");
 				getParent().requestDisallowInterceptTouchEvent(false);
+				mScaling = false;
 			}
 			
 			@Override
 			public boolean onScaleBegin(ScaleGestureDetector detector) {
 				Log.i(TAG,"onScaleBegin");
+				mScaling = true;
 				return true;
 			}
 			
@@ -77,17 +79,21 @@ public class TextEditorView extends EditText {
 		});
 	}
 	
+	private boolean mScaling = false;
 	private ScaleGestureDetector mScaleGestureDetector = null;
 	@SuppressLint("ClickableViewAccessibility")
 	@Override
 	public boolean onTouchEvent(MotionEvent event) {
-		if( (event.getAction()&MotionEvent.ACTION_MASK) == MotionEvent.ACTION_DOWN && event.getPointerCount()==2 ){
+		Log.i(TAG, "onTouchEvent:"+event.getAction());
+		if( (event.getAction()&MotionEvent.ACTION_MASK) == MotionEvent.ACTION_POINTER_DOWN && event.getPointerCount()==2 ){
 			getParent().requestDisallowInterceptTouchEvent(true);
 		}
 		if( (event.getAction()&MotionEvent.ACTION_MASK) == MotionEvent.ACTION_UP && event.getPointerCount()<=1 ){
 			getParent().requestDisallowInterceptTouchEvent(false);
 		}
-		Log.i(TAG,":"+mScaleGestureDetector.onTouchEvent(event));
+		mScaleGestureDetector.onTouchEvent(event);
+		if(mScaling)
+			return true;
 		return super.onTouchEvent(event);
 	}
 	
@@ -316,7 +322,7 @@ public class TextEditorView extends EditText {
 
 	@Override
 	protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-		//long timeStart = System.currentTimeMillis();
+		long timeStart = System.currentTimeMillis();
 		Layout layout = getLayout();
 		if(layout==null){
 			super.onMeasure(widthMeasureSpec, heightMeasureSpec);
@@ -324,7 +330,7 @@ public class TextEditorView extends EditText {
 		}
 		else
 			setMeasuredDimension(layout.getWidth(), layout.getHeight());
-		//Log.i(TAG, "onMeasure used:"+(System.currentTimeMillis()-timeStart));
+		Log.i(TAG, "onMeasure used:"+(System.currentTimeMillis()-timeStart));
 		
 	}
 

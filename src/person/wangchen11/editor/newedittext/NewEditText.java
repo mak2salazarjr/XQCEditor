@@ -341,7 +341,6 @@ public class NewEditText extends TextEditorView implements CodeStypeAdapterListe
 		if(warnAndErrors!=null)
 			Log.i(TAG, "setWarnAndError:"+warnAndErrors.size());
 		mWarnAndErrors = warnAndErrors;
-		invalidate();
 	}
 
 	public void setCodeType(CodeType type) {
@@ -403,5 +402,10 @@ public class NewEditText extends TextEditorView implements CodeStypeAdapterListe
 		builder.setView(textView);
 		alertDialog = builder.create();
 		alertDialog.show();
+	}
+	
+	@Override
+	public void setPadding(int left, int top, int right, int bottom) {
+		super.setPadding(left, top, right, bottom);
 	}
 }

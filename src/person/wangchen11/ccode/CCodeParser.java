@@ -59,7 +59,6 @@ public class CCodeParser implements Runnable{
 			}
 		} catch (Exception e) {
 		}
-		Log.i(TAG, "run");
 	}
 	public void runEx() {
 		if(mCode!=null)
