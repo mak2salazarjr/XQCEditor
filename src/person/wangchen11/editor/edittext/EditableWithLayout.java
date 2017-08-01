@@ -44,6 +44,7 @@ public class EditableWithLayout implements Editable,MyLayout {
 	private List<SpanInfo> mSpanInfos = new ArrayList<SpanInfo>();
 	
     private List<WarnAndError> mWarnAndErrors=new ArrayList<WarnAndError>();
+	private InputFilter[] mFilters ;
 	public EditableWithLayout() {
 		setPaint(new TextPaint());
 		analysisLines();
@@ -406,15 +407,28 @@ public class EditableWithLayout implements Editable,MyLayout {
 	}
 
 	@Override
-	public Editable replace(int st, int en, CharSequence text, int start,int end) {
+	public Editable replace(int start, int end, CharSequence tb, int tbstart,int tbend) {
 		cleanRedo();
-		return replace(st,en,text,start,end,true);
+		return replace(start,end,tb,tbstart,tbend,true);
 	}
 	
-	public Editable replace(int st, int en, CharSequence text, int start,int end,boolean saveToUndo) {
-		//Log.i(TAG, "replace:st:"+st+" en:"+en+" text:"+text+" start:"+start+" end:"+end);
-		int deleteLen=en-st;
-		int insertLen=end-start;
+	public Editable replace(int start, int end, CharSequence tb, int tbstart,int tbend,boolean saveToUndo) {		
+		
+		if(mFilters!=null){
+	        int filtercount = mFilters.length;
+	        for (int i = 0; i < filtercount; i++) {
+	            CharSequence repl = mFilters[i].filter(tb, tbstart, tbend, this, start, end);
+
+	            if (repl != null) {
+	                tb = repl;
+	                tbstart = 0;
+	                tbend = repl.length();
+	            }
+	        }
+		}
+
+		int deleteLen=end-start;
+		int insertLen=tbend-tbstart;
 		int addLen=insertLen-deleteLen;
 		resizeTo(length()+addLen);
 		if(deleteLen<0||insertLen<0)
@@ -430,7 +444,7 @@ public class EditableWithLayout implements Editable,MyLayout {
 			if(mMaxSaveHistory>0){
 				if(mUndoBodies.size()>mMaxSaveHistory)
 					mUndoBodies.remove(0);
-				ReplaceBody body=new ReplaceBody(st, en, subSequence(st, en),text, start, end, mSelectionStart, mSelectionEnd);
+				ReplaceBody body=new ReplaceBody(start, end, subSequence(start, end),tb, tbstart, tbend, mSelectionStart, mSelectionEnd);
 				if(!mUndoBodies.isEmpty() && mUndoBodies.peek().addBody(body))
 				{
 				}
@@ -439,35 +453,35 @@ public class EditableWithLayout implements Editable,MyLayout {
 			}
 		}
 
-		TextWatcher []textWatchers = getSpans(start, end, TextWatcher.class);
+		TextWatcher []textWatchers = getSpans(tbstart, tbend, TextWatcher.class);
 		
-		sendOnTextChanged(textWatchers,this, st, length(), addLen);
-		sendTextBeforeChanged(textWatchers,this, st,addLen ,length()+addLen);
+		sendOnTextChanged(textWatchers,this, start, length(), addLen);
+		sendTextBeforeChanged(textWatchers,this, start,addLen ,length()+addLen);
 		
-		if(mSelectionStart==st && mSelectionEnd==en){
-			mSelectionStart=mSelectionEnd=en+addLen;
+		if(mSelectionStart==start && mSelectionEnd==end){
+			mSelectionStart=mSelectionEnd=end+addLen;
 		}
 		else
 		{
-			if(mSelectionStart>=st){
+			if(mSelectionStart>=start){
 				mSelectionStart+=addLen;
-				if(mSelectionStart<st)
-					mSelectionStart=st;
+				if(mSelectionStart<start)
+					mSelectionStart=start;
 			}
-			if(mSelectionEnd>=st){
+			if(mSelectionEnd>=start){
 				mSelectionEnd+=addLen;
-				if(mSelectionEnd<st)
-					mSelectionEnd=st;
+				if(mSelectionEnd<start)
+					mSelectionEnd=start;
 			}
 		}
 
 		if(addLen>0)
-			charsCopyEndToStart(mText, en, mText, en+addLen, length()+addLen);
+			charsCopyEndToStart(mText, end, mText, end+addLen, length()+addLen);
 		else
 		if(addLen<0)
-			charsCopyStartToEnd(mText, en, mText, en+addLen, length()+addLen);
+			charsCopyStartToEnd(mText, end, mText, end+addLen, length()+addLen);
 		if(insertLen>0)
-			TextUtils.getChars(text, start, end, mText, st);
+			TextUtils.getChars(tb, tbstart, tbend, mText, start);
 		mLength+=addLen;
 		if(mSelectionStart<0)
 			mSelectionStart=0;
@@ -556,13 +570,12 @@ public class EditableWithLayout implements Editable,MyLayout {
 
 	@Override
 	public void setFilters(InputFilter[] filters) {
-		// TODO Auto-generated method stub
-		
+        mFilters  = filters;
 	}
 
 	@Override
 	public InputFilter[] getFilters() {
-		return null;
+		return mFilters;
 	}
 
 	@Override

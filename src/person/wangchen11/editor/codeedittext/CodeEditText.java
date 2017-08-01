@@ -9,6 +9,7 @@ import java.util.concurrent.Executors;
 import person.wangchen11.ccode.WantMsg;
 import person.wangchen11.editor.codeedittext.CodeStyleAdapter.CodeStypeAdapterListener;
 import person.wangchen11.editor.edittext.AfterTextChangeListener;
+import person.wangchen11.editor.edittext.CodeInputFilter;
 import person.wangchen11.editor.edittext.EditableWithLayout;
 import person.wangchen11.editor.edittext.MyEditText;
 import person.wangchen11.editor.edittext.SpanBody;
@@ -16,10 +17,9 @@ import person.wangchen11.gnuccompiler.GNUCCompiler;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.text.Editable;
-import android.text.Selection;
+import android.text.InputFilter;
 import android.util.AttributeSet;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.MotionEvent;
 
 public class CodeEditText extends MyEditText implements CodeStypeAdapterListener{
@@ -51,6 +51,8 @@ public class CodeEditText extends MyEditText implements CodeStypeAdapterListener
 	
 	public void setText(CharSequence charSequence) {
 		super.setText(charSequence);
+		InputFilter []filters = new InputFilter[]{new CodeInputFilter()};
+		getText().setFilters(filters);
 	}
 	
 	@SuppressLint("ClickableViewAccessibility")
@@ -162,83 +164,6 @@ public class CodeEditText extends MyEditText implements CodeStypeAdapterListener
 			if(mOnNeedChangeWants!=null)
 				mOnNeedChangeWants.onNeedChangeWants(wantChangeStart, wantChangeEnd, wants);
 		}
-	}
-	
-	@Override
-	public boolean onKeyUp(int keyCode, KeyEvent event) {
-		Editable editable=getText();
-		int start=Selection.getSelectionStart(editable);
-		int end=Selection.getSelectionEnd(editable);
-		if(start==end&&keyCode==KeyEvent.KEYCODE_ENTER){
-			if(!insertNewLine(end))
-			{
-				editable.replace(start, end, "\n");
-				setSelection(start+1, start+1);
-			}
-			return true;
-		}else
-		return super.onKeyUp(keyCode, event);
-	}
-	
-	public boolean insertNewLine(int position){
-		Editable editable=getText();
-		int numberOfNull=0; //一个'\t' 4个空格 
-		int numberOfK=0;
-		for(int index=position-1;index>=0;index--){
-			//向前查找 '{' 
-			char indexch=editable.charAt(index);
-			if(indexch=='\n')
-				break;
-			if(indexch==' '){
-				numberOfNull++;
-			}else
-			if(indexch=='\t'){
-				numberOfNull+=4;
-			}else
-			if(indexch=='{')
-			{
-				numberOfK+=4;
-			}else{
-				numberOfNull=0;
-			}
-		}
-		
-		for(int index=position;index<editable.length();index++){
-			//向后查找 '}' 
-			char indexch=editable.charAt(index);
-			if(indexch=='\n')
-				break;
-			if(indexch==' '){
-			}else
-			if(indexch=='\t'){
-			}else
-			if(indexch=='}')
-			{
-				numberOfK-=4;
-			}
-		}
-		if(numberOfK<0)
-			numberOfK=0;
-		numberOfNull+=numberOfK;
-		if(numberOfNull<0)
-			numberOfNull=0;
-		int end=position;
-		for(;end<editable.length()-1;end++){
-			char indexch=editable.charAt(end);
-			if( !(indexch == '\t' || indexch == ' ') )
-				break;
-		}
-		String str="\n";
-		for(;numberOfNull>=4;numberOfNull-=4){
-			str+='\t';
-		}
-		for(;numberOfNull>0;numberOfNull--){
-			str+=' ';
-		}
-		
-		editable.replace(position, end, str);
-		setSelection(position+str.length(), position+str.length());
-		return true;
 	}
 	
 	public void onWantSelect(int start,int end,String str){

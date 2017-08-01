@@ -101,43 +101,43 @@ public class MyInputConnection implements InputConnection ,SpanWatcher{
 	int mBatchEditNum=0;
 	@Override
 	public boolean beginBatchEdit() {
-		Log.i(TAG, "beginBatchEdit");
+		//Log.i(TAG, "beginBatchEdit");
 		mBatchEditNum++;
 		return false;
 	}
 	
 	@Override
 	public boolean endBatchEdit() {
-		Log.i(TAG, "endBatchEdit");
+		//Log.i(TAG, "endBatchEdit");
 		mBatchEditNum--;
 		return false;
 	}
 	
 	@Override
 	public boolean commitCompletion(CompletionInfo text) {
-		Log.i(TAG, "commitCompletion:"+text);
+		//Log.i(TAG, "commitCompletion:"+text);
 		return true;
 	}
 	@Override
 	public boolean commitCorrection(CorrectionInfo correctionInfo) {
-		Log.i(TAG, "correctionInfo:"+correctionInfo);
+		//Log.i(TAG, "correctionInfo:"+correctionInfo);
 		return true;
 	}
 	
 	@Override
 	public boolean performPrivateCommand(String action, Bundle data) {
-		Log.i(TAG, "performPrivateCommand:"+action+" "+data);
+		//Log.i(TAG, "performPrivateCommand:"+action+" "+data);
 		return true;
 	}
 	
 	public boolean requestCursorUpdates(int cursorUpdateMode) {
-		Log.i(TAG, "requestCursorUpdates:"+cursorUpdateMode);
+		//Log.i(TAG, "requestCursorUpdates:"+cursorUpdateMode);
 		return true;
 	}
 
 	@Override
     public CharSequence getTextBeforeCursor(int length, int flags) {
-		Log.i(TAG, "getTextBeforeCursor:"+length);
+		//Log.i(TAG, "getTextBeforeCursor:"+length);
         final Editable content = getEditable();
         if (content == null) return null;
 
@@ -166,7 +166,7 @@ public class MyInputConnection implements InputConnection ,SpanWatcher{
 
 	@Override
     public CharSequence getTextAfterCursor(int length, int flags) {
-		Log.i(TAG, "getTextAfterCursor:"+length);
+		//Log.i(TAG, "getTextAfterCursor:"+length);
         final Editable content = getEditable();
         if (content == null) return null;
 
@@ -197,7 +197,7 @@ public class MyInputConnection implements InputConnection ,SpanWatcher{
 
 	@Override
     public CharSequence getSelectedText(int flags) {
-		Log.i(TAG, "getSelectedText:"+flags);
+		//Log.i(TAG, "getSelectedText:"+flags);
         final Editable content = getEditable();
         if (content == null) return null;
 
@@ -220,7 +220,7 @@ public class MyInputConnection implements InputConnection ,SpanWatcher{
 
 	@Override
     public int getCursorCapsMode(int reqModes) {
-		Log.i(TAG, "getCursorCapsMode:"+reqModes);
+		//Log.i(TAG, "getCursorCapsMode:"+reqModes);
 		return 0;
 		/*
         if (mDummyMode) return 0;
