@@ -163,6 +163,10 @@ public class MyEditText extends View implements OnGestureListener,TextWatcher, O
 		mLineNumberPaint.setColor(Color.GRAY);
 		mLineNumberPaint.setTypeface(Typeface.MONOSPACE);
 		mSpaceWidth = mLineNumberPaint.measureText(" ");
+		float strokeWidth=mSpaceWidth/4;
+		if(strokeWidth<1)
+			strokeWidth=1;
+		mCursorPaint.setStrokeWidth(strokeWidth);
 		getLayout().setLineHeight(size*mFontScale*1.2f*mLineScale);
 	}
 	
@@ -199,10 +203,6 @@ public class MyEditText extends View implements OnGestureListener,TextWatcher, O
 		mSelectionBackgroundPaint.setColor(Color.argb(0x60, 0x80, 0xf8, 0x80));
 		mSelectionPaint.setColor(Color.argb(0xff, 0x80, 0x88, 0xff));
 		mLineNumberPaint.setTypeface(Typeface.MONOSPACE);
-		float strokeWidth=getContext().getResources().getDisplayMetrics().density;
-		if(strokeWidth<1)
-			strokeWidth=1;
-		mCursorPaint.setStrokeWidth(strokeWidth);
 		setScrollContainer(true);
 		this.post(new Runnable(){
 			int colors[]={
@@ -340,7 +340,20 @@ public class MyEditText extends View implements OnGestureListener,TextWatcher, O
 				}
 				//mLineNumberPaint
 			}
-
+			
+			{
+				float lineStartY = 0;
+				float lineEndY = 0;
+				mLayout.getLineBounds(lineStart, mBounds);
+				lineStartY = mBounds.top;
+				mLayout.getLineBounds(lineEnd, mBounds);
+				lineEndY = mBounds.bottom;
+				float oldWidth = mLineNumberPaint.getStrokeWidth();
+				mLineNumberPaint.setStrokeWidth(mSpaceWidth/8);
+				canvas.drawLine(mBounds.left - mSpaceWidth/4, lineStartY, mBounds.left - mSpaceWidth/4, lineEndY, mLineNumberPaint);
+				mLineNumberPaint.setStrokeWidth(oldWidth);
+			}
+			
 			try {
 				mLayout.draw(canvas);
 			} catch (OutOfMemoryError e) {
@@ -618,19 +631,22 @@ public class MyEditText extends View implements OnGestureListener,TextWatcher, O
 		if(mLayout!=null){
 			int line=mLayout.getLineForVertical(getScrollY()+(int) e.getY());
 			int offset=mLayout.getOffsetForHorizontal(line, getScrollX()+(int)e.getX());
-			showWarnAndError(line,offset);
+			if(!showWarnAndError(line,offset))
+				showMenu();
+		}else{
+			showMenu();
 		}
 		return false;
 	}
 	
-	public void showWarnAndError(int line,int offset){
+	public boolean showWarnAndError(int line,int offset){
 		if( !(getLayout() instanceof EditableWithLayout))
 		{
-			return ;
+			return false;
 		}
 		List<WarnAndError> warnAndErrors = ((EditableWithLayout)getLayout()).getWarnAndErrors();
 		if(warnAndErrors==null)
-			return ;
+			return false;
 		
 		Iterator<WarnAndError> iterator = warnAndErrors.iterator();
 		WarnAndError warnAndError = null;
@@ -643,7 +659,7 @@ public class MyEditText extends View implements OnGestureListener,TextWatcher, O
 			}
 		}
 		if(warnAndError==null)
-			return ;
+			return false;
 		
 		AlertDialog alertDialog = null;
 		AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
@@ -661,6 +677,7 @@ public class MyEditText extends View implements OnGestureListener,TextWatcher, O
 		builder.setView(textView);
 		alertDialog = builder.create();
 		alertDialog.show();
+		return true;
 	}
 
 	@Override
@@ -774,7 +791,7 @@ public class MyEditText extends View implements OnGestureListener,TextWatcher, O
 	@Override
 	public void onLongPress(MotionEvent e) {
 		//Log.i(TAG, "onLongPress");
-		if(isSelection()){
+		if(isSelection()||getText().length()==0){
 			showMenu();
 		}else
 		if(mLayout!=null){
