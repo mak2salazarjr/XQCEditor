@@ -885,8 +885,7 @@ public class MyEditText extends View implements OnGestureListener,TextWatcher, O
 			editable.delete(start, end);
 			break;
 		case KeyEvent.KEYCODE_ENTER:
-			//editable.replace(start, end, "\n");
-			//setSelection(start+1, start+1);
+			editable.replace(start, end, "\n");
 			break;
 		case KeyEvent.KEYCODE_TAB:
 			editable.replace(start, end, "\t");
