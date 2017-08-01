@@ -15,6 +15,7 @@ import android.graphics.Rect;
 import android.text.Editable;
 import android.text.InputFilter;
 import android.text.Selection;
+import android.text.SpanWatcher;
 import android.text.TextPaint;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -119,16 +120,21 @@ public class EditableWithLayout implements Editable,MyLayout {
 	public void setSpanEx(Object what, int start, int end, int flags) {
 		Log.i(TAG, "setSpanEx:"+mSpanInfos.size()+"  :"+what.getClass());
 		SpanInfo spanInfo = getOrCreateSpanBody(what);
+		int ostart = spanInfo.mStart;
+		int oend = spanInfo.mEnd;
+		
 		spanInfo.mSpan = what;
 		spanInfo.mStart = start;
 		spanInfo.mEnd = end;
 		spanInfo.mFlags = flags;
+		
+		SpanWatcher []spanWatchers = (SpanWatcher[]) getSpans(0, length(), SpanWatcher.class);
+		sendOnSpanChanged(spanWatchers,spanInfo.mSpan, ostart, oend, spanInfo.mStart, spanInfo.mEnd);
 	}
 
 	@Override
 	public void setSpan(Object what, int start, int end, int flags) {
 		if(what==MyInputConnection.COMPOSING){
-
 			Log.i(TAG, "setSpan COMPOSING:start:"+start+" end:"+end);
 		}
 		/*
@@ -189,6 +195,12 @@ public class EditableWithLayout implements Editable,MyLayout {
 		for(TextWatcher textWatcher:textWatchers)
 			textWatcher.afterTextChanged(this);
 	}
+	
+	public void sendOnSpanChanged(SpanWatcher []spanWatchers,Object what, int ostart,int oend, int nstart, int nend){
+		for(SpanWatcher spanWatcher:spanWatchers){
+			spanWatcher.onSpanChanged(this, what, ostart, oend, nstart, nend);
+		}
+	}
 
 	public void removeSpanEx(Object what) {
 		int pos = -1;
@@ -228,10 +240,8 @@ public class EditableWithLayout implements Editable,MyLayout {
 		return ts;
 	}
 	
-	@SuppressWarnings("unchecked")
 	@Override
 	public <T> T[] getSpans(int start, int end, Class<T> type) {
-		
 		//return (T[]) Array.newInstance(type, 0);
 		return getSpansEx(start,end,type);
 	}

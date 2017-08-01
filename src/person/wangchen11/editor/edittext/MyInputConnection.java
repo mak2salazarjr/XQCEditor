@@ -6,8 +6,8 @@ import android.os.SystemClock;
 import android.text.Editable;
 import android.text.NoCopySpan;
 import android.text.Selection;
+import android.text.SpanWatcher;
 import android.text.Spannable;
-import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -26,14 +26,14 @@ import android.view.inputmethod.InputMethodManager;
 class ComposingText implements NoCopySpan {
 }
 
-public class MyInputConnection implements InputConnection {
+public class MyInputConnection implements InputConnection ,SpanWatcher{
 	BaseInputConnection b;
 	protected static final String TAG="MyInputConnection";
-	private boolean mIsFristCallGetEditable=true;
     private InputMethodManager mIMM;
 	private View mView;
     static final Object COMPOSING = new ComposingText();
     private Object[] mDefaultComposingSpans;
+	public Editable mEditable = null;
 
     public InputMethodManager getInputMethodManager(){
     	return mIMM;
@@ -42,15 +42,13 @@ public class MyInputConnection implements InputConnection {
     public MyInputConnection(View view) {
     	mView=view;
         mIMM = (InputMethodManager)view.getContext().getSystemService( Context.INPUT_METHOD_SERVICE);
+        mEditable = new EditableWithLayout();
+        mEditable.setSpan(this, 0, mEditable.length(), Spanned.SPAN_INCLUSIVE_INCLUSIVE);
+		if(mView instanceof TextWatcher)
+			mEditable.setSpan(mView, 0, mEditable.length(), Spanned.SPAN_INCLUSIVE_INCLUSIVE);
 	}
-	public Editable mEditable=new EditableWithLayout();//new SpannableStringBuilder();
+    
 	public Editable getEditable() {
-		if(mIsFristCallGetEditable)
-		{
-			mIsFristCallGetEditable=false;
-			if(mView instanceof TextWatcher)
-				mEditable.setSpan(mView, 0, mEditable.length(), Spanned.SPAN_INCLUSIVE_INCLUSIVE);
-		}
 		return mEditable;
 	}
 	
@@ -270,7 +268,7 @@ public class MyInputConnection implements InputConnection {
             a = b;
             b = tmp;
         }
-
+/*
         // ignore the composing text.
         int ca = getComposingSpanStart(content);
         int cb = getComposingSpanEnd(content);
@@ -282,7 +280,7 @@ public class MyInputConnection implements InputConnection {
         if (ca != -1 && cb != -1) {
             if (ca < a) a = ca;
             if (cb > b) b = cb;
-        }
+        }*/
 
         int deleted = 0;
 
@@ -398,12 +396,14 @@ public class MyInputConnection implements InputConnection {
             // If we are in selection mode, then we want to extend the
             // selection instead of replacing it.
             Selection.extendSelection(content, start);
+            /*
             getInputMethodManager().updateSelection(
-            		mView, start, start, 0, 0);
+            		mView, start, start, 0, 0);*/
         } else {
             Selection.setSelection(content, start, end);
+            /*
             getInputMethodManager().updateSelection(
-            		mView, start, end, 0, 0);
+            		mView, start, end, 0, 0);*/
         }
         return true;
 	}
@@ -526,5 +526,24 @@ public class MyInputConnection implements InputConnection {
         
         endBatchEdit();
     }
+
+	@Override
+	public void onSpanAdded(Spannable text, Object what, int start, int end) {
+	}
+
+	@Override
+	public void onSpanRemoved(Spannable text, Object what, int start, int end) {
+	}
+
+	@Override
+	public void onSpanChanged(Spannable text, Object what, int ostart,
+			int oend, int nstart, int nend) {
+		if(what == Selection.SELECTION_START || what == Selection.SELECTION_END){
+			finishComposingText();
+            getInputMethodManager().updateSelection(
+            		mView, Selection.getSelectionStart(mEditable), Selection.getSelectionEnd(mEditable), 0, 0);
+		}
+		Log.i(TAG, "onSpanChanged:"+what);
+	}
     
 }
