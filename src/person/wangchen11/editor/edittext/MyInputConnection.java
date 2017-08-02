@@ -433,16 +433,8 @@ public class MyInputConnection implements InputConnection ,SpanWatcher{
 
 	@Override
 	public boolean sendKeyEvent(KeyEvent event) {
-		//Log.i(TAG, "sendKeyEvent:"+event);
 		if(mView!=null)
-		switch(event.getAction() ){
-		case KeyEvent.ACTION_DOWN:
-			mView.onKeyDown(event.getKeyCode(), event);
-			break;
-		case KeyEvent.ACTION_UP:
-			mView.onKeyUp(event.getKeyCode(), event);
-			break;
-		}
+			mView.dispatchKeyEvent(event);
         return false;
 	}
 
@@ -543,7 +535,7 @@ public class MyInputConnection implements InputConnection ,SpanWatcher{
             getInputMethodManager().updateSelection(
             		mView, Selection.getSelectionStart(mEditable), Selection.getSelectionEnd(mEditable), 0, 0);
 		}
-		Log.i(TAG, "onSpanChanged:"+what);
+		//Log.i(TAG, "onSpanChanged:"+what);
 	}
     
 }
