@@ -60,13 +60,13 @@ public class EditableWithLayout implements Editable,MyLayout {
 	}
 	
 	public void setLineHeight(float lineHeight){
-		Log.i(TAG, "setLineHeight:"+lineHeight);
+		//Log.i(TAG, "setLineHeight:"+lineHeight);
 		mLineHeight=lineHeight;
 	}
 
 	@Override
 	public float getLineHeight() {
-		Log.i(TAG, "getLineHeight:"+mLineHeight);
+		//Log.i(TAG, "getLineHeight:"+mLineHeight);
 		return mLineHeight;
 	}
 	@Override
@@ -119,7 +119,7 @@ public class EditableWithLayout implements Editable,MyLayout {
 	}
 
 	public void setSpanEx(Object what, int start, int end, int flags) {
-		Log.i(TAG, "setSpanEx:"+mSpanInfos.size()+"  :"+what.getClass());
+		//Log.i(TAG, "setSpanEx:"+mSpanInfos.size()+"  :"+what.getClass());
 		SpanInfo spanInfo = getOrCreateSpanBody(what);
 		int ostart = spanInfo.mStart;
 		int oend = spanInfo.mEnd;
@@ -136,7 +136,7 @@ public class EditableWithLayout implements Editable,MyLayout {
 	@Override
 	public void setSpan(Object what, int start, int end, int flags) {
 		if(what==MyInputConnection.COMPOSING){
-			Log.i(TAG, "setSpan COMPOSING:start:"+start+" end:"+end);
+			//Log.i(TAG, "setSpan COMPOSING:start:"+start+" end:"+end);
 		}
 		/*
 		if( what == Selection.SELECTION_START )
@@ -1024,7 +1024,7 @@ public class EditableWithLayout implements Editable,MyLayout {
 	}
 	
 	public boolean canUndo(){
-		Log.i(TAG, "canUndo :"+!mUndoBodies.isEmpty());
+		//Log.i(TAG, "canUndo :"+!mUndoBodies.isEmpty());
 		return !mUndoBodies.isEmpty();
 	}
 	
@@ -1066,7 +1066,7 @@ public class EditableWithLayout implements Editable,MyLayout {
 	}
 	
 	public boolean canRedo(){
-		Log.i(TAG, "canRedo :"+!mRedoBodies.isEmpty());
+		//Log.i(TAG, "canRedo :"+!mRedoBodies.isEmpty());
 		return !mRedoBodies.isEmpty();
 		
 	}
@@ -1196,7 +1196,7 @@ public class EditableWithLayout implements Editable,MyLayout {
 			if (mSt == mEn && mText != null && mText.length() != 0
 					&& mEnd - mStart > 0)
 				return true;
-			Log.i("isInsert", "false");
+			//Log.i("isInsert", "false");
 			return false;
 		}
 
@@ -1207,10 +1207,10 @@ public class EditableWithLayout implements Editable,MyLayout {
 				this.mSelectionStart = body.mSelectionStart;
 				return true;
 			}
-			Log.i("addBody", "addBody");
+			//Log.i("addBody", "addBody");
 			if (isInsert() && body.isInsert()
 					&& mSt + mText.length() == body.mSt) {// 合并相连的插入
-				Log.i("addBody", "合并相连的插入 ");
+				//Log.i("addBody", "合并相连的插入 ");
 				if (body.mText.toString().contains("\n")) {
 					return false;
 				}

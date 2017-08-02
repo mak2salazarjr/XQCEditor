@@ -869,7 +869,7 @@ public class MyEditText extends View implements OnGestureListener,TextWatcher, O
 	
 	@Override
 	public boolean onKeyUp(int keyCode, KeyEvent event) {
-		Log.i(TAG, "onKeyUp:"+event);
+		//Log.i(TAG, "onKeyUp:"+event);
 		switch(event.getKeyCode()){
 		case KeyEvent.KEYCODE_SHIFT_LEFT:
 		case KeyEvent.KEYCODE_SHIFT_RIGHT:
@@ -885,10 +885,13 @@ public class MyEditText extends View implements OnGestureListener,TextWatcher, O
 	
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
-		Log.i(TAG, "onKeyDown:"+event);
+		//event.getDevice().isVirtual();
+		//Log.i(TAG, "onKeyDown:"+event);
 		Editable editable=getText();
 		int start=Selection.getSelectionStart(editable);
 		int end=Selection.getSelectionEnd(editable);
+
+		if(!event.isCtrlPressed())
 		switch(event.getKeyCode()){
 		case KeyEvent.KEYCODE_SHIFT_LEFT:
 		case KeyEvent.KEYCODE_SHIFT_RIGHT:
@@ -996,41 +999,37 @@ public class MyEditText extends View implements OnGestureListener,TextWatcher, O
 				}
 			}
 			break;
+		default:
+			return false;
+		}
+		
+		/////////////////////////////////////
+		if(event.isCtrlPressed())
+		switch(event.getKeyCode()){
 		case KeyEvent.KEYCODE_A:
-			if(event.isCtrlPressed()){
-				this.performContextMenuAction(android.R.id.selectAll);
-			}
+			this.performContextMenuAction(android.R.id.selectAll);
 			break;
 		case KeyEvent.KEYCODE_Z:
-			if(event.isCtrlPressed()){
-				Log.i(TAG, "Ctrl Z");
-				this.undo();
-			}
+			Log.i(TAG, "Ctrl Z");
+			this.undo();
 			break;
 		case KeyEvent.KEYCODE_Y:
-			if(event.isCtrlPressed()){
-				Log.i(TAG, "Ctrl Y");
-				this.redo();
-			}
+			Log.i(TAG, "Ctrl Y");
+			this.redo();
 			break;
 		case KeyEvent.KEYCODE_X:
-			if(event.isCtrlPressed()){
-				this.performContextMenuAction(android.R.id.cut);
-			}
+			this.performContextMenuAction(android.R.id.cut);
 			break;
 		case KeyEvent.KEYCODE_C:
-			if(event.isCtrlPressed()){
-				this.performContextMenuAction(android.R.id.copy);
-			}
+			this.performContextMenuAction(android.R.id.copy);
 			break;
 		case KeyEvent.KEYCODE_V:
-			if(event.isCtrlPressed()){
-				this.performContextMenuAction(android.R.id.paste);
-			}
+			this.performContextMenuAction(android.R.id.paste);
 			break;
 		default:
 			return false;	
 		}
+		
 		return true;
 	}
 

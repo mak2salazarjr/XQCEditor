@@ -24,6 +24,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -187,6 +188,24 @@ public class EditorFregment extends Fragment implements OnClickListener, AfterTe
 		}
 		configAllView(mRelativeLayout);
 		configCharList(mQuickInput);
+		
+		mCodeEditText.setOnKeyListener(new View.OnKeyListener() {
+			@Override
+			public boolean onKey(View v, int keyCode, KeyEvent event) {
+				Log.i(TAG, "onKey:"+keyCode);
+				if(mListView.getVisibility()==View.VISIBLE) {
+					if(keyCode == KeyEvent.KEYCODE_DPAD_DOWN){
+						mListView.setItemChecked(0, true);
+						return true;
+					}else if(keyCode == KeyEvent.KEYCODE_DPAD_UP){
+					}else if(keyCode == KeyEvent.KEYCODE_DPAD_CENTER || keyCode == KeyEvent.KEYCODE_ENTER){
+					}
+				}else{
+				}
+				return false;
+			}
+		});
+		
 		return mRelativeLayout;
 	}
 	

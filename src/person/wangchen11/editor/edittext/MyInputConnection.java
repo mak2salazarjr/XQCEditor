@@ -60,11 +60,11 @@ public class MyInputConnection implements InputConnection ,SpanWatcher{
 	
 	@Override
 	public ExtractedText getExtractedText(ExtractedTextRequest request,int flags) {
-		
+		/*
 		Log.i(TAG, "getExtractedText"+" flags:"+request.flags+" hitMaxC"+request.hintMaxChars+
 				" hintMaxLines:"+request.hintMaxLines+" token"+request.token
 				+" describeContents:"+request.describeContents()
-				);
+				);*/
 		//return null;
 		
 		//if(mBatchEditNum!=0)
@@ -243,18 +243,18 @@ public class MyInputConnection implements InputConnection ,SpanWatcher{
 
 
     public static int getComposingSpanStart(Spannable text) {
-		Log.i(TAG, "getComposingSpanStart:");
+		//Log.i(TAG, "getComposingSpanStart:");
         return text.getSpanStart(COMPOSING);
     }
     
     public static int getComposingSpanEnd(Spannable text) {
-		Log.i(TAG, "getComposingSpanEnd:");
+		//Log.i(TAG, "getComposingSpanEnd:");
         return text.getSpanEnd(COMPOSING);
     }
     
 	@Override
     public boolean deleteSurroundingText(int beforeLength, int afterLength) {
-		Log.i(TAG, "deleteSurroundingText:"+beforeLength+" "+afterLength);
+		//Log.i(TAG, "deleteSurroundingText:"+beforeLength+" "+afterLength);
         final Editable content = getEditable();
         if (content == null) return false;
 
@@ -312,14 +312,14 @@ public class MyInputConnection implements InputConnection ,SpanWatcher{
 
 	@Override
     public boolean setComposingText(CharSequence text, int newCursorPosition) {
-		Log.i(TAG, "setComposingText:"+text);
+		//Log.i(TAG, "setComposingText:"+text);
         replaceText(text, newCursorPosition, true);
         return true;
     }
 
 	@Override
     public boolean setComposingRegion(int start, int end) {
-		Log.i(TAG, "setComposingRegion:"+start);
+		//Log.i(TAG, "setComposingRegion:"+start);
         final Editable content = getEditable();
         if (content != null) {
             beginBatchEdit();
@@ -354,7 +354,7 @@ public class MyInputConnection implements InputConnection ,SpanWatcher{
 
 	@Override
     public boolean finishComposingText() {
-		Log.i(TAG, "finishComposingText:");
+		//Log.i(TAG, "finishComposingText:");
         final Editable content = getEditable();
         if (content != null) {
             beginBatchEdit();
@@ -366,7 +366,7 @@ public class MyInputConnection implements InputConnection ,SpanWatcher{
 
 	@Override
 	public boolean commitText(CharSequence text, int newCursorPosition) {
-		Log.i(TAG, "commitText:"+text);
+		//Log.i(TAG, "commitText:"+text);
         //replaceText(text, newCursorPosition, false);
 		Editable content=getEditable();
 		content.replace(Selection.getSelectionStart(content),Selection.getSelectionEnd(content) , text);
@@ -380,7 +380,7 @@ public class MyInputConnection implements InputConnection ,SpanWatcher{
 
 	@Override
 	public boolean setSelection(int start, int end) {
-		Log.i(TAG, "setSelection:"+start+end);
+		//Log.i(TAG, "setSelection:"+start+end);
         final Editable content = getEditable();
         if (content == null) return false;
         int len = content.length();
@@ -410,7 +410,7 @@ public class MyInputConnection implements InputConnection ,SpanWatcher{
 
 	@Override
 	public boolean performEditorAction(int editorAction) {
-		Log.i(TAG, "performEditorAction:"+editorAction);
+		//Log.i(TAG, "performEditorAction:"+editorAction);
         long eventTime = SystemClock.uptimeMillis();
         sendKeyEvent(new KeyEvent(eventTime, eventTime,
                 KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_ENTER, 0, 0,
@@ -427,13 +427,13 @@ public class MyInputConnection implements InputConnection ,SpanWatcher{
 
 	@Override
 	public boolean performContextMenuAction(int id) {
-		Log.i(TAG, "performContextMenuAction:"+id);
+		//Log.i(TAG, "performContextMenuAction:"+id);
 		return false;
 	}
 
 	@Override
 	public boolean sendKeyEvent(KeyEvent event) {
-		Log.i(TAG, "sendKeyEvent:"+event);
+		//Log.i(TAG, "sendKeyEvent:"+event);
 		if(mView!=null)
 		switch(event.getAction() ){
 		case KeyEvent.ACTION_DOWN:
