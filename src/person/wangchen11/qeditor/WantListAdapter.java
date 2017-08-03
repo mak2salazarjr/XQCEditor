@@ -3,6 +3,7 @@ package person.wangchen11.qeditor;
 import java.util.List;
 
 import person.wangchen11.ccode.WantMsg;
+import person.wangchen11.window.ext.Setting;
 import android.graphics.Color;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -78,7 +79,7 @@ public class WantListAdapter extends BaseAdapter implements OnKeyListener {
 			layout.addView(textView2);
 		}
 		if(position == mSelectedPosition){
-			layout.setBackgroundColor(Color.rgb(0xcf, 0xcf, 0xcf));
+			layout.setBackgroundColor(Setting.mConfig.mEditorConfig.mBackGroundColor);
 		}else{
 			layout.setBackgroundColor(Color.TRANSPARENT);
 		}

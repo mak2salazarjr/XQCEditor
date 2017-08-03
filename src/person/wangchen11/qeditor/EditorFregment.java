@@ -36,7 +36,6 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
-import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -626,7 +625,17 @@ public class EditorFregment extends Fragment implements OnClickListener, AfterTe
 		}
 		else{
 			mListView.setVisibility(View.VISIBLE);
-			WantListAdapter wantListAdapter = new WantListAdapter(wants,mListView);
+			WantListAdapter wantListAdapter = new WantListAdapter(wants,mListView){
+				@Override
+				public boolean onSelected(int position) {
+					if(position>=0){
+						WantMsg wantMsg = getItem(position);
+						mCodeEditText.getText().replace(mWantChangeStart, mWantChangeEnd, wantMsg.toString());
+					}
+					onNeedChangeWants(0,0,null);
+					return super.onSelected(position);
+				}
+			};
 			mListView.setAdapter(wantListAdapter);
 			mCodeEditText.setOnKeyListener(wantListAdapter);
 		}
