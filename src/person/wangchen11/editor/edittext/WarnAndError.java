@@ -1,6 +1,7 @@
 package person.wangchen11.editor.edittext;
 
 import android.graphics.Color;
+import person.wangchen11.waps.Waps;
 import person.wangchen11.xqceditor.R;
 
 public class WarnAndError {
@@ -112,6 +113,7 @@ public class WarnAndError {
 	};
 	
 	public static String translateMsg(String msg){
+		if(!Waps.isGoogle())
 		for(int i=0;i<mReplaceStr.length;i++){
 			msg = msg.replaceAll(mReplaceStr[i][0], mReplaceStr[i][1]);
 		}

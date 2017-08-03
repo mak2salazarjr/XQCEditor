@@ -6,6 +6,7 @@ import android.graphics.*;
 import android.os.*;
 import android.text.*;
 import android.text.Editable.Factory;
+import android.text.style.SuggestionSpan;
 import android.util.*;
 import android.view.*;
 import android.view.inputmethod.InputMethodManager;
@@ -40,8 +41,19 @@ public class TextEditorView extends EditText {
 		setEditableFactory(new Factory(){
 			@Override
 			public Editable newEditable(CharSequence source) {
+				return new SpannableStringBuilder(source){
+					@Override
+					public void setSpan(Object what, int start, int end,
+							int flags) {
+						if(what instanceof SuggestionSpan){
+							Log.i(TAG, "jump setSpan:"+what.getClass());
+							return ;
+						}
+						super.setSpan(what, start, end, flags);
+					}
+				};
 				//return new QuicklySpannableStringBuilder(source);
-				return super.newEditable(source);
+				//return super.newEditable(source);
 			}
 		});
 		setGravity(Gravity.TOP);
@@ -253,7 +265,7 @@ public class TextEditorView extends EditText {
 
 	@Override
 	protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-		long timeStart = System.currentTimeMillis();
+		//long timeStart = System.currentTimeMillis();
 		Layout layout = getLayout();
 		if(layout==null){
 			super.onMeasure(widthMeasureSpec, heightMeasureSpec);
@@ -261,7 +273,7 @@ public class TextEditorView extends EditText {
 		}
 		else
 			setMeasuredDimension(layout.getWidth(), layout.getHeight());
-		Log.i(TAG, "onMeasure used:"+(System.currentTimeMillis()-timeStart));
+		//Log.i(TAG, "onMeasure used:"+(System.currentTimeMillis()-timeStart));
 		
 	}
 

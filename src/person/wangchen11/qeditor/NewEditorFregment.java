@@ -10,9 +10,11 @@ import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.AlertDialog;
+import android.app.Notification.Action;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Rect;
@@ -23,11 +25,14 @@ import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
+import android.text.method.KeyListener;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnKeyListener;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.WindowManager.LayoutParams;
@@ -611,65 +616,29 @@ public class NewEditorFregment extends Fragment implements OnClickListener, Afte
 		mWantChangeStart=start;
 		mWantChangeEnd=end;
 		
-		if(wants==null)
-		{
+		if(wants==null||wants.size()<=0) {
 			mListView.setVisibility(View.GONE);
-			return ;
-		}
-		if(wants.size()<=0)
-		{
-			mListView.setVisibility(View.GONE);
+			mCodeEditText.setOnKeyListener(null);
 		}
 		else{
 			mListView.setVisibility(View.VISIBLE);
-			mListView.setAdapter(new WantListAdapter(wants));
+			WantListAdapter wantListAdapter = new WantListAdapter(wants,mListView){
+				@Override
+				public boolean onSelected(int position) {
+					if(position>=0){
+						WantMsg wantMsg = getItem(position);
+						mCodeEditText.getText().replace(mWantChangeStart, mWantChangeEnd, wantMsg.toString());
+					}
+					onNeedChangeWants(0,0,null);
+					return super.onSelected(position);
+				}
+			};
+			mListView.setAdapter(wantListAdapter);
+			mCodeEditText.setOnKeyListener(wantListAdapter);
 		}
 		//Log.i(TAG, "wants:"+wants);
 	}
 	
-	class WantListAdapter extends BaseAdapter{
-		List<WantMsg> mWants;
-		public WantListAdapter(List<WantMsg> wants) {
-			mWants=wants;
-		}
-		@Override
-		public int getCount() {
-			return mWants.size();
-		}
-
-		@Override
-		public Object getItem(int position) {
-			return mWants.get(position);
-		}
-
-		@Override
-		public long getItemId(int position) {
-			return position;
-		}
-
-		@Override
-		public View getView(int position, View convertView, ViewGroup parent) {
-			WantMsg wantMsg = mWants.get(position);
-			float density=parent.getContext().getResources().getDisplayMetrics().density;
-			LinearLayout layout = new LinearLayout(parent.getContext());
-			layout.setPadding((int)(density*2),(int)( density*4),(int)( density*2),(int)( density*4) );
-			layout.setOrientation(LinearLayout.VERTICAL);
-			TextView textView=new TextView(parent.getContext());
-			textView.setText(wantMsg.mReplace);
-			textView.setTextSize(14f);
-			layout.addView(textView);
-			if(wantMsg.mTip!=null&&wantMsg.mTip.length()>0){
-				TextView textView2=new TextView(parent.getContext());
-				textView2.setText(wantMsg.mTip);
-				textView2.setTextSize(10);
-				textView2.setTextColor(Color.rgb(0x80, 0x30, 0x00));
-				layout.addView(textView2);
-			}
-			return layout;
-		}
-		
-	}
-
 	@Override
 	public void onItemClick(AdapterView<?> parent, View view, int position,
 			long id) {
