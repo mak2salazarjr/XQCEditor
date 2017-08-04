@@ -54,6 +54,11 @@ public class CodeEditText extends MyEditText implements CodeStypeAdapterListener
 		InputFilter []filters = new InputFilter[]{new CodeInputFilter(){
 			@Override
 			public boolean isEnable() {
+				Editable editable = getText();
+				if(editable instanceof EditableWithLayout){
+					EditableWithLayout editableWithLayout = (EditableWithLayout) editable;
+					return editableWithLayout.isSaveToHistory();
+				}
 				return true;
 			}
 		}};

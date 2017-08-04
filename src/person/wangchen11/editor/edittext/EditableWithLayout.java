@@ -1028,9 +1028,16 @@ public class EditableWithLayout implements Editable,MyLayout {
 		return !mUndoBodies.isEmpty();
 	}
 	
+	private boolean mSaveToHistory = true;
+	
+	public boolean isSaveToHistory(){
+		return mSaveToHistory;
+	}
+	
 	public boolean undo(){
 		if(!canUndo())
 			return false;
+		mSaveToHistory = false;
 		ReplaceBody body=mUndoBodies.pop();
 		ReplaceBody replaceBody=body.getUndoBody();
 		if(mMaxSaveHistory>0){
@@ -1057,7 +1064,7 @@ public class EditableWithLayout implements Editable,MyLayout {
 		}
 		setSpan(Selection.SELECTION_START, mSelectionStart, mSelectionStart, 0);
 		setSpan(Selection.SELECTION_END, mSelectionEnd, mSelectionEnd, 0);
-		
+		mSaveToHistory = true;
 		return true;
 	}
 	
@@ -1074,6 +1081,7 @@ public class EditableWithLayout implements Editable,MyLayout {
 	public boolean redo(){
 		if(!canRedo())
 			return false;
+		mSaveToHistory = false;
 		ReplaceBody body=mRedoBodies.pop();
 		ReplaceBody replaceBody=body.getRedoBody();
 		if(mMaxSaveHistory>0){
@@ -1099,7 +1107,7 @@ public class EditableWithLayout implements Editable,MyLayout {
 		}
 		setSpan(Selection.SELECTION_START, mSelectionStart, mSelectionStart, 0);
 		setSpan(Selection.SELECTION_END, mSelectionEnd, mSelectionEnd, 0);
-		
+		mSaveToHistory = true;
 		return true;
 	}
 
