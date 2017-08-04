@@ -51,7 +51,12 @@ public class CodeEditText extends MyEditText implements CodeStypeAdapterListener
 	
 	public void setText(CharSequence charSequence) {
 		super.setText(charSequence);
-		InputFilter []filters = new InputFilter[]{new CodeInputFilter()};
+		InputFilter []filters = new InputFilter[]{new CodeInputFilter(){
+			@Override
+			public boolean isEnable() {
+				return true;
+			}
+		}};
 		getText().setFilters(filters);
 	}
 	

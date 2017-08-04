@@ -3,7 +3,7 @@ package person.wangchen11.editor.edittext;
 import android.text.InputFilter;
 import android.text.Spanned;
 
-public class CodeInputFilter implements InputFilter {
+public abstract class CodeInputFilter implements InputFilter {
 
 	@Override
 	public CharSequence filter(CharSequence source, int start, int end,
@@ -13,6 +13,7 @@ public class CodeInputFilter implements InputFilter {
 
 	public CharSequence autoIndent(CharSequence source, int start, int end,
 									Spanned dest, int dstart, int dend) {
+		if(isEnable())
 		if( (end-start==1)&&(source.charAt(start)=='\n')){
 			return newLine(dest,dstart);
 		}
@@ -80,4 +81,6 @@ public class CodeInputFilter implements InputFilter {
 	public String getTabString(){
 		return "\t";
 	}
+	
+	public abstract boolean isEnable();
 }

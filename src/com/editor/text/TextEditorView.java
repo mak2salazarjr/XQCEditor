@@ -153,6 +153,10 @@ public class TextEditorView extends EditText {
 		public String getTabString() {
 			return mReplaceTab;
 		};
+		@Override
+		public boolean isEnable() {
+			return mSaveToHistory;
+		}
 	};
 
     private TextWatcher watcher = new TextWatcher(){

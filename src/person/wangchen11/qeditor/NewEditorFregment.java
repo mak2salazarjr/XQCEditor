@@ -132,7 +132,7 @@ public class NewEditorFregment extends Fragment implements OnClickListener, Afte
 		if(Setting.mConfig.mOtherConfig.mCtrlAtHead){
 			mRelativeLayout = (RelativeLayout) inflater.inflate(R.layout.fragment_new_ceditor, null);
 		}else{
-			//mRelativeLayout = (RelativeLayout) inflater.inflate(R.layout.fragment_ceditor_cdt, null);
+			mRelativeLayout = (RelativeLayout) inflater.inflate(R.layout.fragment_new_ceditor_cdt, null);
 		}
 		mListView= (ListView) mRelativeLayout.findViewById(R.id.listView1);
 		mListView.setVisibility(View.GONE);
