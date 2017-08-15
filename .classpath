@@ -6,5 +6,6 @@
 	<classpathentry exported="true" kind="con" path="com.android.ide.eclipse.adt.LIBRARIES"/>
 	<classpathentry exported="true" kind="con" path="com.android.ide.eclipse.adt.DEPENDENCIES"/>
 	<classpathentry kind="lib" path="libs/juniversalchardet-1.0.3.jar"/>
+	<classpathentry kind="lib" path="libs/ZipEntry.jar"/>
 	<classpathentry kind="output" path="bin/classes"/>
 </classpath>

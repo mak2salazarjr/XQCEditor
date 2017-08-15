@@ -9,9 +9,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Enumeration;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipException;
-import java.util.zip.ZipFile;
+
+import com.file.zip.ZipEntry;
+import com.file.zip.ZipFile;
+
 import android.content.Context;
 import android.util.Log;
 
@@ -130,9 +131,9 @@ public class FileUtil {
 		int ret = 0;
 		
 		try {
-			ZipFile zipFile = new ZipFile(file);
+			ZipFile zipFile = new ZipFile(file,"GBK");
 			byte data[] = new byte[BUFFER];
-			Enumeration<? extends ZipEntry> enumeration = zipFile.entries();
+			Enumeration<ZipEntry> enumeration = zipFile.getEntries();
 			while(enumeration.hasMoreElements()){
 				ZipEntry entry = enumeration.nextElement();
 				Log.i("Unzip: ", "" + entry);
@@ -164,9 +165,6 @@ public class FileUtil {
 				ret++;
 			}
 			zipFile.close();
-				
-		} catch (ZipException e) {
-			e.printStackTrace();
 		} catch (IOException e) {
 			e.printStackTrace();
 		} finally {
