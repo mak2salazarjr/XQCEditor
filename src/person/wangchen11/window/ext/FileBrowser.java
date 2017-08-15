@@ -21,6 +21,7 @@ import person.wangchen11.filebrowser.FileBowserFragment;
 import person.wangchen11.filebrowser.OnOpenListener;
 import person.wangchen11.gnuccompiler.GNUCCompiler;
 import person.wangchen11.plugins.PluginsManager;
+import person.wangchen11.util.FileUtil;
 import person.wangchen11.util.ToastUtil;
 import person.wangchen11.window.MenuTag;
 import person.wangchen11.window.Window;
@@ -321,7 +322,7 @@ public class FileBrowser implements Window,OnOpenListener, OnClickListener{
 					else
 					{
 						file.mkdirs();
-						GNUCCompiler.freeZip(mWindowsManager.getContext(), "sdl project.zip", file.getAbsolutePath());
+						FileUtil.freeZip(mWindowsManager.getContext(), "sdl project.zip", file.getAbsolutePath());
 					}
 					
 				}

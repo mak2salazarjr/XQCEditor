@@ -270,6 +270,10 @@ public class CEditor implements Window, ChangeFlagChanged, OnClickListener ,Wind
 					menuTags.add(new MenuTag(R.string.build_and_run,getText(R.string.build_and_run) ));
 				}
 				menuTags.add(new MenuTag(R.string.build_so,getText(R.string.build_so) ));
+				if(cProject!=null){
+					menuTags.add(new MenuTag(R.string.build_so_exclude_cur,getText(R.string.build_so_exclude_cur) ));
+					menuTags.add(new MenuTag(R.string.build_a_exclude_cur,getText(R.string.build_a_exclude_cur) ));
+				}
 				
 				if(name.endsWith(".c")||
 						name.endsWith(".cpp"))
@@ -384,7 +388,7 @@ public class CEditor implements Window, ChangeFlagChanged, OnClickListener ,Wind
 						if(files.size()>0)
 						{
 
-							cmd+=GNUCCompiler2.getCompilerCmd( mWindowsManager.getContext(),cProject,false);
+							cmd+=GNUCCompiler2.getCompilerCmd( mWindowsManager.getContext(),cProject,false,null);
 							cmd+=GNUCCompiler.getRunCmd(mWindowsManager.getContext(), new File(cProject.getBinFilePath()));
 							//cmd=GNUCCompiler.getProjectCompilerAndRunCmd(mWindowsManager.getContext(), files, new File(cProject.getBinFilePath()),  cProject.getOtherOption() );
 							processName=GNUCCompiler.getRunCmdProcessName();
@@ -460,7 +464,7 @@ public class CEditor implements Window, ChangeFlagChanged, OnClickListener ,Wind
 					List<File > files=cProject.getAllCFiles();
 					if(files.size()>0)
 					{
-						cmd+=GNUCCompiler2.getCompilerCmd( mWindowsManager.getContext(),cProject,true);
+						cmd+=GNUCCompiler2.getCompilerCmd( mWindowsManager.getContext(),cProject,true,null);
 						//cmd=GNUCCompiler.getProjectCompilerSoCmd(mWindowsManager.getContext(), files, new File(cProject.getSoFilePath()), cProject.getOtherOption() );
 					}
 					else
@@ -470,6 +474,47 @@ public class CEditor implements Window, ChangeFlagChanged, OnClickListener ,Wind
 				}else
 				{
 					cmd = GNUCCompiler.getCompilerSoCmd(mWindowsManager.getContext(), getFile(),null);
+				}
+				mWindowsManager.addWindow(new Console(mWindowsManager,cmd,true,getFile().getParent() , cProject!=null ? cProject.getSoFilePath(): getFile().getPath()));
+			}
+			break;
+		case R.string.build_so_exclude_cur:
+			if(getFile()!=null)
+			{
+				cProject=CProject.findCProjectByFile(getFile());
+				String cmd="";
+				if(cProject!=null)
+				{
+					List<File > files=cProject.getAllCFiles();
+					if(files.size()>0)
+					{
+						cmd+=GNUCCompiler2.getCompilerCmd( mWindowsManager.getContext(),cProject,true,getFile());
+						//cmd=GNUCCompiler.getProjectCompilerSoCmd(mWindowsManager.getContext(), files, new File(cProject.getSoFilePath()), cProject.getOtherOption() );
+					}
+					else
+						cmd="echo '"+
+								mWindowsManager.getContext().getText(R.string.c_file_not_found)+
+								"'\n";
+				}
+				mWindowsManager.addWindow(new Console(mWindowsManager,cmd,true,getFile().getParent() , cProject!=null ? cProject.getSoFilePath(): getFile().getPath()));
+			}
+			break;
+		case R.string.build_a_exclude_cur:
+			if(getFile()!=null)
+			{
+				cProject=CProject.findCProjectByFile(getFile());
+				String cmd="";
+				if(cProject!=null)
+				{
+					List<File > files=cProject.getAllCFiles();
+					if(files.size()>0)
+					{
+						cmd+=GNUCCompiler2.getCompilerACmd( mWindowsManager.getContext(),cProject,getFile());
+					}
+					else
+						cmd="echo '"+
+								mWindowsManager.getContext().getText(R.string.c_file_not_found)+
+								"'\n";
 				}
 				mWindowsManager.addWindow(new Console(mWindowsManager,cmd,true,getFile().getParent() , cProject!=null ? cProject.getSoFilePath(): getFile().getPath()));
 			}

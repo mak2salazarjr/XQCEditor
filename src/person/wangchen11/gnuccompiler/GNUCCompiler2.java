@@ -12,6 +12,7 @@ import person.wangchen11.xqceditor.R;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Environment;
+import android.util.Log;
 
 @SuppressLint("DefaultLocale") public class GNUCCompiler2 {
 	static final String TAG = "GNUCCompiler2";
@@ -198,7 +199,7 @@ import android.os.Environment;
 		return false;
 	}
 	
-	public static String getCompilerCmd(Context context,CProject project,boolean toSo){
+	public static String getCompilerCmd(Context context,CProject project,boolean toSo,File exclude){
 		File outFile = null;
 		if(toSo)
 			outFile = new File(project.getSoFilePath());
@@ -213,6 +214,10 @@ import android.os.Environment;
 		cmdBuilder.append("cd \""+project.getProjectPath()+"\"\n");
 		//cmdBuilder.append(getExportEnvPathCmd(context));
 		List<File> allFiles = project.getAllCFiles();
+		if(exclude!=null){
+			allFiles.remove(exclude);
+			Log.i(TAG, "exclude:"+exclude);
+		}
 		try {
 			cmdBuilder.append(getCompilerToObjCmd(allFiles, objPath, srcPath,project.getCompileOption()));
 		} catch (Exception e) {
@@ -245,6 +250,53 @@ import android.os.Environment;
 		else
 			cmdBuilder.append(" -static ");
 		cmdBuilder.append(" "+ (otherOption!=null?otherOption:""));
+		cmdBuilder.append("\n");
+
+		//cmdBuilder.append("if [ ! -f \""+outFile.getPath()+"\" ]; then \n");
+		cmdBuilder.append("if [  $? -ne 0 ]; then \n");
+		cmdBuilder.append("echo \""+context.getText(R.string.compilation_fails)+"\"\n");
+		cmdBuilder.append("else\n");
+		cmdBuilder.append("echo \""+context.getText(R.string.successfully_compiled)+"\"\n");
+		cmdBuilder.append("fi\n");
+		
+		cmdBuilder.append("else\n");
+		cmdBuilder.append( "echo \""+context.getText(R.string.compilation_fails)+"\"\n");
+		cmdBuilder.append("fi\n");
+		return cmdBuilder.toString();
+	}
+
+	public static String getCompilerACmd(Context context,CProject project,File exclude){
+		File outFile = null;
+		outFile = new File(project.getAFilePath());
+		outFile.delete();
+		outFile.getParentFile().mkdirs();
+		File objPath = new File(project.getObjPath());
+		File srcPath = new File(project.getSrcPath());
+		//String otherOption = project.getOtherOption();
+		StringBuilder cmdBuilder = new StringBuilder();
+		cmdBuilder.append("cd \""+project.getProjectPath()+"\"\n");
+		//cmdBuilder.append(getExportEnvPathCmd(context));
+		List<File> allFiles = project.getAllCFiles();
+		if(exclude!=null){
+			allFiles.remove(exclude);
+		}
+		try {
+			cmdBuilder.append(getCompilerToObjCmd(allFiles, objPath, srcPath,project.getCompileOption()));
+		} catch (Exception e) {
+			e.printStackTrace();
+			return "echo \"Exception:"+e.getMessage()+"\"\n";
+		}
+		cmdBuilder.append("if [ \"$compiler_to_obj_success\" = \"1\" ] \n");
+		cmdBuilder.append("then\n");
+		cmdBuilder.append("echo linking...\n");
+		cmdBuilder.append("ar crv ");
+		cmdBuilder.append("\""+outFile.getAbsolutePath()+"\" ");
+		try {
+			cmdBuilder.append( getFilesString(getObjFiles(project.getAllCFiles(), objPath, srcPath)));
+		} catch (Exception e) {
+			e.printStackTrace();
+			return "echo \"Exception:"+e.getMessage()+"\"\n";
+		}
 		cmdBuilder.append("\n");
 
 		//cmdBuilder.append("if [ ! -f \""+outFile.getPath()+"\" ]; then \n");

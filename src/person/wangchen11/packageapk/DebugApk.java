@@ -138,10 +138,10 @@ public class DebugApk implements OnClickListener {
 		if(files.size()>0)
 		{
 			if(mProject.isGuiProject())
-				cmd=GNUCCompiler2.getCompilerCmd(mContext, mProject, true);
+				cmd=GNUCCompiler2.getCompilerCmd(mContext, mProject, true,null);
 				//cmd=GNUCCompiler.getProjectCompilerSoCmd(mContext, files, new File(mProject.getSoFilePath()), mProject.getOtherOption() );
 			else
-				cmd=GNUCCompiler2.getCompilerCmd(mContext, mProject, false);
+				cmd=GNUCCompiler2.getCompilerCmd(mContext, mProject, false,null);
 				//cmd=GNUCCompiler.getProjectCompilerCmd(mContext, files, new File(mProject.getBinFilePath()), mProject.getOtherOption() );
 		}
 		else

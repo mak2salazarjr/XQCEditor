@@ -13,7 +13,7 @@ import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlPullParserFactory;
 import org.xmlpull.v1.XmlSerializer;
 
-import person.wangchen11.gnuccompiler.GNUCCompiler;
+import person.wangchen11.util.FileUtil;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -128,6 +128,9 @@ public class CProject {
 	public String getBinFilePath(){
 		return getBinPath()+File.separatorChar+mProjectName+".elf";
 	}
+	public String getAFilePath(){
+		return getBinPath()+File.separatorChar+mProjectName+".a";
+	}
 	public String getSoFilePath(){
 		return getBinPath()+File.separatorChar+mProjectName+".so";
 	}
@@ -173,7 +176,7 @@ public class CProject {
 		dir=new File(getBinPath());
 		if(!dir.mkdirs())
 			throw new Exception("创建生成目录失败!");
-		if( !GNUCCompiler.freeZip(context, "console project.zip", getProjectPath()) )
+		if( FileUtil.freeZip(context, "console project.zip", getProjectPath())<=0 )
 			throw new Exception("释放资源失败!");
 	}
 	
@@ -194,7 +197,7 @@ public class CProject {
 		dir=new File(getBinPath());
 		if(!dir.mkdirs())
 			throw new Exception("创建生成目录失败!");
-		if( !GNUCCompiler.freeZip(context, "gui project.zip", getProjectPath()) )
+		if( FileUtil.freeZip(context, "gui project.zip", getProjectPath())<=0 )
 			throw new Exception("释放资源失败!");
 	}
 	

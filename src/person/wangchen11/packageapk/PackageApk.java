@@ -1,20 +1,15 @@
 package person.wangchen11.packageapk;
 
-import java.io.BufferedOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipInputStream;
 import person.wangchen11.console.Console;
 import person.wangchen11.console.Terminal;
 import person.wangchen11.cproject.CProject;
 import person.wangchen11.filebrowser.Open;
-import person.wangchen11.gnuccompiler.GNUCCompiler;
 import person.wangchen11.gnuccompiler.GNUCCompiler2;
+import person.wangchen11.util.FileUtil;
 import person.wangchen11.xqceditor.R;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
@@ -24,7 +19,6 @@ import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.os.Handler;
 import android.support.annotation.NonNull;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,7 +27,6 @@ import android.widget.TextView;
 
 public class PackageApk implements OnClickListener{
 	final static String TAG="PackageApk";
-	private static final int BUFFER = 4096;
 	private Context mContext;
 	private CProject mProject;
 	private AlertDialog mAlertDialog;
@@ -117,10 +110,10 @@ public class PackageApk implements OnClickListener{
 		if(files.size()>0)
 		{
 			if(mProject.isGuiProject())
-				cmd=GNUCCompiler2.getCompilerCmd(mContext, mProject, true);
+				cmd=GNUCCompiler2.getCompilerCmd(mContext, mProject, true,null);
 				//cmd=GNUCCompiler.getProjectCompilerSoCmd(mContext, files, new File(mProject.getSoFilePath()), mProject.getOtherOption() );
 			else
-				cmd=GNUCCompiler2.getCompilerCmd(mContext, mProject, false);
+				cmd=GNUCCompiler2.getCompilerCmd(mContext, mProject, false,null);
 				//cmd=GNUCCompiler.getProjectCompilerCmd(mContext, files, new File(mProject.getBinFilePath()), mProject.getOtherOption() );
 		}
 		else
@@ -181,56 +174,6 @@ public class PackageApk implements OnClickListener{
 		return mContext.getFilesDir()+"/security/testkey.pk8";
 	}
 
-	@SuppressWarnings("resource")
-	public static boolean freeZip(String fileIn,String pathTo){
-		if(pathTo!=null)
-			pathTo+=File.separatorChar;
-		try {
-			ZipInputStream zis = new ZipInputStream(new FileInputStream(new File(fileIn)));
-			BufferedOutputStream dest = null;
-			ZipEntry entry = null; 
-			String strEntry = null;
-			byte data[] = new byte[BUFFER];
-			while ((entry = zis.getNextEntry()) != null) {
-				try {
-					Log.i("Unzip: ", "" + entry);
-					int count;
-					strEntry = entry.getName();
-
-					File entryFile = new File(pathTo + strEntry);
-					File entryDir = new File(entryFile.getParent());
-					entryDir.mkdirs();
-					if (!entryDir.exists()) {
-						Log.i(TAG, "mkdirs");
-						if(!entryDir.mkdirs())
-							Log.i(TAG, "mkdirs failed :"+entryDir.getAbsolutePath());;
-					}
-					if(entry.isDirectory())
-					{
-						entryFile.mkdirs();
-					}else
-					{
-						FileOutputStream fos = new FileOutputStream(entryFile);
-						dest = new BufferedOutputStream(fos, BUFFER);
-						while ((count = zis.read(data, 0, BUFFER)) != -1) {
-							dest.write(data, 0, count);
-						}
-						dest.flush();
-						dest.close();
-					}
-				} catch (Exception ex) {
-					ex.printStackTrace();
-					return false;
-				}
-			}
-			zis.close();
-		} catch (Exception cwj) {
-			cwj.printStackTrace();
-			return false;
-		}
-		return true;
-	}
-	
 	private void onCompileComplete()
 	{
 		if(mIsAlive)
@@ -317,7 +260,7 @@ public class PackageApk implements OnClickListener{
 	{
 		if(!new File(getPemPath()).isFile())
 		{
-			return GNUCCompiler.freeZip(mContext, "security.zip", mContext.getFilesDir().getPath());
+			return FileUtil.freeZip(mContext, "security.zip", mContext.getFilesDir().getPath())>0;
 		}
 		return true;
 	}

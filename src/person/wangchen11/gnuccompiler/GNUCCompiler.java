@@ -1,15 +1,7 @@
 package person.wangchen11.gnuccompiler;
 
-import java.io.BufferedOutputStream;
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipInputStream;
-
 import person.wangchen11.plugins.WaitingProcess;
 import person.wangchen11.util.FileUtil;
 import person.wangchen11.waps.Waps;
@@ -21,12 +13,10 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Environment;
 import android.support.annotation.Nullable;
-import android.util.Log;
 
 @SuppressLint("DefaultLocale") 
 public class GNUCCompiler {
-	protected final static String TAG="GNUCCompiler"; 
-	private final static int BUFFER=4096; 
+	protected final static String TAG="GNUCCompiler";
 
 	public static void freeResourceIfNeed(final Context context){
 		new WaitingProcess(context,R.string.free_res) {
@@ -37,35 +27,35 @@ public class GNUCCompiler {
 				if(!Waps.isGoogle())
 				if( State.isUpdated() || !new File(getWorkSpaceDir()).isDirectory() )
 				{
-					freeZip(context, "workspace.zip", getSystemDir() );
+					FileUtil.freeZip(context, "workspace.zip", getSystemDir() );
 				}
 				setMsg(R.string.install_gcc);
 				setProcess(20);
 				if( State.isUpdated() || !new File(getGccPath(context)).isDirectory() )
 				{
-					freeZip(context, "gcc.zip", getRunablePath(context));
+					FileUtil.freeZip(context, "gcc.zip", getRunablePath(context));
 				}
 				setMsg(R.string.free_gcc_res);
 				setProcess(40);
 				if( State.isUpdated() || !new File(getIncludeDir()).isDirectory() )
 				{
-					freeZip(context, "gcc include.zip", getSystemDir() );
+					FileUtil.freeZip(context, "gcc include.zip", getSystemDir() );
 				}
 				setMsg(R.string.free_gpp_res);
 				setProcess(60);
 				if( State.isUpdated() || !new File(getIncludeDirEx()).isDirectory() )
 				{
-					freeZip(context, "g++ include.zip", getSystemDir() );
+					FileUtil.freeZip(context, "g++ include.zip", getSystemDir() );
 				}
 				setProcess(80);
 				if( State.isUpdated() || !new File(getFixCppObj(context)).isFile() )
 				{
-					freeFile(context, "fix.cpp.o", getFixCppObj(context));
+					FileUtil.freeFile(context, "fix.cpp.o", getFixCppObj(context));
 				}
 				setProcess(99);
 				if( State.isUpdated() || !new File(Setting.getThemeDir()).isDirectory() )
 				{
-					freeZip(context, "themes.zip", Setting.getThemeDir() );
+					FileUtil.freeZip(context, "themes.zip", Setting.getThemeDir() );
 				}
 				setProcess(100);
 				FileUtil.setFileAllChildsExecutable(new File(getGccPath(context)));
@@ -81,84 +71,6 @@ public class GNUCCompiler {
 		}).start();
 	}
 
-	public static boolean freeZip(Context context,String assetsName,String pathTo){
-		if(pathTo!=null)
-			pathTo+=File.separatorChar;
-		try {
-			ZipInputStream zis = new ZipInputStream(context.getAssets().open(
-					assetsName));
-			BufferedOutputStream dest = null;
-			ZipEntry entry = null; 
-			String strEntry = null;
-			byte data[] = new byte[BUFFER];
-			while ((entry = zis.getNextEntry()) != null) {
-				try {
-					Log.i("Unzip: ", "" + entry);
-					int count;
-					strEntry = entry.getName();
-
-					File entryFile = new File(pathTo + strEntry);
-					File entryDir = new File(entryFile.getParent());
-					entryDir.mkdirs();
-					if (!entryDir.exists()) {
-						Log.i(TAG, "mkdirs");
-						if(!entryDir.mkdirs())
-							Log.i(TAG, "mkdirs failed :"+entryDir.getAbsolutePath());;
-					}
-					if(entry.isDirectory())
-					{
-						entryFile.mkdirs();
-					}else
-					{
-						FileOutputStream fos = new FileOutputStream(entryFile);
-						dest = new BufferedOutputStream(fos, BUFFER);
-						while ((count = zis.read(data, 0, BUFFER)) != -1) {
-							dest.write(data, 0, count);
-						}
-						dest.flush();
-						dest.close();
-					}
-				} catch (Exception ex) {
-					ex.printStackTrace();
-					return false;
-				}
-			}
-			zis.close();
-		} catch (Exception cwj) {
-			cwj.printStackTrace();
-			return false;
-		}
-		return true;
-	}
-
-	public static boolean freeFile(Context context,String assetsName,String fileTo)
-	{
-		try {
-			OutputStream outputStream=new FileOutputStream(new File(fileTo));
-			try {
-				InputStream inputStream=context.getAssets().open(assetsName);
-				byte data[] = new byte[4096];
-				int readLen=0;
-				while( ( readLen=inputStream.read(data))>0 )
-				{
-					outputStream.write(data,0,readLen);
-				}
-				inputStream.close();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-			try {
-				outputStream.close();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-			return false;
-		}
-		return true;
-	}
-	
 	public static String getGccPath(Context context){
 		return getRunablePath(context)+"/gcc/arm-linux-androideabi/bin/";
 	}
