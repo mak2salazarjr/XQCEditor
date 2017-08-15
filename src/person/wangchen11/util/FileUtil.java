@@ -136,7 +136,7 @@ public class FileUtil {
 			Enumeration<ZipEntry> enumeration = zipFile.getEntries();
 			while(enumeration.hasMoreElements()){
 				ZipEntry entry = enumeration.nextElement();
-				Log.i("Unzip: ", "" + entry);
+				Log.i(TAG, "Unzip:" + entry);
 				int count;
 				String strEntry = entry.getName();
 
