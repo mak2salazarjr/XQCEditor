@@ -229,7 +229,7 @@ import android.util.Log;
 		cmdBuilder.append("echo linking...\n");
 		cmdBuilder.append("gcc ");
 		try {
-			cmdBuilder.append( getFilesString(getObjFiles(project.getAllCFiles(), objPath, srcPath)));
+			cmdBuilder.append( getFilesString(getObjFiles(allFiles, objPath, srcPath)));
 		} catch (Exception e) {
 			e.printStackTrace();
 			return "echo \"Exception:"+e.getMessage()+"\"\n";
@@ -256,6 +256,7 @@ import android.util.Log;
 		cmdBuilder.append("if [  $? -ne 0 ]; then \n");
 		cmdBuilder.append("echo \""+context.getText(R.string.compilation_fails)+"\"\n");
 		cmdBuilder.append("else\n");
+		cmdBuilder.append("echo Install:\""+outFile.getAbsolutePath()+"\"\n");
 		cmdBuilder.append("echo \""+context.getText(R.string.successfully_compiled)+"\"\n");
 		cmdBuilder.append("fi\n");
 		
@@ -292,7 +293,7 @@ import android.util.Log;
 		cmdBuilder.append("ar crv ");
 		cmdBuilder.append("\""+outFile.getAbsolutePath()+"\" ");
 		try {
-			cmdBuilder.append( getFilesString(getObjFiles(project.getAllCFiles(), objPath, srcPath)));
+			cmdBuilder.append( getFilesString(getObjFiles(allFiles, objPath, srcPath)));
 		} catch (Exception e) {
 			e.printStackTrace();
 			return "echo \"Exception:"+e.getMessage()+"\"\n";
@@ -303,6 +304,7 @@ import android.util.Log;
 		cmdBuilder.append("if [  $? -ne 0 ]; then \n");
 		cmdBuilder.append("echo \""+context.getText(R.string.compilation_fails)+"\"\n");
 		cmdBuilder.append("else\n");
+		cmdBuilder.append("echo Install:\""+outFile.getAbsolutePath()+"\"\n");
 		cmdBuilder.append("echo \""+context.getText(R.string.successfully_compiled)+"\"\n");
 		cmdBuilder.append("fi\n");
 		
