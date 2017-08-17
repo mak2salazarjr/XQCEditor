@@ -178,6 +178,10 @@
     <string name="_back">返回</string>
     <string name="_updatemsg">更新说明</string>
     <string name="_updateinfo">
+2.1.6:\n
+(1)新增编译为静态库功能。\n
+(2)新增多线程编译功能。\n
+\n
 2.1.5:\n
 (1)加入新版编辑框(在设置中打开，新版编辑框编辑大文件速度较慢，但是对所有输入法兼容性)。\n
 (2)旧版编辑框兼容谷歌键盘等输入法。\n
@@ -258,4 +262,7 @@
     <string name="use_new_ver_edittext">使用新版编辑框</string>
     <string name="build_so_exclude_cur">编译为so(排除当前文件)</string>
     <string name="build_a_exclude_cur">编译为静态库a(排除当前文件)</string>
+    <string name="threads">线程</string>
+    <string name="mut_thread_compile">多线程编译:</string>
+    <string name="build_static_lib_a">编译为静态库a</string>
 </resources>
