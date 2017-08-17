@@ -94,7 +94,7 @@ public class CProject {
 		mCompileOption="";
 		if(isGuiProject)
 		{
-			mOtherOption=" -ljnigraphics ";
+			mOtherOption=" -ljnigraphics -Lslib/armeabi -lapi ";
 			mPackageSoFile="libNativeActivity.so";
 			mDebugType = "";
 		}
