@@ -224,5 +224,7 @@
     <string name="use_new_ver_edittext">Use new version EditText</string>
     <string name="build_so_exclude_cur">Build to SO(Exclude cur)</string>
     <string name="build_a_exclude_cur">Build to a(Exclude cur)</string>
+    <string name="threads">线程</string>
+    <string name="mut_thread_compile">多线程编译:</string>
     
 </resources>

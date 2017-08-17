@@ -103,6 +103,7 @@ public class Setting extends Fragment implements Window, TextWatcher, OnClickLis
 		((EditText)(mRelativeLayout.findViewById(R.id.et_cs_col))).addTextChangedListener(this);
 		((EditText)(mRelativeLayout.findViewById(R.id.et_cm_col))).addTextChangedListener(this);
 		
+		((EditText)(mRelativeLayout.findViewById(R.id.et_thread_number))).addTextChangedListener(this);
 		((EditText)(mRelativeLayout.findViewById(R.id.et_qk_ipt))).addTextChangedListener(this);
 		((EditText)(mRelativeLayout.findViewById(R.id.et_til_bk_col))).addTextChangedListener(this);
 		((EditText)(mRelativeLayout.findViewById(R.id.et_til_sl_col))).addTextChangedListener(this);
@@ -140,6 +141,7 @@ public class Setting extends Fragment implements Window, TextWatcher, OnClickLis
 		((EditText)(mRelativeLayout.findViewById(R.id.et_cs_col))).setText(String.format("%08x", mConfig.mCEditorConfig.mConstantColor ));
 		((EditText)(mRelativeLayout.findViewById(R.id.et_cm_col))).setText(String.format("%08x", mConfig.mCEditorConfig.mCommentsColor ));
 		
+		((EditText)(mRelativeLayout.findViewById(R.id.et_thread_number))).setText(""+mConfig.mOtherConfig.mThreadNumber);
 		((EditText)(mRelativeLayout.findViewById(R.id.et_qk_ipt))).setText(mConfig.mOtherConfig.mQuickInput);
 
 		((EditText)(mRelativeLayout.findViewById(R.id.et_til_bk_col))).setText(String.format("%08x", mConfig.mOtherConfig.mTitleBarColor ));
@@ -187,6 +189,10 @@ public class Setting extends Fragment implements Window, TextWatcher, OnClickLis
 		str=editText.getText().toString();
 		mConfig.mCEditorConfig.mCommentsColor=HexStrToIntWithTry(str);
 		
+		editText=((EditText)(mRelativeLayout.findViewById(R.id.et_thread_number)));
+		str=editText.getText().toString();
+		mConfig.mOtherConfig.mThreadNumber=StrToIntWithTry(str);
+		
 		editText=((EditText)(mRelativeLayout.findViewById(R.id.et_qk_ipt)));
 		str=editText.getText().toString();
 		mConfig.mOtherConfig.mQuickInput=str;
@@ -208,7 +214,14 @@ public class Setting extends Fragment implements Window, TextWatcher, OnClickLis
 	public static int HexStrToIntWithTry(String str){
 		try {
 			return (int) Long.parseLong(str, 16);
-			
+		} catch (Exception e) {
+			e.printStackTrace();
+			return 0;
+		}
+	}
+	public static int StrToIntWithTry(String str){
+		try {
+			return (int) Long.parseLong(str, 10);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return 0;
@@ -627,6 +640,7 @@ public class Setting extends Fragment implements Window, TextWatcher, OnClickLis
 	
 
 	public static class OtherConfig{
+		public int mThreadNumber = 8;
 		public String mQuickInput = "\t'\"`$[]{}<>()+-*%=&|!^~,;?:_\\";
 		public int mTitleBarColor = Color.rgb(0xff, 0xd3, 0x9b);
 		public int mSelectTitleColor = Color.rgb(0xff, 0xef, 0xd5) ;
@@ -639,6 +653,7 @@ public class Setting extends Fragment implements Window, TextWatcher, OnClickLis
 		public boolean mAnimation = true;
 		public static OtherConfig load(SharedPreferences sharedPreferences){
 			OtherConfig config=new OtherConfig();
+			config.mThreadNumber=sharedPreferences.getInt("mThreadNumber",config.mThreadNumber);
 			config.mQuickInput=sharedPreferences.getString("mQuickInput", config.mQuickInput);
 			config.mTitleBarColor=sharedPreferences.getInt("mTitleBarColor",config.mTitleBarColor);
 			config.mSelectTitleColor=sharedPreferences.getInt("mSelectTitleColor",config.mSelectTitleColor);
@@ -653,6 +668,7 @@ public class Setting extends Fragment implements Window, TextWatcher, OnClickLis
 		}
 
 		public void save(Editor editor){
+			editor.putInt("mThreadNumber", mThreadNumber);
 			editor.putString("mQuickInput",mQuickInput );
 			editor.putInt("mTitleBarColor", mTitleBarColor);
 			editor.putInt("mSelectTitleColor", mSelectTitleColor);

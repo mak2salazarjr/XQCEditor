@@ -465,6 +465,38 @@
                 android:layout_height="wrap_content"
                 android:text="@string/other_set"
                 android:textAppearance="?android:attr/textAppearanceLarge" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingBottom="8dp"
+                android:paddingTop="8dp" >
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center_horizontal"
+                    android:text="@string/mut_thread_compile" />
+
+                <EditText
+                    android:id="@+id/et_thread_number"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:singleLine="true"
+                    android:inputType="numberSigned"
+                    android:gravity="center_horizontal"
+                    android:typeface="monospace" >
+                </EditText>
+                
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center_horizontal"
+                    android:text="@string/threads" />
+            </LinearLayout>
             
             <LinearLayout
             	android:paddingTop="8dp"

@@ -1,12 +1,14 @@
 package person.wangchen11.gnuccompiler;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
 import person.wangchen11.cproject.CProject;
+import person.wangchen11.window.ext.Setting;
 import person.wangchen11.xqceditor.R;
 
 import android.annotation.SuppressLint;
@@ -149,7 +151,6 @@ import android.util.Log;
 	private static String getCompilerToObjCmd(List <File> files,File objPath,File srcPath,String compileOption) throws Exception
 	{
 		StringBuilder cmdBuilder = new StringBuilder();
-		cmdBuilder.append("compiler_to_obj_success=1\n");
 		
 		Iterator<File > iterator = files.iterator();
 		while(iterator.hasNext())
@@ -176,13 +177,27 @@ import android.util.Log;
 						+" -O "
 						+" "+(compileOption!=null?compileOption:"")
 						+"\n"
+						/*
 						//+"if [ ! -f \""+objFile.getPath()+"\" ]; then \n"
 						+"if [  $? -ne 0 ]; then \n"
 				      	+"compiler_to_obj_success=0\n"
-						+"fi\n");
+						+"fi\n"*/ );
 			}
 		}
 		cmdBuilder.append("\n");
+		File file = File.createTempFile("exec", ".sh");
+		FileOutputStream fileOutputStream = new FileOutputStream(file);
+		fileOutputStream.write(cmdBuilder.toString().getBytes());
+		fileOutputStream.close();
+		
+		cmdBuilder.delete(0, cmdBuilder.length());
+		cmdBuilder.append("compiler_to_obj_success=1\n");
+		cmdBuilder.append("mutexec "+Setting.mConfig.mOtherConfig.mThreadNumber+" "+file.getAbsolutePath()+"\n");
+		cmdBuilder.append(""
+				+"if [  $? -ne 0 ]; then \n"
+		      	+"compiler_to_obj_success=0\n"
+				+"fi\n");
+		cmdBuilder.append("rm \""+file.getAbsolutePath()+"\"\n");
 		return cmdBuilder.toString();
 	}
 	
