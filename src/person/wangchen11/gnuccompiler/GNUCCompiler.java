@@ -169,6 +169,7 @@ public class GNUCCompiler {
 		cmd+="if [  $? -ne 0 ]; then \n";
 		cmd+="echo \""+context.getText(R.string.compilation_fails)+"\"\n";
 		cmd+="else\n";
+		cmd+="strip \""+outFile.getAbsolutePath()+"\"\n";
 		cmd+="echo \""+context.getText(R.string.successfully_compiled)+"\"\n";
 		cmd+="fi\n";
 		return cmd;

@@ -272,6 +272,7 @@ import android.util.Log;
 		cmdBuilder.append("echo \""+context.getText(R.string.compilation_fails)+"\"\n");
 		cmdBuilder.append("else\n");
 		cmdBuilder.append("echo Install:\""+outFile.getAbsolutePath()+"\"\n");
+		cmdBuilder.append("strip \""+outFile.getAbsolutePath()+"\"\n");
 		cmdBuilder.append("echo \""+context.getText(R.string.successfully_compiled)+"\"\n");
 		cmdBuilder.append("fi\n");
 		
