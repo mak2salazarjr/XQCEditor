@@ -24,10 +24,15 @@ public class GNUCCompiler {
 			public void run() {
 				setProcess(0);
 				setMsg(R.string.free_example);
-				if(!Waps.isGoogle())
 				if( State.isUpdated() || !new File(getWorkSpaceDir()).isDirectory() )
 				{
-					FileUtil.freeZip(context, "workspace.zip", getSystemDir() );
+					String zipFile = "";
+					if(Waps.isGoogle()){
+						zipFile = "workspace_google.zip";
+					}else{
+						zipFile = "workspace.zip";
+					}
+					FileUtil.freeZip(context, zipFile, getSystemDir() );
 				}
 				setMsg(R.string.install_gcc);
 				setProcess(20);
