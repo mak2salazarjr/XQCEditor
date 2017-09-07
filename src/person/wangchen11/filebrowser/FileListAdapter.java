@@ -45,6 +45,7 @@ public class FileListAdapter extends BaseAdapter implements OnCheckedChangeListe
 	PathChangeCallBack mCallBack=null;
 	boolean mSelecting=false;
 	long mLastModified=0;
+	int  mLastFilesNumber = 0;
 	public FileListAdapter(LayoutInflater inflater) {
 		mInflater=inflater;
 		mSdcard=Environment.getExternalStorageDirectory();
@@ -154,7 +155,7 @@ public class FileListAdapter extends BaseAdapter implements OnCheckedChangeListe
 	
 	public boolean RefreshEx()
 	{
-		if(mLastModified==mPath.lastModified())
+		if((mLastModified==mPath.lastModified()) && (getFileSubFilesNumber(mPath) == mLastFilesNumber) )
 		{
 			return true;
 		}
@@ -163,11 +164,24 @@ public class FileListAdapter extends BaseAdapter implements OnCheckedChangeListe
 			mCallBack.onCheckChange();
 		return ret;
 	}
+	
+	private int getFileSubFilesNumber(File file){
+		File []files = file.listFiles();
+		if(files!=null)
+		{
+			return files.length;
+		}
+		return 0;
+	}
+	
 	public boolean OpenPath(File file)
 	{
 		Log.i("bsr","open "+file.getName() );
 		mPath=file;
 		mLastModified=mPath.lastModified();
+		
+		mLastFilesNumber = getFileSubFilesNumber(file);
+				
 		if(file.isDirectory())
 		{
 			mFiles.clear();
