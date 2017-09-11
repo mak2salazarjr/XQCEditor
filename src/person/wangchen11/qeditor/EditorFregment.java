@@ -310,7 +310,7 @@ public class EditorFregment extends Fragment implements OnClickListener, AfterTe
 	
 	private void configCharList(String chars){
 		float d=getActivity().getResources().getDisplayMetrics().density;
-		Rect rect=new Rect( (int)(d*12),(int)(d*2),(int)(d*12),(int)(d*2) );
+		Rect rect=new Rect( (int)(d*12),(int)(d*1),(int)(d*12),(int)(d*1) );
 		mLinearLayoutOfChars.removeAllViews();
 		for(int i=0;i<chars.length();i++){
 			char ch=chars.charAt(i);
@@ -322,7 +322,7 @@ public class EditorFregment extends Fragment implements OnClickListener, AfterTe
 				textView.setText(String.valueOf(ch));
 			}
 			textView.setTag(String.valueOf(ch));
-			textView.setTextSize(d*6);
+			textView.setTextSize(d*8);
 			textView.setPadding(rect.left, rect.top, rect.right, rect.bottom);
 			mLinearLayoutOfChars.addView(textView);
 		}
