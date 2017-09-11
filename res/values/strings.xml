@@ -227,5 +227,15 @@
     <string name="threads">threads</string>
     <string name="mut_thread_compile">Multithreading:</string>
     <string name="build_static_lib_a">Butid to static lib A</string>
+    <string name="restore_default">Restore default</string>
+    <string name="browser">Browser</string>
+    <string name="db_path">Data base path:</string>
+    <string name="www_path">File path:</string>
+    <string name="mysql_port">MYSQL port:</string>
+    <string name="http_port">HTTP port:</string>
+    <string name="state">state</string>
+    <string name="stop_service">Stop service</string>
+    <string name="start_service">Start service</string>
+    <string name="php_service_not_found">PHP server not found.Please download from:\nhttps://pan.baidu.com/s/1kV4ThjT</string>
     
 </resources>

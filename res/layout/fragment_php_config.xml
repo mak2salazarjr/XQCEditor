@@ -20,7 +20,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="启动服务" />
+            android:text="@string/start_service" />
 
         <person.wangchen11.phpconfig.SignalLight
             android:id="@+id/signal_light"
@@ -33,7 +33,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="关闭服务" />
+            android:text="@string/stop_service" />
 
     </LinearLayout>
 
@@ -48,7 +48,7 @@
         android:gravity="center_vertical"
         android:paddingBottom="4dp"
         android:paddingTop="4dp"
-        android:text="状态" />
+        android:text="@string/state" />
 
     <ScrollView
         android:id="@+id/scrollView1"
@@ -87,7 +87,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:singleLine="true"
-            android:text="HTTP端口号:" />
+            android:text="@string/http_port" />
 
         <EditText
             android:id="@+id/edit_http_port"
@@ -115,7 +115,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:singleLine="true"
-            android:text="MYSQL端口:" />
+            android:text="@string/mysql_port" />
 
         <EditText
             android:id="@+id/edit_mysql_port"
@@ -140,7 +140,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:singleLine="true"
-            android:text="网页路径:" />
+            android:text="@string/www_path" />
 
         <EditText
             android:id="@+id/edit_www_path"
@@ -163,7 +163,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:singleLine="true"
-            android:text="数据库路径:" />
+            android:text="@string/db_path" />
 
         <EditText
             android:id="@+id/edit_data_base_path"
@@ -179,7 +179,7 @@
         android:layout_alignLeft="@+id/linearLayout1"
         android:textIsSelectable="true"
         android:layout_alignParentTop="true"
-        android:text="您的机器尚未安装PHP插件！你可以通过下述链接下载或向作者索要。\n下载链接:https://pan.baidu.com/s/1kV4ThjT" />
+        android:text="@string/php_service_not_found" />
 
     <Button
         android:id="@+id/button_restore"
@@ -189,7 +189,7 @@
         android:layout_alignBottom="@+id/state"
         android:layout_alignParentRight="true"
         android:layout_toRightOf="@+id/progressBar1"
-        android:text="恢复默认" />
+        android:text="@string/restore_default" />
 
     <ProgressBar
         android:id="@+id/progressBar1"
@@ -205,6 +205,6 @@
         android:layout_alignLeft="@+id/LinearLayout01"
         android:layout_alignParentRight="true"
         android:layout_below="@+id/LinearLayout01"
-        android:text="浏览网站" />
+        android:text="@string/browser" />
 
 </RelativeLayout>
