@@ -20,11 +20,11 @@
     <string name="about">About</string>
     <string name="exit">Exit</string>
     
-    <string name="move_to_left">Move Left</string>
-    <string name="move_to_right">Move Right</string>
+    <string name="move_to_left">Move to left</string>
+    <string name="move_to_right">Move to right</string>
     
-    <string name="build_and_run">Build and Run</string>
-    <string name="build_so">Build to SO</string>
+    <string name="build_and_run">Build and run</string>
+    <string name="build_so">Build to \'so\'</string>
     
         
     <string name="new_file">New File</string>
@@ -32,7 +32,7 @@
     <string name="new_project">New Project</string>
     <string name="refresh">Refresh</string>
     <string name="info">Info</string>
-    <string name="by_wangchen11">By WangChen11\n1012371864@qq.com\nhttp://www.kxdmwc.com</string>
+    <string name="by_wangchen11">By WangChen11\nw1012371864@gmail.com\n1012371864@qq.com\nhttp://www.kxdmwc.com</string>
     <string name="editor_set">Editor Setting:</string>
     <string name="background_color">Background Color</string>
     <string name="font_color">Font Color</string>
@@ -139,13 +139,13 @@
     <string name="open_with_browser">open with browser</string>
     <string name="use_nice_font">"Use nice font"</string>
     <string name="use_high_light">Use high light</string>
-    <string name="complie_to_s">complie to asm</string>
+    <string name="complie_to_s">Complie to \'asm\'</string>
     <string name="charset">charset:</string>
     <string name="clean_objs">clean objs</string>
     <string name="this_file_can_not_run">this file is not runnable! </string>
     <string name="input_param">please input param</string>
     <string name="run_lua">run lua</string>
-    <string name="code_format">code format</string>
+    <string name="code_format">Code format</string>
     <string name="ip_addr">ip</string>
     <string name="port">port</string>
     <string name="connect">connect</string>
@@ -199,7 +199,7 @@
     <string name="ctrl_at_head">The control panel is on the top</string>
     <string name="animation">Animation</string>
     <string name="check_for_update">Check for update</string>
-    <string name="cur_version">Current version:</string>
+    <string name="cur_version">Current version</string>
     <string name="default_version">v1.0.0</string>
     <string name="is_the_latest_version">Is the latest version</string>
     <string name="is_the_latest_version_thanku">The current version is the latest version. Thank you!</string>
@@ -233,7 +233,7 @@
     <string name="www_path">File path:</string>
     <string name="mysql_port">MYSQL port:</string>
     <string name="http_port">HTTP port:</string>
-    <string name="state">state</string>
+    <string name="state">State</string>
     <string name="stop_service">Stop service</string>
     <string name="start_service">Start service</string>
     <string name="php_service_not_found">PHP server not found.Please download from:\nhttps://pan.baidu.com/s/1kV4ThjT</string>
