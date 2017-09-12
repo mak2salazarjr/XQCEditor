@@ -237,5 +237,8 @@
     <string name="stop_service">Stop service</string>
     <string name="start_service">Start service</string>
     <string name="php_service_not_found">PHP server not found.Please download from:\nhttps://pan.baidu.com/s/1kV4ThjT</string>
+    <string name="console_application">Console Application</string>
+    <string name="gui_application">GUI Application</string>
+    <string name="sdl_application">SDL Application</string>
     
 </resources>

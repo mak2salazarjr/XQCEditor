@@ -29,19 +29,19 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:checked="true"
-            android:text="控制台应用程序" />
+            android:text="@string/console_application" />
 
         <RadioButton
             android:id="@+id/radio_window"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="窗体应用程序" />
+            android:text="@string/gui_application" />
         
         <RadioButton
             android:id="@+id/radio_sdl"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="SDL应用程序" />
+            android:text="@string/sdl_application" />
     </RadioGroup>
 
 </LinearLayout>

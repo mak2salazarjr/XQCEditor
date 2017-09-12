@@ -11,9 +11,9 @@ import android.widget.LinearLayout;
 public class Waps {
 	static final String TAG="Waps";
 	private static String APP_ID="f29592b5daa7915e1048e659e7e930cf";
-	private static String APP_PID="qq";
+	//private static String APP_PID="qq";
 	private static boolean mInited = false;
-	//private static String APP_PID="google";
+	private static String APP_PID="google";
 	
 	private static Date mDurTime;
 	static{

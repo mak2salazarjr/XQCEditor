@@ -277,4 +277,8 @@
     <string name="stop_service">关闭服务</string>
     <string name="start_service">启动服务</string>
     <string name="php_service_not_found">您的机器尚未安装PHP插件！你可以通过下述链接下载或向作者索要。\\n下载链接:https://pan.baidu.com/s/1kV4ThjT</string>
+    
+    <string name="console_application">控制台应用程序</string>
+    <string name="gui_application">窗体应用程序</string>
+    <string name="sdl_application">SDL应用程序</string>
 </resources>
