@@ -2,6 +2,9 @@ package person.wangchen11.browser;
 
 import person.wangchen11.xqceditor.R;
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.net.http.SslError;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -9,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.TranslateAnimation;
+import android.webkit.SslErrorHandler;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
@@ -43,7 +47,29 @@ public class Browser extends Fragment {
         //加载html页面
         mWebView.loadUrl(mUrl);
         //设置为用我的mWebWiew打开URL
-        mWebView.setWebViewClient(new WebViewClient());
+        mWebView.setWebViewClient(new WebViewClient(){
+        	@Override
+        	public void onReceivedSslError(WebView view,
+        			final SslErrorHandler handler, SslError error) {
+        		final AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        		builder.setCancelable(false);
+    		    builder.setMessage(R.string.notification_error_ssl_cert_invalid);
+    		    builder.setPositiveButton("continue", new DialogInterface.OnClickListener() {
+    		        @Override
+    		        public void onClick(DialogInterface dialog, int which) {
+    		            handler.proceed();
+    		        }
+    		    });
+    		    builder.setNegativeButton("cancel", new DialogInterface.OnClickListener() {
+    		        @Override
+    		        public void onClick(DialogInterface dialog, int which) {
+    		            handler.cancel();
+    		        }
+    		    });
+    		    final AlertDialog dialog = builder.create();
+    		    dialog.show();
+        	}
+        });
         return viewGroup;
 	}
 	

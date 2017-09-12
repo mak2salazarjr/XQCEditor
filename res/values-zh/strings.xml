@@ -281,4 +281,5 @@
     <string name="console_application">控制台应用程序</string>
     <string name="gui_application">窗体应用程序</string>
     <string name="sdl_application">SDL应用程序</string>
+    <string name="notification_error_ssl_cert_invalid">SSL证书验证失败！是否继续加载页面？</string>
 </resources>
