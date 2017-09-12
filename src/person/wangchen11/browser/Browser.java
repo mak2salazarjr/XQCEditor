@@ -54,13 +54,13 @@ public class Browser extends Fragment {
         		final AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         		builder.setCancelable(false);
     		    builder.setMessage(R.string.notification_error_ssl_cert_invalid);
-    		    builder.setPositiveButton("continue", new DialogInterface.OnClickListener() {
+    		    builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
     		        @Override
     		        public void onClick(DialogInterface dialog, int which) {
     		            handler.proceed();
     		        }
     		    });
-    		    builder.setNegativeButton("cancel", new DialogInterface.OnClickListener() {
+    		    builder.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
     		        @Override
     		        public void onClick(DialogInterface dialog, int which) {
     		            handler.cancel();
