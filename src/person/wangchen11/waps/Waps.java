@@ -11,9 +11,9 @@ import android.widget.LinearLayout;
 public class Waps {
 	static final String TAG="Waps";
 	private static String APP_ID="f29592b5daa7915e1048e659e7e930cf";
-	//private static String APP_PID="qq";
+	private static String APP_PID="qq";
 	private static boolean mInited = false;
-	private static String APP_PID="google";
+	//private static String APP_PID="google";
 	
 	private static Date mDurTime;
 	static{
@@ -102,16 +102,37 @@ public class Waps {
 		}
 	}
 	
-	public static void updatePoints(Context context,UpdatePointsListener listener)
+	private static AdListener mAdListener = null;
+	public static void updatePoints(Context context,AdListener listener)
 	{
 		if(!isTimeToShow())
 			return ;
+		mAdListener = listener;
 		try{
-			AppConnect.getInstance(context).getPoints(listener);
+			AppConnect.getInstance(context).getPoints(new UpdatePointsListener() {
+				
+				@Override
+				public void getUpdatePointsFailed(String arg0) {
+					if(mAdListener!=null)
+						mAdListener.getUpdatePointsFailed(arg0);
+				}
+				
+				@Override
+				public void getUpdatePoints(String arg0, int arg1) {
+					if(mAdListener!=null)
+						mAdListener.getUpdatePoints(arg0, arg1);
+				}
+			});
 		}catch(Error e) {
 			e.printStackTrace();
 		}catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+	
+	public interface AdListener{
+		public void getUpdatePointsFailed(String arg0);
+		
+		public void getUpdatePoints(String arg0, int arg1);
 	}
 }

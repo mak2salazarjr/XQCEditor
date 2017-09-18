@@ -7,8 +7,6 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import cn.waps.UpdatePointsListener;
-
 import person.wangchen11.editor.codeedittext.CodeStyleAdapter;
 import person.wangchen11.editor.edittext.EditableWithLayout;
 import person.wangchen11.editor.edittext.MyEditText;
@@ -55,7 +53,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class Setting extends Fragment implements Window, TextWatcher, OnClickListener, OnCheckedChangeListener,UpdatePointsListener{
+public class Setting extends Fragment implements Window, TextWatcher, OnClickListener, OnCheckedChangeListener,Waps.AdListener{
 	public static final String ConfigName="ceditor_config";
 	RelativeLayout mRelativeLayout;
 	public static Config mConfig = new Config();

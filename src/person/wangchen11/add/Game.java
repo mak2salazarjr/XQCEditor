@@ -88,11 +88,6 @@ public class Game {
 		mData[y][x].mData=data;
 	}
 	
-	public void startLink(int x,int y){
-		mLinkedList.clear();
-		startLink(x,y);
-	}
-	
 	public void linkTo(int x,int y){
 		if(isAnimation())
 			return ;
@@ -119,6 +114,8 @@ public class Game {
 				}
 			}
 		}
+		if(mGameListener!=null)
+			mGameListener.onLinkedNumberChange();
 	}
 	
 	public LinkedList<Point> getPointLink(){
@@ -147,6 +144,8 @@ public class Game {
 			mRunNumber=24;
 		}
 		mLinkedList.clear();
+		if(mGameListener!=null)
+			mGameListener.onLinkedNumberChange();
 	}
 	
 	public int getLinkedScore(){
@@ -156,6 +155,16 @@ public class Game {
 			return mData[point.y][point.x].mData*mLinkedList.size()*mLinkedList.size();
 		}
 		return 0;
+	}
+	
+	public String getLinkedScoreText(){
+		if(mLinkedList.size()>1)
+		{
+			Point point=mLinkedList.getFirst();
+			int score = mData[point.y][point.x].mData*mLinkedList.size()*mLinkedList.size();
+			return ""+mData[point.y][point.x].mData+"x"+(mLinkedList.size()*mLinkedList.size())+"="+score;
+		}
+		return "";
 	}
 	
 	private void letDataToNormal(){
@@ -381,6 +390,7 @@ public class Game {
 		{
 			mGameListener.onScoreChange(mGameScore, mGameScoreGoal);
 			mGameListener.onCustomsChange(mCustoms);
+			mGameListener.onLinkedNumberChange();
 		}
 	}
 	
@@ -415,6 +425,7 @@ public class Game {
 		{
 			mGameListener.onScoreChange(mGameScore, mGameScoreGoal);
 			mGameListener.onCustomsChange(mCustoms);
+			mGameListener.onLinkedNumberChange();
 		}
 		backUp();
 		return true;
@@ -446,6 +457,7 @@ public class Game {
 		{
 			mGameListener.onScoreChange(mGameScore, mGameScoreGoal);
 			mGameListener.onCustomsChange(mCustoms);
+			mGameListener.onLinkedNumberChange();
 		}
 		backUp();
 		return true;
@@ -526,6 +538,7 @@ class GameData {
 		mNeedAddScore=game.mNeedAddScore;
 		mCustoms=game.mCustoms;
 		mSmashOfCustoms=game.mSmashOfCustoms;
+		
 	}
 	
 	public boolean save(SharedPreferences sharedPreferences){
@@ -581,4 +594,5 @@ interface GameListener{
 	public void onCustomsChange(int customs);
 	public void onGamePass();
 	public void onGameOver();
+	public void onLinkedNumberChange();
 }
