@@ -21,6 +21,7 @@ public class MainActivity extends Activity implements View.OnClickListener{
 	private TextView mCustomsView;
 	private TextView mGoalView;
 	private TextView mHighScoreViiew;
+	private TextView mNowView;
 	private Button   mNewGameButton;
 	private Button   mUndoButton;
 	private Button   mHelpButton;
@@ -44,6 +45,7 @@ public class MainActivity extends Activity implements View.OnClickListener{
 		mCustomsView=(TextView) findViewById(R.id.textView_customs);
 		mGoalView=(TextView) findViewById(R.id.textView_goal);
 		mHighScoreViiew=(TextView) findViewById(R.id.textView_highscore);
+		mNowView=(TextView) findViewById(R.id.textView_now);
 		mNewGameButton=(Button) findViewById(R.id.button_newgame);
 		mUndoButton=(Button) findViewById(R.id.button_undo);
 		mHelpButton=(Button) findViewById(R.id.button_help);
@@ -93,6 +95,11 @@ public class MainActivity extends Activity implements View.OnClickListener{
 				});
 				builder.setPositiveButton(getResources().getText(R.string._wait),null);
 				builder.show();
+			}
+
+			@Override
+			public void onLinkedNumberChange() {
+				mNowView.setText(mGameView.getGame().getLinkedScoreText());
 			}
 
 		});
