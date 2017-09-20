@@ -101,7 +101,6 @@ public class MainActivity extends Activity implements View.OnClickListener{
 
 			@Override
 			public void onLinkedNumberChange() {
-<<<<<<< HEAD
 				String oldText = mNowView.getText().toString();
 				String nowText = mGameView.getGame().getLinkedScoreText();
 				if(!oldText.equals(nowText)){
@@ -110,9 +109,6 @@ public class MainActivity extends Activity implements View.OnClickListener{
 					mNowView.startAnimation(scaleAnimation);
 					mNowView.setText(nowText);
 				}
-=======
-				mNowView.setText(mGameView.getGame().getLinkedScoreText());
->>>>>>> 1f0758131fe1d8fdb0358f9aa72658723fbe128d
 			}
 
 		});

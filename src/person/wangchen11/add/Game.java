@@ -145,7 +145,6 @@ public class Game {
 		mLinkedList.clear();
 		if(mGameListener!=null)
 			mGameListener.onLinkedNumberChange();
-<<<<<<< HEAD
 	}
 	
 	public void clearLastLine(){
@@ -163,8 +162,6 @@ public class Game {
 			mSmashDrawables.add(new SmashDrawable(point.x+0.5f, point.y+0.5f, getWidth(), getHeight(), 1.0f, getColor(point.x, point.y)));
 			mData[point.y][point.x]=null;
 		}
-=======
->>>>>>> 1f0758131fe1d8fdb0358f9aa72658723fbe128d
 	}
 	
 	public int getLinkedScore(){
