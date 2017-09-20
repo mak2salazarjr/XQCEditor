@@ -137,8 +137,7 @@ public class Game {
 			mData[point.y][point.x].mData=linkSum;
 			for(int i=0;i<mLinkedList.size()-1;i++){
 				point=mLinkedList.get(i);
-				mSmashDrawables.add(new SmashDrawable(point.x+0.5f, point.y+0.5f, getWidth(), getHeight(), 1.0f, getColor(point.x, point.y)));
-				mData[point.y][point.x]=null;
+				clearPoint(point);
 			}
 			letDataToNormal();
 			mRunNumber=24;
@@ -146,6 +145,23 @@ public class Game {
 		mLinkedList.clear();
 		if(mGameListener!=null)
 			mGameListener.onLinkedNumberChange();
+	}
+	
+	public void clearLastLine(){
+		clearLine(getHeight()-1);
+	}
+	
+	public void clearLine(int line){
+		for(int x=0;x<getWidth();x++){
+			clearPoint(new Point(x,line));
+		}
+	}
+	
+	public void clearPoint(Point point){
+		if(mData[point.y][point.x]!=null){
+			mSmashDrawables.add(new SmashDrawable(point.x+0.5f, point.y+0.5f, getWidth(), getHeight(), 1.0f, getColor(point.x, point.y)));
+			mData[point.y][point.x]=null;
+		}
 	}
 	
 	public int getLinkedScore(){
@@ -196,6 +212,7 @@ public class Game {
 			}
 		}
 	}
+	
 	public void nextStation(){
 		letDataFull();
 		mCustoms++;
@@ -209,6 +226,7 @@ public class Game {
 	}
 	
 	private void letDataFull(){
+		letDataToNormal();
 		for(int x=0;x<getWidth();x++){
 			int num=0;
 			for(int y=getHeight()-1;y>=0;y--){

@@ -12,6 +12,7 @@ import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
+import android.view.animation.ScaleAnimation;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -63,6 +64,7 @@ public class MainActivity extends Activity implements View.OnClickListener{
 			
 			@Override
 			public void onGamePass() {
+				mGameView.mGame.clearLastLine();
 				mGameView.mGame.nextStation();
 			}
 			
@@ -99,7 +101,14 @@ public class MainActivity extends Activity implements View.OnClickListener{
 
 			@Override
 			public void onLinkedNumberChange() {
-				mNowView.setText(mGameView.getGame().getLinkedScoreText());
+				String oldText = mNowView.getText().toString();
+				String nowText = mGameView.getGame().getLinkedScoreText();
+				if(!oldText.equals(nowText)){
+					ScaleAnimation scaleAnimation = new ScaleAnimation(0.6f, 1.0f, 0.6f, 1.0f,ScaleAnimation.RELATIVE_TO_SELF,0.5f,ScaleAnimation.RELATIVE_TO_SELF,0.5f);
+					scaleAnimation.setDuration(200);
+					mNowView.startAnimation(scaleAnimation);
+					mNowView.setText(nowText);
+				}
 			}
 
 		});
@@ -149,6 +158,7 @@ public class MainActivity extends Activity implements View.OnClickListener{
 			mGameView.mGame.newGame(mGameView.mGame.getWidth(), mGameView.mGame.getHeight());
 			break;
 		case R.id.button_help:
+			
 			break;
 		case R.id.button_undo:
 			mGameView.mGame.unDo();
