@@ -2,7 +2,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+<<<<<<< HEAD
     android:padding="4dp"
+=======
+>>>>>>> 1f0758131fe1d8fdb0358f9aa72658723fbe128d
     android:background="#f8f8f8" >
 
     <LinearLayout
@@ -34,6 +37,7 @@
             android:layout_weight="2"
             android:text="@string/_undo" />
     </LinearLayout>
+<<<<<<< HEAD
 
     <person.wangchen11.add.GameView
         android:id="@+id/gameView1"
@@ -68,6 +72,34 @@
             android:textAppearance="?android:attr/textAppearanceMedium" />
 
         <TextView
+=======
+
+    <RelativeLayout
+        android:id="@+id/layoutInfo"
+        android:layout_width="match_parent"
+        android:layout_height="52dp"
+        android:layout_alignParentBottom="true" >
+
+        <TextView
+            android:id="@+id/textView_customs"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentLeft="true"
+            android:hint="@string/_level"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+        <TextView
+            android:id="@+id/textView_highscore"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:hint="@string/_high"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+        <TextView
+>>>>>>> 1f0758131fe1d8fdb0358f9aa72658723fbe128d
             android:id="@+id/textView_goal"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -75,6 +107,7 @@
             android:layout_alignParentTop="true"
             android:hint="@string/_goal"
             android:textAppearance="?android:attr/textAppearanceLarge" />
+<<<<<<< HEAD
 
         <TextView
             android:id="@+id/textView_score"
@@ -94,5 +127,34 @@
             android:text="TextView"
             android:textAppearance="?android:attr/textAppearanceLarge" />
     </RelativeLayout>
+=======
+
+        <TextView
+            android:id="@+id/textView_score"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:hint="@string/_score"
+            android:textAppearance="?android:attr/textAppearanceLarge" />
+
+        <TextView
+            android:id="@+id/textView_now"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="TextView" />
+
+    </RelativeLayout>
+
+    <person.wangchen11.add.GameView
+        android:id="@+id/gameView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/layoutInfo"
+        android:layout_alignParentLeft="true" />
+>>>>>>> 1f0758131fe1d8fdb0358f9aa72658723fbe128d
 
 </RelativeLayout>
