@@ -19,7 +19,7 @@ import android.webkit.WebViewClient;
 @SuppressLint("SetJavaScriptEnabled")
 public class Browser extends Fragment {
 
-	private WebView mWebView = null;
+	public WebView mWebView = null;
 	public String mUrl="";
 	
 	public Browser(String url) {
