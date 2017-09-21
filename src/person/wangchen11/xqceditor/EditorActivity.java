@@ -299,8 +299,8 @@ public class EditorActivity extends FragmentActivity implements OnClickListener,
 			}else{
 				if(mWindowsManager.closeAllWindow())
 				{
-					android.os.Process.killProcess(android.os.Process.myPid());
 					super.onBackPressed();
+					android.os.Process.killProcess(android.os.Process.myPid());
 				}
 			}
 			mPreBackTime=time;
