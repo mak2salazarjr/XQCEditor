@@ -41,6 +41,7 @@ public class WindowsManager implements View.OnClickListener, android.support.v7.
 	private LinkedList<WindowsManagerLintener> mLinteners=new LinkedList<WindowsManagerLintener>();
 	private LinearLayout mTitleListView;
 	private HorizontalScrollView mScrollView;
+	private PopupMenu mPopupMenu = null;
 	
 	private WindowPointer mSelectWindow=null;
 	public View getTitleListView(){
@@ -256,7 +257,7 @@ public class WindowsManager implements View.OnClickListener, android.support.v7.
 	public boolean removeListener(WindowsManagerLintener lintener){
 		return mLinteners.remove(lintener);
 	}
-
+	
 	@Override
 	public void onClick(View v) {
 		
@@ -274,6 +275,8 @@ public class WindowsManager implements View.OnClickListener, android.support.v7.
 				changeWondow(pointer);
 			}
 			else{
+				if(mPopupMenu!=null)
+					mPopupMenu.dismiss();
 				PopupMenu popupMenu=new PopupMenu(mContext, pointerSelect.mTitleView);
 				popupMenu.setOnMenuItemClickListener(this);
 				Menu menu=popupMenu.getMenu();
@@ -282,6 +285,7 @@ public class WindowsManager implements View.OnClickListener, android.support.v7.
 				menu.add(0,R.string.move_to_left,0, mContext.getResources().getText(R.string.move_to_left));
 				menu.add(0,R.string.move_to_right,0, mContext.getResources().getText(R.string.move_to_right));
 				popupMenu.show();
+				mPopupMenu = popupMenu;
 			}
 		}
 	}
@@ -334,13 +338,12 @@ public class WindowsManager implements View.OnClickListener, android.support.v7.
 			addWindow(new Setting(this));
 			break;
 		case R.string.exit:
-			mTitleListView.getHandler().post(new Runnable() {
-				@Override
-				public void run() {
-					if(closeAllWindow())
-						mContext.finish();
-				}
-			});
+			if(closeAllWindow()){
+				if(mPopupMenu!=null)
+					mPopupMenu.dismiss();
+				mContext.finish();
+				android.os.Process.killProcess(android.os.Process.myPid());
+			}
 			break;
 		case R.string.move_to_left:
 			int index=mWindowPointers.indexOf(getSelectWindow());
@@ -382,8 +385,8 @@ public class WindowsManager implements View.OnClickListener, android.support.v7.
 		menuTags.add(new MenuTag(R.string.php_config, mContext.getResources().getText(R.string.php_config)));
 		menuTags.add(new MenuTag(R.string.net_assist, mContext.getResources().getText(R.string.net_assist)));
 		menuTags.add(new MenuTag(R.string.setting, mContext.getResources().getText(R.string.setting)));
-		//if(!Waps.isGoogle())
-		//	menuTags.add(new MenuTag(R.string.help, mContext.getResources().getText(R.string.help)));
+		if(! person.wangchen11.waps.Waps.isGoogle())
+			menuTags.add(new MenuTag(R.string.help, mContext.getResources().getText(R.string.help)));
 		menuTags.add(new MenuTag(R.string.about, mContext.getResources().getText(R.string.about)));
 		menuTags.add(new MenuTag(R.string.exit, mContext.getResources().getText(R.string.exit)));
 		return menuTags;

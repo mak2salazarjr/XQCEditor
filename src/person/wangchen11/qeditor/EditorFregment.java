@@ -289,7 +289,7 @@ public class EditorFregment extends Fragment implements OnClickListener, AfterTe
 		{
 			mCodeCheck = new GNUCCodeCheck(context, file);
 			String name = file.getName().toLowerCase();
-			if(name.endsWith(".c")||name.endsWith(".cpp")||name.endsWith(".h")||name.endsWith(".hpp")||name.endsWith(".hp"))
+			if(name.endsWith(".c")||name.endsWith(".cpp")/*||name.endsWith(".h")*/||name.endsWith(".hpp")||name.endsWith(".hp"))
 			{
 				final LinkedList<CheckInfo> checkInfos = mCodeCheck.start();
 				if(checkInfos!=null){

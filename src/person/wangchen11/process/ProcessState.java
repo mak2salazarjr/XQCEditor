@@ -1,7 +1,8 @@
 package person.wangchen11.process;
 
 import java.io.IOException;
-import java.util.Scanner;
+
+import person.wangchen11.myscanner.MyScanner;
 
 import android.util.Log;
 
@@ -10,7 +11,7 @@ public class ProcessState {
 	public String mProcessName=null;
 	public String mPid=null;
 	public ProcessState(String line,int nameIndex,int pidIndex) {
-		Scanner scanner=new Scanner(line);
+		MyScanner scanner=new MyScanner(line);
 		for(int i=0;scanner.hasNext();i++)
 		{
 			String string=scanner.next();
@@ -28,7 +29,7 @@ public class ProcessState {
 		ProcessState ret=null;
 		try {
 			Process process=Runtime.getRuntime().exec("ps");
-			Scanner scanner=new Scanner(process.getInputStream());
+			MyScanner scanner=new MyScanner(process.getInputStream());
 			String line=null;
 			int nameIndex=8;
 			int pidIndex=1;

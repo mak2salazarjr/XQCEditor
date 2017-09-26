@@ -98,9 +98,14 @@ public class Console implements Window, OnConsoleColseListener,WindowsManagerLin
 			mTermFragment.destory();
 		if(mProcessName!=null)
 		{
-			ProcessState state=ProcessState.getProcessByName(mProcessName);
-			if(state!=null)
-				state.kill();
+			new Thread(new Runnable() {
+				@Override
+				public void run() {
+					ProcessState state=ProcessState.getProcessByName(mProcessName);
+					if(state!=null)
+						state.kill();
+				}
+			}).start();
 		}
 		return true;
 	}

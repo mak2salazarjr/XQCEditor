@@ -177,7 +177,15 @@
     <string name="_wait">再看看</string>
     <string name="_back">返回</string>
     <string name="_updatemsg">更新说明</string>
-    <string name="_updateinfo">
+    <string name="_updateinfo">2.1.8:\n
+(1)解决部分设备编译成功后提示:overwrite ------T user:user for \'*.tmp\'。\n
+(2)增加.nomedia文件，让相册不再扫描快写代码的目录。\n
+\n
+2.1.7:\n
+(1)解决4.4以及以下设备，关闭控制台时卡顿的问题。\n
+(2)更新文件列表自动刷新。\n
+(3)增大快速输入栏的大小。\n
+\n
 2.1.6:\n
 (1)新增编译为静态库功能。\n
 (2)新增多线程编译功能。\n
@@ -219,7 +227,7 @@
 (1)修复makefile部分问题。\n
 (2)添加物理键盘支持。\n
 (3)可以从其它应用中通过快写代码打开代码。\n
-(4)增加PHP代码提示功能。</string>
+(4)增加PHP代码提示功能。\n</string>
     <string name="warn">警告</string>
     <string name="error">错误</string>
     

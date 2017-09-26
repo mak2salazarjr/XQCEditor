@@ -9,7 +9,12 @@ import person.wangchen11.xqceditor.R;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
 @SuppressLint("SetJavaScriptEnabled")
 public class Help extends Browser implements Window{
@@ -55,13 +60,29 @@ public class Help extends Browser implements Window{
 
 	@Override
 	public String[] getResumeCmd() {
-		// TODO Auto-generated method stub
-		return null;
+		if(mWebView==null)
+			return null;
+		String url = mWebView.getUrl();
+		if(url==null)
+			return null;
+		String[] cmds = new String[]{url};
+		return cmds;
 	}
 
 	@Override
 	public void resumeByCmd(String []cmd) {
-		// TODO Auto-generated method stub
-		
+		if(cmd==null||cmd.length<=0)
+			return ;
+		mUrl = cmd[0];
+	}
+	
+	@Override
+	@SuppressLint("InflateParams")
+	public View onCreateView(LayoutInflater inflater,
+			@Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+		View view = super.onCreateView(inflater, container, savedInstanceState);
+        // ÉèÖÃ±àÂë 
+        mWebView.getSettings().setDefaultTextEncodingName("GBK");
+		return view;
 	}
 }

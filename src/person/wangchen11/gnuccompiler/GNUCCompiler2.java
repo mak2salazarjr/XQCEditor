@@ -197,7 +197,7 @@ import android.util.Log;
 				+"if [  $? -ne 0 ]; then \n"
 		      	+"compiler_to_obj_success=0\n"
 				+"fi\n");
-		cmdBuilder.append("rm \""+file.getAbsolutePath()+"\"\n");
+		cmdBuilder.append("myrm \""+file.getAbsolutePath()+"\"\n");
 		return cmdBuilder.toString();
 	}
 	

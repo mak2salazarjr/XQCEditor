@@ -12,6 +12,7 @@ package person.wangchen11.xqceditor;
  */
 
 import java.io.File;
+import java.io.IOException;
 import java.util.List;
 
 import person.wangchen11.busybox.Busybox;
@@ -78,6 +79,11 @@ public class EditorActivity extends FragmentActivity implements OnClickListener,
         mContent=null;
         File workspace = new File(GNUCCompiler.getSystemDir()+File.separatorChar+"workspace"+File.separatorChar);
 		FileBowserFragment.mDefaultFile=workspace;
+		try {
+			new File(GNUCCompiler.getSystemDir()+File.separatorChar+".nomedia").createNewFile();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 		Console.mDefaultFile=workspace;
 		
 		if(!FileBowserFragment.mDefaultFile.isDirectory()){
@@ -299,8 +305,8 @@ public class EditorActivity extends FragmentActivity implements OnClickListener,
 			}else{
 				if(mWindowsManager.closeAllWindow())
 				{
-					android.os.Process.killProcess(android.os.Process.myPid());
 					super.onBackPressed();
+					android.os.Process.killProcess(android.os.Process.myPid());
 				}
 			}
 			mPreBackTime=time;
