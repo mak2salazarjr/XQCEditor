@@ -6,6 +6,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import person.wangchen11.help.Help;
+import person.wangchen11.questions.AnswerMode;
 import person.wangchen11.window.ext.About;
 import person.wangchen11.window.ext.BrowserWindow;
 import person.wangchen11.window.ext.CEditor;
@@ -331,6 +332,9 @@ public class WindowsManager implements View.OnClickListener, android.support.v7.
 		case R.string.about:
 			addWindow(new About());
 			break;
+		case R.string.answer_and_question:
+			addWindow(new AnswerMode(this));
+			break;
 		case R.string.help:
 			addWindow(new Help());
 			break;
@@ -385,8 +389,10 @@ public class WindowsManager implements View.OnClickListener, android.support.v7.
 		menuTags.add(new MenuTag(R.string.php_config, mContext.getResources().getText(R.string.php_config)));
 		menuTags.add(new MenuTag(R.string.net_assist, mContext.getResources().getText(R.string.net_assist)));
 		menuTags.add(new MenuTag(R.string.setting, mContext.getResources().getText(R.string.setting)));
-		if(! person.wangchen11.waps.Waps.isGoogle())
+		if(! person.wangchen11.waps.Waps.isGoogle()){
+			menuTags.add(new MenuTag(R.string.answer_and_question, mContext.getResources().getText(R.string.answer_and_question)));
 			menuTags.add(new MenuTag(R.string.help, mContext.getResources().getText(R.string.help)));
+		}
 		menuTags.add(new MenuTag(R.string.about, mContext.getResources().getText(R.string.about)));
 		menuTags.add(new MenuTag(R.string.exit, mContext.getResources().getText(R.string.exit)));
 		return menuTags;
@@ -542,6 +548,11 @@ public class WindowsManager implements View.OnClickListener, android.support.v7.
 		}
 		if(className.equals( Help.class.getName() )){
 			Window window = new Help();
+			window.resumeByCmd(cmds);
+			return addWindow(window);
+		}
+		if(className.equals( AnswerMode.class.getName() )){
+			Window window = new AnswerMode(this);
 			window.resumeByCmd(cmds);
 			return addWindow(window);
 		}
