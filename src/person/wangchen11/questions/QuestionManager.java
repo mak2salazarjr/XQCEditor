@@ -2,6 +2,8 @@ package person.wangchen11.questions;
 
 import java.util.ArrayList;
 
+import person.wangchen11.gnuccompiler.GNUCCompiler;
+
 import android.content.Context;
 
 public class QuestionManager {
@@ -9,12 +11,13 @@ public class QuestionManager {
 	
 	private static final String ASSETS_PATH = "questions/";
 	
-	private Context mContext = null;
-	private ArrayList<Question> mLevel1Questions = null;
+	private ArrayList<QuestionGroup> mAllLevelQuestions = new ArrayList<QuestionGroup>();
 	
 	private QuestionManager(Context context) {
-		mContext = context;
-		mLevel1Questions = createQuestions(context,ASSETS_PATH,"1.",4);
+		mAllLevelQuestions.add(new QuestionGroup(context,ASSETS_PATH,"1.",4,"入门训练"));
+		mAllLevelQuestions.add(new QuestionGroup(context,ASSETS_PATH,"1.",4,"入门训练"));
+		mAllLevelQuestions.add(new QuestionGroup(context,ASSETS_PATH,"1.",4,"入门训练"));
+		mAllLevelQuestions.add(new QuestionGroup(context,ASSETS_PATH,"1.",4,"入门训练"));
 	}
 	public static void init(Context context){
 		if(mQuestionManager==null)
@@ -25,15 +28,60 @@ public class QuestionManager {
 		return mQuestionManager;
 	}
 	
-	private ArrayList<Question> createQuestions(Context context,String assetsPath,String prefix,int number){
-		ArrayList<Question> questions = new ArrayList<Question>();
-		for(int i=1;i<=4;i++){
-			questions.add(new Question(context, assetsPath+prefix+i+"/", prefix+i));
-		}
-		return questions;
+	public QuestionGroup getQuestionGroupByLevel(int level){
+		return mAllLevelQuestions.get(level);
 	}
 	
-	public ArrayList<Question> getLevel1Questions(){
-		return mLevel1Questions;
+	public int getQuestionLevelCount(){
+		return mAllLevelQuestions.size();
 	}
+	
+	public QuestionGroup getQuestionGroup(Question question){
+		for(QuestionGroup questionGroup:mAllLevelQuestions){
+			if(questionGroup.getQuestionIndex(question)>=0)
+				return questionGroup;
+		}
+		return null;
+	}
+	
+	public Question getNextQuestion(Question question){
+		QuestionGroup questionGroup = getQuestionGroup(question);
+		if(questionGroup==null)
+			return null;
+		int index = questionGroup.getQuestionIndex(question);
+		if(index+1 >= questionGroup.getQuestions().size()){
+			int questionGroupIndex = mAllLevelQuestions.indexOf(questionGroup);
+			if(questionGroupIndex+1 >= mAllLevelQuestions.size())
+				return null;
+			return mAllLevelQuestions.get(questionGroupIndex+1).getQuestions().get(0);
+		}
+			
+		return questionGroup.getQuestions().get(index+1);
+	}
+	
+	public Question getPreQuestion(Question question){
+		QuestionGroup questionGroup = getQuestionGroup(question);
+		if(questionGroup==null)
+			return null;
+		int index = questionGroup.getQuestionIndex(question);
+		if(index-1 < 0){
+			int questionGroupIndex = mAllLevelQuestions.indexOf(questionGroup);
+			if(questionGroupIndex-1 < 0)
+				return null;
+			return mAllLevelQuestions.get(questionGroupIndex-1).getQuestions().get(0);
+		}
+		
+		return questionGroup.getQuestions().get(index-1);
+	}
+	
+	public String getQuestionCodeFile(Question question){
+		QuestionGroup questionGroup = getQuestionGroup(question);
+		if(questionGroup==null)
+			return null;
+		int questionGroupIndex = mAllLevelQuestions.indexOf(questionGroup);
+		int questionIndex = questionGroup.getQuestionIndex(question);
+		
+		return GNUCCompiler.getSystemDir()+"/Answers/answer"+String.format("%03d", questionGroupIndex+1)+"_"+String.format("%03d", questionIndex+1)+".cpp";
+	}
+	
 }

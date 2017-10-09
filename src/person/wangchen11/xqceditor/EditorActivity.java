@@ -134,12 +134,12 @@ public class EditorActivity extends FragmentActivity implements OnClickListener,
 	
 	@Override
 	protected void onNewIntent(final Intent intent) {
-		mHandler.post(new Runnable() {
+		mHandler.postDelayed(new Runnable() {
 			@Override
 			public void run() {
 				openNewIntent(intent);
 			}
-		});
+		},300);
 	}
 	
 	private void openNewIntent(Intent intent){

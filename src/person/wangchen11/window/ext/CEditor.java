@@ -674,7 +674,14 @@ public class CEditor implements Window, ChangeFlagChanged, OnClickListener ,Wind
 		
 		return false;
 	}
-
+	
+	public void setText(String text){
+		if(mCEditorFregment!=null)
+			mCEditorFregment.setText(text);
+		if(mNewCEditorFregment!=null)
+			mNewCEditorFregment.setText(text);
+	}
+	
 	@Override
 	public String[] getResumeCmd() {
 		String []cmd = new String[3];

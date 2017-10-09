@@ -5,7 +5,9 @@ import java.util.List;
 import person.wangchen11.window.MenuTag;
 import person.wangchen11.window.Window;
 import person.wangchen11.window.WindowsManager;
+import person.wangchen11.window.ext.Setting;
 import person.wangchen11.xqceditor.R;
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -15,11 +17,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.ExpandableListView;
+import android.widget.ExpandableListView.OnChildClickListener;
 import android.widget.TextView;
 
+@SuppressLint("InflateParams") 
 public class AnswerMode extends Fragment implements Window {
 	private WindowsManager mWindowsManager = null;
 	private ExpandableListView mExpandableListView = null;
+	private QuestionAdapter mQuestionAdapter = null;
 	public AnswerMode(WindowsManager windowsManager) {
 		mWindowsManager = windowsManager;
 	}
@@ -31,7 +36,16 @@ public class AnswerMode extends Fragment implements Window {
 		QuestionManager.init(inflater.getContext());
 		View view = inflater.inflate(R.layout.fragment_answer_and_qusestion, null);
 		mExpandableListView = (ExpandableListView) view.findViewById(R.id.expandableListView);
-		mExpandableListView.setAdapter(new QuestionAdapter());
+		mQuestionAdapter = new QuestionAdapter();
+		mExpandableListView.setAdapter(mQuestionAdapter);
+		mExpandableListView.setOnChildClickListener(new OnChildClickListener() {
+			@Override
+			public boolean onChildClick(ExpandableListView parent, View v,
+					int groupPosition, int childPosition, long id) {
+				QuestionFloatWindow.startQuestionMode(mWindowsManager, mQuestionAdapter.getChild(groupPosition, childPosition));
+				return false;
+			}
+		});
 		return view;
 	}
 	
@@ -82,34 +96,29 @@ public class AnswerMode extends Fragment implements Window {
 	}
 }
 
+@SuppressLint("InflateParams") 
 class QuestionAdapter extends BaseExpandableListAdapter {
 	public QuestionAdapter() {
 	}
 	
 	@Override
 	public int getGroupCount() {
-		return 1;
+		return QuestionManager.instance().getQuestionLevelCount();
 	}
 
 	@Override
 	public int getChildrenCount(int groupPosition) {
-		if(groupPosition==0)
-			return QuestionManager.instance().getLevel1Questions().size();
-		return 0;
+		return getGroup(groupPosition).getQuestions().size();
 	}
 
 	@Override
-	public String getGroup(int groupPosition) {
-		if(groupPosition==0)
-			return "»Î√≈—µ¡∑";
-		return null;
+	public QuestionGroup getGroup(int groupPosition) {
+		return QuestionManager.instance().getQuestionGroupByLevel(groupPosition);
 	}
 
 	@Override
 	public Question getChild(int groupPosition, int childPosition) {
-		if(groupPosition==0)
-			return QuestionManager.instance().getLevel1Questions().get(childPosition);
-		return null;
+		return getGroup(groupPosition).getQuestions().get(childPosition);
 	}
 
 	@Override
@@ -134,7 +143,9 @@ class QuestionAdapter extends BaseExpandableListAdapter {
 		View view = inflater.inflate(R.layout.item_question_group, null);
 		
 		TextView textView = (TextView) view.findViewById(R.id.textView);
-		textView.setText(getGroup(groupPosition));
+		textView.setText(getGroup(groupPosition).getName());
+
+		Setting.applySettingConfigToAllView(view);
 		return view;
 	}
 
@@ -146,6 +157,7 @@ class QuestionAdapter extends BaseExpandableListAdapter {
 		
 		TextView textView = (TextView) view.findViewById(R.id.textView);
 		textView.setText(getChild(groupPosition, childPosition).mTitle);
+		Setting.applySettingConfigToAllView(view);
 		return view;
 	}
 

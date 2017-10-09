@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
+import android.content.Context;
 import android.os.Handler;
 import android.util.Log;
 
@@ -16,8 +17,10 @@ public abstract class Console {
 	private int mMaxLength=4096;
 	private String mCachedCmd="";
 	private boolean mNeedErrorIntputStream=true;
+	protected Context mContext;
 	
-	public Console(Handler handler,ConsoleCallback callback) {
+	public Console(Handler handler,ConsoleCallback callback,Context context) {
+		mContext = context;
 		setCallback(callback);
 		mHandler=handler;
 		if(mHandler==null)

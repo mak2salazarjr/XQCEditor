@@ -242,5 +242,8 @@
     <string name="sdl_application">SDL Application</string>
     <string name="notification_error_ssl_cert_invalid">SSL certificate validation failed! Do you want to continue loading this page?</string>
     <string name="answer_and_question">答题模式</string>
+    <string name="commit_cur_code">提交当前代码</string>
+    <string name="quit_question_mode">退出答题模式</string>
+    <string name="wait">再看看</string>
     
 </resources>

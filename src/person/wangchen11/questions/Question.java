@@ -2,6 +2,8 @@ package person.wangchen11.questions;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Scanner;
+
 import person.wangchen11.myscanner.MyScanner;
 
 import android.content.Context;
@@ -16,9 +18,8 @@ public class Question {
 	public int mScore = 0;
 	
 	public String getQuestion(Context context){
-		return "";
+		return getAssetsText(context,mAssetsPath+"_questions.txt");
 	}
-	
 	
 	public Question(Context context,String assrtsPath,String queskey) {
 		mAssetsPath = assrtsPath;
@@ -62,4 +63,59 @@ public class Question {
 		} 
 	}
 	
+	public static String getAssetsText(Context context,String path){
+		try {
+			Scanner scanner = new Scanner(context.getAssets().open(path));
+			StringBuilder stringBuilder = new StringBuilder();
+			while(scanner.hasNextLine()){
+				stringBuilder.append(scanner.nextLine());
+				if(scanner.hasNextLine())
+					stringBuilder.append("\n");
+			}
+			scanner.close();
+			return stringBuilder.toString();
+		} catch (IOException e) {
+			e.printStackTrace();
+			return e.getMessage();
+		}
+	}
+	
+    public static String stripEnd(String str, String stripChars) {
+        int end;
+        if (str == null || (end = str.length()) == 0) {
+            return str;
+        }
+        if (stripChars == null) {
+            while ((end != 0) && Character.isWhitespace(str.charAt(end - 1))) {
+                end--;
+            }
+        } else if (stripChars.length() == 0) {
+            return str;
+        } else {
+            while ((end != 0) && (stripChars.indexOf(str.charAt(end - 1)) != -1)) {
+                end--;
+            }
+        }
+        return str.substring(0, end);
+    }
+    
+	public int getInputCount(){
+		return 10;
+	}
+	
+	public String getInput(Context context,int index){
+		String str = getAssetsText(context, mAssetsPath+"input"+(index+1)+".txt");
+		str.replaceAll("\r\n", "\n");
+		return stripEnd(str, null);
+	}
+	
+	public String getOutput(Context context,int index){
+		String str = getAssetsText(context, mAssetsPath+"output"+(index+1)+".txt");
+		str.replaceAll("\r\n", "\n");
+		return stripEnd(str, null);
+	}
+	
+	public String getAnwser(Context context){
+		return getAssetsText(context, mAssetsPath+"_answer.c");
+	}
 }

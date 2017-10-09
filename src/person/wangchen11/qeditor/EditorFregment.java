@@ -680,6 +680,10 @@ public class EditorFregment extends Fragment implements OnClickListener, AfterTe
 		}
 	}
 	
+	public void setText(String text){
+		mCodeEditText.setText(text);
+	}
+	
 	public boolean codeFormat()
 	{
 		Editable editable = mCodeEditText.getText();

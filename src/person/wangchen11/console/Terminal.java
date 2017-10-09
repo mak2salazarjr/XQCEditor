@@ -13,10 +13,8 @@ import android.util.Log;
 
 public class Terminal extends Console{
 	private Process mProcess;
-	private Context mContext;
 	public Terminal(Handler handler, ConsoleCallback callback,Context context) {
-		super(handler, callback);
-		mContext = context;
+		super(handler, callback,context);
 	}
 
 	@Override

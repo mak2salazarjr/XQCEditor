@@ -671,6 +671,10 @@ public class NewEditorFregment extends Fragment implements OnClickListener, Afte
 			break;
 		}
 	}
+
+	public void setText(String text){
+		mCodeEditText.setText(text);
+	}
 	
 	public boolean codeFormat()
 	{
