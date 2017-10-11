@@ -27,7 +27,7 @@ public class CompileTask extends QuestionTask {
 		
 		mCompileCmd = Busybox.getCmd(context);
 		mCompileCmd += GNUCCompiler2.getExportEnvPathCmd(context);
-		mCompileCmd += GNUCCompiler.getCompilerCmd(context, new File(mFileIn), new File(mFileOut), "");
+		mCompileCmd += GNUCCompiler.getCompilerCmd(context, new File(mFileIn), new File(mFileOut), " -static ");
 	}
 	
 	public boolean isSuccess(){
