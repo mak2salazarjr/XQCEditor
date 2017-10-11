@@ -6,7 +6,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import person.wangchen11.help.Help;
-import person.wangchen11.questions.AnswerMode;
+import person.wangchen11.questions.QuestionMode;
 import person.wangchen11.window.ext.About;
 import person.wangchen11.window.ext.BrowserWindow;
 import person.wangchen11.window.ext.CEditor;
@@ -333,7 +333,7 @@ public class WindowsManager implements View.OnClickListener, android.support.v7.
 			addWindow(new About());
 			break;
 		case R.string.answer_and_question:
-			addWindow(new AnswerMode(this));
+			addWindow(new QuestionMode(this));
 			break;
 		case R.string.help:
 			addWindow(new Help());
@@ -551,8 +551,8 @@ public class WindowsManager implements View.OnClickListener, android.support.v7.
 			window.resumeByCmd(cmds);
 			return addWindow(window);
 		}
-		if(className.equals( AnswerMode.class.getName() )){
-			Window window = new AnswerMode(this);
+		if(className.equals( QuestionMode.class.getName() )){
+			Window window = new QuestionMode(this);
 			window.resumeByCmd(cmds);
 			return addWindow(window);
 		}

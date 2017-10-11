@@ -97,7 +97,7 @@ public class GNUCCompiler {
 		return context.getFilesDir().getAbsolutePath()+File.separatorChar;
 	}
 	static int mNameStartNumber=0;
-	public static String getTempFilePath(Context context){
+	public static synchronized String getTempFilePath(Context context){
 		String path="";
 		for(int i=0;i<1000;i++)
 		{

@@ -26,4 +26,20 @@ public class QuestionGroup {
 	public int getQuestionIndex(Question question){
 		return mQuestions.indexOf(question);
 	}
+
+	public int getFullMarks(){
+		int marks = 0;
+		for(Question question:mQuestions){
+			marks+=question.getFullMarks();
+		}
+		return marks;
+	}
+	
+	public int getMarks(){
+		int marks = 0;
+		for(Question question:mQuestions){
+			marks+=question.getMarks();
+		}
+		return marks;
+	}
 }

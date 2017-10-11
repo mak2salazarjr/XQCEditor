@@ -100,17 +100,18 @@ public class GNUCCodeCheck {
 				else
 					break;
 			}
-			if(!mStopFlag)
-				dexErrorPutMsg(stringBuilder.toString());
+			if(!mStopFlag){
+				mCheckInfos = dexErrorPutMsg(stringBuilder.toString());
+			}
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 
 	}
 	
-	private void dexErrorPutMsg(String msg)
+	public static LinkedList<CheckInfo> dexErrorPutMsg(String msg)
 	{
-		mCheckInfos.clear();
+		LinkedList<CheckInfo> checkInfos = new LinkedList<CheckInfo>();
 		String []lines = msg.split("\n");
 		for (int i = 0; i < lines.length; i++) {
 			String line = lines[i];
@@ -139,13 +140,13 @@ public class GNUCCodeCheck {
 					{
 						wmsg+=":"+items[j];
 					}
-					mCheckInfos.add(new CheckInfo(items[0], wmsg, type, lineAt, charAt));
+					checkInfos.add(new CheckInfo(items[0], wmsg, type, lineAt, charAt));
 					
 				}catch (Exception e) {
 				}
 			}
-			
 		}
+		return checkInfos;
 	}
 
 	private static int getUtf8Length(byte data[],int length)

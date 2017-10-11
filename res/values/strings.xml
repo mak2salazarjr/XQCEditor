@@ -245,5 +245,8 @@
     <string name="commit_cur_code">提交当前代码</string>
     <string name="quit_question_mode">退出答题模式</string>
     <string name="wait">再看看</string>
+    <string name="waiting_for_test">等待测试</string>
+    <string name="try_angin_later">请在测试任务完成后重试！</string>
+    <string name="no_more_questions">没有更多的题目了！</string>
     
 </resources>

@@ -15,7 +15,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.GestureDetector.OnGestureListener;
 
-public class FloatBall extends View implements OnGestureListener {
+public class QuestionFloatBall extends View implements OnGestureListener {
 	private GestureDetector mGestureDetector = null;
 	private float mDensity = 0;
 	private Bitmap mBitmap = null;
@@ -23,7 +23,7 @@ public class FloatBall extends View implements OnGestureListener {
 	private Rect   mToRect = new Rect();
 	private Paint mPaint = null;
 	
-	public FloatBall(Context context) {
+	public QuestionFloatBall(Context context) {
 		super(context);
 		mGestureDetector = new GestureDetector(context,this);
 		mDensity = context.getResources().getDisplayMetrics().density;
@@ -35,6 +35,12 @@ public class FloatBall extends View implements OnGestureListener {
 	@Override
 	protected void onSizeChanged(int w, int h, int oldw, int oldh) {
 		super.onSizeChanged(w, h, oldw, oldh);
+        getHandler().post(new Runnable() {
+			@Override
+			public void run() {
+				checkViewInParent();
+			}
+		});
 	}
 	
 	public void savePosition(){
@@ -62,14 +68,17 @@ public class FloatBall extends View implements OnGestureListener {
 		setY(sharedPreferences.getFloat("position_y", mDensity*62));
 	}
 	
+	
 	private boolean mIsPortrait(){
+		/*
 		View parent = (View) getParent();
 		if(parent!=null){
 			if(parent.getHeight()>parent.getWidth())
 				return true;
 			return false;
 		}
-		return false;
+		return false;*/
+		return true;
 	}
 	
 	@SuppressLint("DrawAllocation") 
@@ -146,6 +155,25 @@ public class FloatBall extends View implements OnGestureListener {
 			return;
 		}
 		super.setY(y);
+	}
+	
+	public void checkViewInParent(){
+		if(getX()<=0){
+			super.setX(0);
+		}
+		if(getY()<=0){
+			super.setY(0);
+		}
+
+		View parent = (View) getParent();
+		if(parent!=null){
+			if(getY()>parent.getHeight()-getHeight()){
+				super.setY(parent.getHeight()-getHeight());
+			}
+			if(getX()>parent.getWidth()-getWidth()){
+				super.setX(parent.getWidth()-getWidth());
+			}
+		}
 	}
 	
 	@Override

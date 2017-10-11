@@ -1,29 +1,22 @@
 package person.wangchen11.questions;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-
 import android.content.Context;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewParent;
 import android.widget.RelativeLayout;
 import person.wangchen11.window.WindowsManager;
-import person.wangchen11.window.ext.CEditor;
 import person.wangchen11.xqceditor.R;
 
 public class QuestionFloatWindow {
 	private WindowsManager mWindowsManager = null;
-	private Question mQuestion = null;
-	private FloatBall mFloatBall = null;
+	private QuestionFloatBall mFloatBall = null;
 	private QuestionDialog mQuestionDialog = null;
 	
 	private QuestionFloatWindow(WindowsManager windowsManager,Question question) {
 		mWindowsManager = windowsManager;
-		mQuestion = question;
 		mQuestionDialog = new QuestionDialog(mWindowsManager.getContext(),question,mWindowsManager);
-		mFloatBall = new FloatBall(getContext()){
+		mFloatBall = new QuestionFloatBall(getContext()){
 			@Override
 			public boolean onSingleTapUp(MotionEvent e) {
 				mQuestionDialog.show();
@@ -53,21 +46,6 @@ public class QuestionFloatWindow {
 		mQuestionFloatWindow = new QuestionFloatWindow(windowsManager, question);
 		RelativeLayout layout = (RelativeLayout) findParentViewById(mQuestionFloatWindow.mWindowsManager.getTitleListView(),R.id.editor_layout);
 		layout.addView(mQuestionFloatWindow.mFloatBall);
-		mQuestionFloatWindow.mQuestionDialog.show();
-		String codePath = QuestionManager.instance().getQuestionCodeFile(question);
-		if(codePath!=null){
-			File file = new File(codePath);
-			file.getParentFile().mkdirs();
-			if(!file.isFile())
-			try {
-				FileOutputStream fileOutputStream = new FileOutputStream(file);
-				fileOutputStream.write(CCodeTemplate.mRunableCode.getBytes());
-				fileOutputStream.close();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-			windowsManager.addWindow(new CEditor(windowsManager,file));
-		}
 	}
 	
 	public static void stopQusetionMode(){
@@ -80,9 +58,33 @@ public class QuestionFloatWindow {
 					layout.removeView(removeFloatBall);
 				}
 			});
+			mQuestionFloatWindow.mQuestionDialog.stopTest();
 			mQuestionFloatWindow.mQuestionDialog.dismiss();
 			mQuestionFloatWindow = null;
 		}
 	}
 	
+	public static void showQuestionDialog(){
+		if(mQuestionFloatWindow!=null){
+			mQuestionFloatWindow.mQuestionDialog.show();
+		}
+	}
+	
+	public static void hideQuestionDialog(){
+		if(mQuestionFloatWindow!=null){
+			mQuestionFloatWindow.mQuestionDialog.dismiss();
+		}
+	}
+	
+	public static void hideFloatBall(){
+		if(mQuestionFloatWindow!=null){
+			mQuestionFloatWindow.mFloatBall.setVisibility(View.GONE);
+		}
+	}
+	
+	public static void showFloatBall(){
+		if(mQuestionFloatWindow!=null){
+			mQuestionFloatWindow.mFloatBall.setVisibility(View.VISIBLE);
+		}
+	}
 }

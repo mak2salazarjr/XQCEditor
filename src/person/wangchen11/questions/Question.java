@@ -9,13 +9,13 @@ import person.wangchen11.myscanner.MyScanner;
 import android.content.Context;
 
 public class Question {
-	public String mKey = null;
+	private String mKey = null;
 	public String mAssetsPath = null;
 	public String mTitle = null;
 	public int    mPoint = 0;
 	public int    mDifficulty = 0;
 	public ArrayList<String> mImages = new ArrayList<String>();
-	public int mScore = 0;
+	public int mMarks = 0;
 	
 	public String getQuestion(Context context){
 		return getAssetsText(context,mAssetsPath+"_questions.txt");
@@ -105,8 +105,7 @@ public class Question {
 	
 	public String getInput(Context context,int index){
 		String str = getAssetsText(context, mAssetsPath+"input"+(index+1)+".txt");
-		str.replaceAll("\r\n", "\n");
-		return stripEnd(str, null);
+		return stripEnd(str.replaceAll("\r\n", "\n"), null);
 	}
 	
 	public String getOutput(Context context,int index){
@@ -117,5 +116,21 @@ public class Question {
 	
 	public String getAnwser(Context context){
 		return getAssetsText(context, mAssetsPath+"_answer.c");
+	}
+	
+	public int getFullMarks(){
+		return 100;
+	}
+	
+	public void setMarks(int marks){
+		mMarks = marks;
+	}
+	
+	public int getMarks(){
+		return mMarks;
+	}
+	
+	public String getKey(){
+		return mKey;
 	}
 }

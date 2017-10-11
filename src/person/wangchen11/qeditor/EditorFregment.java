@@ -57,6 +57,7 @@ import person.wangchen11.editor.codeedittext.OnNeedChangeWants;
 import person.wangchen11.editor.edittext.AfterTextChangeListener;
 import person.wangchen11.gnuccompiler.CheckInfo;
 import person.wangchen11.gnuccompiler.GNUCCodeCheck;
+import person.wangchen11.util.SingerThreadPool;
 import person.wangchen11.window.ext.Setting;
 import person.wangchen11.xqceditor.R;
 
@@ -254,18 +255,20 @@ public class EditorFregment extends Fragment implements OnClickListener, AfterTe
 	}
 
 
-	private static ExecutorService mExecutorService = null;
+	//private static ExecutorService mExecutorService = null;
 	public void onChangeFlagChanged() {
 
 		if(!isChanged())
 		{
+			/*
 			if(mExecutorService==null)
 			{
 				mExecutorService = Executors.newSingleThreadExecutor();
-			}
+			}*/
 			if(mCodeCheck==null)
 			{
-				mExecutorService.execute(new Runnable() {
+				
+				SingerThreadPool.getPublicThreadPool().execute(new Runnable() {
 					@Override
 					public void run() {
 						checkCode();

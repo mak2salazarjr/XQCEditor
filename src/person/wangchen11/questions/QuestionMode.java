@@ -21,11 +21,11 @@ import android.widget.ExpandableListView.OnChildClickListener;
 import android.widget.TextView;
 
 @SuppressLint("InflateParams") 
-public class AnswerMode extends Fragment implements Window {
+public class QuestionMode extends Fragment implements Window {
 	private WindowsManager mWindowsManager = null;
 	private ExpandableListView mExpandableListView = null;
 	private QuestionAdapter mQuestionAdapter = null;
-	public AnswerMode(WindowsManager windowsManager) {
+	public QuestionMode(WindowsManager windowsManager) {
 		mWindowsManager = windowsManager;
 	}
 	
@@ -42,7 +42,7 @@ public class AnswerMode extends Fragment implements Window {
 			@Override
 			public boolean onChildClick(ExpandableListView parent, View v,
 					int groupPosition, int childPosition, long id) {
-				QuestionFloatWindow.startQuestionMode(mWindowsManager, mQuestionAdapter.getChild(groupPosition, childPosition));
+				mWindowsManager.addWindow(new QuestionCEditor(mWindowsManager,mQuestionAdapter.getChild(groupPosition, childPosition)));
 				return false;
 			}
 		});
@@ -66,7 +66,7 @@ public class AnswerMode extends Fragment implements Window {
 
 	@Override
 	public boolean canAddNewWindow(Window window) {
-		if(window instanceof AnswerMode)
+		if(window instanceof QuestionMode)
 			return false;
 		return true;
 	}
@@ -145,6 +145,10 @@ class QuestionAdapter extends BaseExpandableListAdapter {
 		TextView textView = (TextView) view.findViewById(R.id.textView);
 		textView.setText(getGroup(groupPosition).getName());
 
+		TextView textViewScore = (TextView) view.findViewById(R.id.textViewScore);
+		QuestionGroup questionGroup = getGroup(groupPosition);
+		textViewScore.setText(questionGroup.getMarks()+"/"+questionGroup.getFullMarks());
+		
 		Setting.applySettingConfigToAllView(view);
 		return view;
 	}
@@ -154,9 +158,14 @@ class QuestionAdapter extends BaseExpandableListAdapter {
 			boolean isLastChild, View convertView, ViewGroup parent) {
 		LayoutInflater inflater = LayoutInflater.from(parent.getContext());
 		View view = inflater.inflate(R.layout.item_question_child, null);
+		Question question = getChild(groupPosition, childPosition);
 		
 		TextView textView = (TextView) view.findViewById(R.id.textView);
-		textView.setText(getChild(groupPosition, childPosition).mTitle);
+		textView.setText(question.mTitle);
+
+		TextView textViewScore = (TextView) view.findViewById(R.id.textViewScore);
+		textViewScore.setText(question.getMarks()+"/"+question.getFullMarks());
+		
 		Setting.applySettingConfigToAllView(view);
 		return view;
 	}

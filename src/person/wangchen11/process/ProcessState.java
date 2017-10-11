@@ -4,7 +4,7 @@ import java.io.IOException;
 
 import person.wangchen11.myscanner.MyScanner;
 
-import android.util.Log;
+//import android.util.Log;
 
 public class ProcessState {
 	static final String TAG="ProcessState";
@@ -20,7 +20,7 @@ public class ProcessState {
 			if(i==pidIndex)
 				mPid=string;
 		}
-		Log.i(TAG, "name:"+mProcessName+",id:"+mPid);
+		//Log.i(TAG, "name:"+mProcessName+",id:"+mPid);
 		scanner.close();
 	}
 	
@@ -37,7 +37,7 @@ public class ProcessState {
 			{
 				line=scanner.nextLine();
 				ProcessState processState=new ProcessState(line, nameIndex, pidIndex);
-				Log.i(TAG, "line:"+line);
+				//Log.i(TAG, "line:"+line);
 				if(name.equals(processState.mProcessName))
 				{
 					ret=processState;

@@ -60,6 +60,7 @@ import person.wangchen11.editor.newedittext.NewEditText;
 import person.wangchen11.editor.newedittext.WarnAndErrorScrollBar;
 import person.wangchen11.gnuccompiler.CheckInfo;
 import person.wangchen11.gnuccompiler.GNUCCodeCheck;
+import person.wangchen11.util.SingerThreadPool;
 import person.wangchen11.window.ext.Setting;
 import person.wangchen11.xqceditor.R;
 
@@ -241,18 +242,19 @@ public class NewEditorFregment extends Fragment implements OnClickListener, Afte
 	}
 
 
-	private static ExecutorService mExecutorService = null;
+	//private static ExecutorService mExecutorService = null;
 	public void onChangeFlagChanged() {
 
 		if(!isChanged())
 		{
+			/*
 			if(mExecutorService==null)
 			{
 				mExecutorService = Executors.newSingleThreadExecutor();
-			}
+			}*/
 			if(mCodeCheck==null)
 			{
-				mExecutorService.execute(new Runnable() {
+				SingerThreadPool.getPublicThreadPool().execute(new Runnable() {
 					@Override
 					public void run() {
 						checkCode();

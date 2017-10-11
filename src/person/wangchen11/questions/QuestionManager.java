@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import person.wangchen11.gnuccompiler.GNUCCompiler;
 
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 
 public class QuestionManager {
 	private static QuestionManager mQuestionManager = null;
@@ -15,9 +17,7 @@ public class QuestionManager {
 	
 	private QuestionManager(Context context) {
 		mAllLevelQuestions.add(new QuestionGroup(context,ASSETS_PATH,"1.",4,"入门训练"));
-		mAllLevelQuestions.add(new QuestionGroup(context,ASSETS_PATH,"1.",4,"入门训练"));
-		mAllLevelQuestions.add(new QuestionGroup(context,ASSETS_PATH,"1.",4,"入门训练"));
-		mAllLevelQuestions.add(new QuestionGroup(context,ASSETS_PATH,"1.",4,"入门训练"));
+		loadAllQuestionInfo(context);
 	}
 	public static void init(Context context){
 		if(mQuestionManager==null)
@@ -81,7 +81,24 @@ public class QuestionManager {
 		int questionGroupIndex = mAllLevelQuestions.indexOf(questionGroup);
 		int questionIndex = questionGroup.getQuestionIndex(question);
 		
-		return GNUCCompiler.getSystemDir()+"/Answers/answer"+String.format("%03d", questionGroupIndex+1)+"_"+String.format("%03d", questionIndex+1)+".cpp";
+		return GNUCCompiler.getSystemDir()+"/answers/answer"+String.format("%03d", questionGroupIndex+1)+"_"+String.format("%03d", questionIndex+1)+".c";
+	}
+
+	public void loadAllQuestionInfo(Context context){
+		SharedPreferences preferences = context.getSharedPreferences("question_marks", Context.MODE_PRIVATE);
+		for(QuestionGroup questionGroup:mAllLevelQuestions){
+			for(Question question:questionGroup.getQuestions()){
+				int marks = preferences.getInt("marks_"+question.getKey(), 0);
+				question.setMarks(marks);
+			}
+		}
+	}
+	
+	public static void saveQuestionInfo(Context context,Question question){
+		SharedPreferences preferences = context.getSharedPreferences("question_marks", Context.MODE_PRIVATE);
+		Editor editor = preferences.edit();
+		editor.putInt("marks_"+question.getKey(), question.getMarks() );
+		editor.commit();
 	}
 	
 }
