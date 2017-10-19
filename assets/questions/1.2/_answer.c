@@ -2,15 +2,7 @@
 
 int main(){
 	long long n;
-	long long sum=0;
-	
 	scanf("%lld",&n);
-	
-	while(n>0){
-		sum += n;
-		n--;
-	}
-	
-	printf("%lld",sum);
+	printf("%lld",n*(1+n)/2);
 	return 0;
 }
