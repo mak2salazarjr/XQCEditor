@@ -48,7 +48,7 @@ public class Waps {
 		if(!isTimeToShow())
 			return ;
 		AppConnect.getInstance(context).showPopAd(context);
-		AppConnect.getInstance(context).setPopAdBack(true);
+		//AppConnect.getInstance(context).setPopAdBack(true);
 	}
 	
 	public static void showBanner(Context context,LinearLayout linearLayout)
