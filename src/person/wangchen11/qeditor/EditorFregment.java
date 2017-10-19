@@ -620,7 +620,8 @@ public class EditorFregment extends Fragment implements OnClickListener, AfterTe
 		Log.i(TAG, "onNeedChangeWants:"+start+ " "+end);
 		mWantChangeStart=start;
 		mWantChangeEnd=end;
-		
+		if(mCodeEditText==null)
+			return;
 		if(wants==null||wants.size()<=0)
 		{
 			mListView.setVisibility(View.GONE);

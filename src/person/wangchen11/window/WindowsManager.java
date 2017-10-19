@@ -190,10 +190,9 @@ public class WindowsManager implements View.OnClickListener, android.support.v7.
 	}
 	
 	public boolean addWindow(Window window){
-		Iterator<WindowPointer> iterator=mWindowPointers.iterator();
-		while(iterator.hasNext())
+		for(int i=0;i<mWindowPointers.size();i++)
 		{
-			WindowPointer pointer=iterator.next();
+			WindowPointer pointer=mWindowPointers.get(i);
 			if(pointer.mWindow==window)
 				return false;
 			if(!pointer.mWindow.canAddNewWindow(window))

@@ -40,7 +40,7 @@ public class TestTask extends QuestionTask {
 		if(isPass()){
 			return "通过";
 		}
-		return mResult;//"未通过";
+		return "未通过";
 	}
 	
 	@Override
@@ -89,6 +89,7 @@ public class TestTask extends QuestionTask {
 				outputStream.close();
 				
 				cmd+="'"+mCompileTask.getFileOut()+"'"+" < "+"'"+inputFile+"'\n";
+				Log.i("", "cmd:"+cmd);
 				mResult = runCmd(cmd, getTimeOut(),false);
 				mResult = Question.stripEnd( mResult.replaceAll("\r\n", "\n"),null);
 			} catch (IOException e) {
@@ -98,7 +99,9 @@ public class TestTask extends QuestionTask {
 			} catch (Exception e) {
 				mException = e;
 			} finally {
-				ProcessState.getProcessByName(elfFile.getAbsolutePath()).kill();
+				ProcessState processState = ProcessState.getProcessByName(elfFile.getAbsolutePath());
+				if(processState!=null)
+					processState.kill();
 				//elfFile.delete();
 				if(inputFile!=null)
 					inputFile.delete();
