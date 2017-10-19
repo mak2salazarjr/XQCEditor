@@ -12,6 +12,7 @@ import android.os.Environment;
 import android.support.v4.app.Fragment;
 import person.wangchen11.console.ConsoleFragment;
 import person.wangchen11.console.OnConsoleColseListener;
+import person.wangchen11.gnuccompiler.GNUCCompiler2;
 import person.wangchen11.process.ProcessState;
 import person.wangchen11.window.MenuTag;
 import person.wangchen11.window.Window;
@@ -47,6 +48,7 @@ public class Console implements Window, OnConsoleColseListener,WindowsManagerLin
 		
 		if(Setting.mConfig.mOtherConfig.mNewConsoleEnable)
 		{
+			initCmd=GNUCCompiler2.getExportEnvPathCmd(windowsManager.getContext()) + initCmd;
 			mTermFragment=new TermFragment(initCmd, runAsSu,home);
 			mTermFragment.setFinishCallback(this);
 		}

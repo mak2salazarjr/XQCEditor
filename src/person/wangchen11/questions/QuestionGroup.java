@@ -9,7 +9,7 @@ public class QuestionGroup {
 	private String mName = "";
 	
 	public QuestionGroup(Context context,String assetsPath,String prefix,int number,String name){
-		for(int i=1;i<=4;i++){
+		for(int i=1;i<=number;i++){
 			mQuestions.add(new Question(context, assetsPath+prefix+i+"/", prefix+i));
 		}
 		mName = name;

@@ -17,6 +17,9 @@ public class QuestionManager {
 	
 	private QuestionManager(Context context) {
 		mAllLevelQuestions.add(new QuestionGroup(context,ASSETS_PATH,"1.",4,"入门训练"));
+		mAllLevelQuestions.add(new QuestionGroup(context,ASSETS_PATH,"2.",1,"基础练习"));
+		mAllLevelQuestions.add(new QuestionGroup(context,ASSETS_PATH,"3.",0,"算法训练"));
+		mAllLevelQuestions.add(new QuestionGroup(context,ASSETS_PATH,"4.",0,"算法提高"));
 		loadAllQuestionInfo(context);
 	}
 	public static void init(Context context){

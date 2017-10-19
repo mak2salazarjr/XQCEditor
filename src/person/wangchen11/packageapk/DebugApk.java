@@ -133,19 +133,19 @@ public class DebugApk implements OnClickListener {
 				});
 			}
 		},mContext);
-		String cmd="";
+		String cmd=GNUCCompiler2.getExportEnvPathCmd(mContext);
 		List<File > files=mProject.getAllCFiles();
 		if(files.size()>0)
 		{
 			if(mProject.isGuiProject())
-				cmd=GNUCCompiler2.getCompilerCmd(mContext, mProject, true,null);
-				//cmd=GNUCCompiler.getProjectCompilerSoCmd(mContext, files, new File(mProject.getSoFilePath()), mProject.getOtherOption() );
+				cmd+=GNUCCompiler2.getCompilerCmd(mContext, mProject, true,null);
+				//cmd+=GNUCCompiler.getProjectCompilerSoCmd(mContext, files, new File(mProject.getSoFilePath()), mProject.getOtherOption() );
 			else
-				cmd=GNUCCompiler2.getCompilerCmd(mContext, mProject, false,null);
-				//cmd=GNUCCompiler.getProjectCompilerCmd(mContext, files, new File(mProject.getBinFilePath()), mProject.getOtherOption() );
+				cmd+=GNUCCompiler2.getCompilerCmd(mContext, mProject, false,null);
+				//cmd+=GNUCCompiler.getProjectCompilerCmd(mContext, files, new File(mProject.getBinFilePath()), mProject.getOtherOption() );
 		}
 		else
-			cmd="echo '"+
+			cmd+="echo '"+
 					mContext.getText(R.string.c_file_not_found)+
 					"'\n";
 		mTerminal.execute(cmd+"\nexit\n");
