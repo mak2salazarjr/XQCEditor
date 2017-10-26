@@ -1,5 +1,6 @@
 package person.wangchen11.myscanner;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -114,9 +115,8 @@ class ScannerForInputStream extends AdstractScanner
 	}
 	public ScannerForInputStream(String in) 
 	{
-		this.mString=in;
-		this.mInputStream=null;
-		mIsReadComplete=true;
+		this.mInputStream=new ByteArrayInputStream(in.getBytes());
+		mIsReadComplete=false;
 	}
 	private void Read()
 	{

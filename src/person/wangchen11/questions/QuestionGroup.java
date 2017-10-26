@@ -1,5 +1,6 @@
 package person.wangchen11.questions;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 import android.content.Context;
@@ -10,7 +11,11 @@ public class QuestionGroup {
 	
 	public QuestionGroup(Context context,String assetsPath,String prefix,int number,String name){
 		for(int i=1;i<=number;i++){
-			mQuestions.add(new Question(context, assetsPath+prefix+i+"/", prefix+i));
+			try {
+				mQuestions.add(new Question(context, assetsPath+prefix+i+"/", prefix+i));
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
 		mName = name;
 	}

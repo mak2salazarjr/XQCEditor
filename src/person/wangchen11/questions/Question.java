@@ -1,10 +1,9 @@
 package person.wangchen11.questions;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
-
-import person.wangchen11.myscanner.MyScanner;
 
 import android.content.Context;
 
@@ -18,66 +17,69 @@ public class Question {
 	public int mMarks = 0;
 	
 	public String getQuestion(Context context){
-		return getAssetsText(context,mAssetsPath+"_questions.txt");
+		try {
+			return getAssetsText(context,mAssetsPath+"_questions.txt");
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return "";
 	}
 	
-	public Question(Context context,String assrtsPath,String queskey) {
+	public Question(Context context,String assrtsPath,String queskey) throws IOException {
 		mAssetsPath = assrtsPath;
 		mKey = queskey;
-		try {
-			MyScanner scanner = new MyScanner(context.getAssets().open(assrtsPath+"_base.txt"));
-			while(scanner.hasNextLine()){
-				String line = scanner.nextLine();
-				int index = line.indexOf(":");
-				if(index<0)
-					continue;
-				String key = line.substring(0,index);
-				String value = line.substring(index+1,line.length());
-				if(key.equals("mTitle")){
-					mTitle = value;
+
+		Scanner scanner = new Scanner(getAssetsText(context,assrtsPath+"_base.txt"));
+		while(scanner.hasNextLine()){
+			String line = scanner.nextLine();
+			int index = line.indexOf(":");
+			if(index<0)
+				continue;
+			String key = line.substring(0,index);
+			String value = line.substring(index+1,line.length());
+			if(key.equals("mTitle")){
+				mTitle = value;
+			}
+			if(key.equals("mPoint")){
+				try {
+					mPoint = Integer.parseInt(value);
+				} catch (Exception e) {
 				}
-				if(key.equals("mPoint")){
-					try {
-						mPoint = Integer.parseInt(value);
-					} catch (Exception e) {
-					}
+			}
+			if(key.equals("mDifficulty")){
+				try {
+					mDifficulty = Integer.parseInt(value);
+				} catch (Exception e) {
 				}
-				if(key.equals("mDifficulty")){
-					try {
-						mDifficulty = Integer.parseInt(value);
-					} catch (Exception e) {
-					}
-				}
-				if(key.equals("mImages")){
-					String[] images = value.split(",");
-					if(images!=null){
-						for(String image:mImages){
-							mImages.add(image);
-						}
+			}
+			if(key.equals("mImages")){
+				String[] images = value.split(",");
+				if(images!=null){
+					for(String image:mImages){
+						mImages.add(image);
 					}
 				}
 			}
-			scanner.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-		} 
+		}
+		scanner.close();
 	}
 	
-	public static String getAssetsText(Context context,String path){
-		try {
-			Scanner scanner = new Scanner(context.getAssets().open(path));
-			StringBuilder stringBuilder = new StringBuilder();
-			while(scanner.hasNextLine()){
-				stringBuilder.append(scanner.nextLine());
-				if(scanner.hasNextLine())
-					stringBuilder.append("\n");
-			}
-			scanner.close();
-			return stringBuilder.toString();
-		} catch (IOException e) {
-			e.printStackTrace();
-			return e.getMessage();
+	public static String getAssetsText(Context context,String path) throws IOException{
+		Scanner scanner = null;
+		if(path.startsWith("/"))
+			scanner = new Scanner(new File(path));
+		else
+			scanner = new Scanner(context.getAssets().open(path));
+			
+		
+		StringBuilder stringBuilder = new StringBuilder();
+		while(scanner.hasNextLine()){
+			stringBuilder.append(scanner.nextLine());
+			if(scanner.hasNextLine())
+				stringBuilder.append("\n");
 		}
+		scanner.close();
+		return stringBuilder.toString();
 	}
 	
     public static String stripEnd(String str, String stripChars) {
@@ -104,18 +106,33 @@ public class Question {
 	}
 	
 	public String getInput(Context context,int index){
-		String str = getAssetsText(context, mAssetsPath+"input"+(index+1)+".txt");
+		String str = "";
+		try {
+			str = getAssetsText(context, mAssetsPath+"input"+(index+1)+".txt");
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 		return stripEnd(str.replaceAll("\r\n", "\n"), null);
 	}
 	
 	public String getOutput(Context context,int index){
-		String str = getAssetsText(context, mAssetsPath+"output"+(index+1)+".txt");
+		String str = "";
+		try {
+			str = getAssetsText(context, mAssetsPath+"output"+(index+1)+".txt");
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 		str.replaceAll("\r\n", "\n");
 		return stripEnd(str, null);
 	}
 	
 	public String getAnwser(Context context){
-		return getAssetsText(context, mAssetsPath+"_answer.c");
+		try {
+			return getAssetsText(context, mAssetsPath+"_answer.c");
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return "";
 	}
 	
 	public int getFullMarks(){

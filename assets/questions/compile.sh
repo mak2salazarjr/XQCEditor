@@ -11,7 +11,7 @@ fi
 
 echo compile $1 
 cat $1"/_base.txt" | grep mTitle
-gcc -static -o $EXEC_PATH$1.elf $1/_answer.c
+gcc -static -std=c99 -o $EXEC_PATH$1.elf $1/_answer.c
 
 for i in 1 2 3 4 5 6 7 8 9 10
 do

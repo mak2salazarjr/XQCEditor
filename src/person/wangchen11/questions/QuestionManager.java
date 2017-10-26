@@ -1,5 +1,6 @@
 package person.wangchen11.questions;
 
+import java.io.File;
 import java.util.ArrayList;
 
 import person.wangchen11.gnuccompiler.GNUCCompiler;
@@ -10,19 +11,29 @@ import android.content.SharedPreferences.Editor;
 
 public class QuestionManager {
 	private static QuestionManager mQuestionManager = null;
-	
+
 	private static final String ASSETS_PATH = "questions/";
+	
+	private static final String DEBUG_QUESTION_PATH = GNUCCompiler.getWorkSpaceDir()+"questions/";
 	
 	private ArrayList<QuestionGroup> mAllLevelQuestions = new ArrayList<QuestionGroup>();
 	
 	private QuestionManager(Context context) {
-		mAllLevelQuestions.add(new QuestionGroup(context,ASSETS_PATH,"1.",4,"入门训练"));
-		mAllLevelQuestions.add(new QuestionGroup(context,ASSETS_PATH,"2.",1,"基础练习"));
-		mAllLevelQuestions.add(new QuestionGroup(context,ASSETS_PATH,"3.",0,"算法训练"));
-		mAllLevelQuestions.add(new QuestionGroup(context,ASSETS_PATH,"4.",0,"算法提高"));
+		String path = ASSETS_PATH;
+		if(new File(DEBUG_QUESTION_PATH).isDirectory()){
+			path = DEBUG_QUESTION_PATH;
+		}
+		mAllLevelQuestions.add(new QuestionGroup(context,path,"1.",100,"入门训练"));
+		mAllLevelQuestions.add(new QuestionGroup(context,path,"2.",100,"基础练习"));
+		mAllLevelQuestions.add(new QuestionGroup(context,path,"3.",100,"算法训练"));
+		mAllLevelQuestions.add(new QuestionGroup(context,path,"4.",100,"算法提高"));
 		loadAllQuestionInfo(context);
 	}
 	public static void init(Context context){
+		if(new File(DEBUG_QUESTION_PATH).isDirectory()){
+			mQuestionManager = new QuestionManager(context);
+		}
+		else
 		if(mQuestionManager==null)
 			mQuestionManager = new QuestionManager(context);
 	}
