@@ -1,7 +1,7 @@
 #include <stdio.h>
 
-long aaa(int n){
-	int s=1;
+long long aaa(int n){
+	long long s=1;
 	for(int i=1;i<n;i++){
 		s*=i;
 	}

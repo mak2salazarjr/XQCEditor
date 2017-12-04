@@ -1,38 +1,31 @@
-#include <stdio.h> 
+#include <stdio.h>
 
-float mySum(float num[], int len);
-float myMean(float num[], int len);
-
-int main()
-{
-	float num[256] = {0};
-	int len = 0;
+int myStrcmp(char *astr, char *bstr){
+	int i=0,j=0;
+	while(1){
+		j=astr[i]-bstr[i];
+		if(0 != j)
+			return j;
 		
-	scanf("%d", &len);
-	
-	for(int i=0; i<len; i++)
-	{
-		scanf("%f", &num[i]);
+		if(astr[i] == '\0')
+			return 0;
+		i++;
 	}
+}
+int main(){
+	char astr[100]={0};
+	char bstr[100]={0};
 	
-	float sum = mySum(num, len);
-	float mean = myMean(num, len);
+	scanf("%s",astr);
+	scanf("%s",bstr);
 	
-	printf("%8.2f\n", sum);
-	printf("%8.2f\n", mean);
+	int n=myStrcmp(astr,bstr);
 	
+	if(n>0)
+		printf("%s>%s\n", astr,bstr);
+	else if(n == 0)
+		printf("%s=%s\n", astr,bstr);
+	else
+		printf("%s<%s\n",astr,bstr);
 	return 0;
-}
-float mySum(float num[], int len)
-{
-	float n = 0;
-	for(int i=0; i<len; i++)
-	{
-		n += num[i];
-	}
-	return n;
-}
-float myMean(float num[], int len)
-{
-	return mySum(num, len)/(len*1.0);
 }
