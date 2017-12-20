@@ -24,7 +24,7 @@ public class GNUCCompiler {
 			public void run() {
 				setProcess(0);
 				setMsg(R.string.free_example);
-				if( State.isUpdated() || !new File(getWorkSpaceDir()).isDirectory() )
+				if( State.isUpdated(State.RES_KEY_WORKSPACE) || !new File(getWorkSpaceDir()).isDirectory() )
 				{
 					String zipFile = "";
 					if(Waps.isGoogle()){
@@ -36,29 +36,29 @@ public class GNUCCompiler {
 				}
 				setMsg(R.string.install_gcc);
 				setProcess(20);
-				if( State.isUpdated() || !new File(getGccPath(context)).isDirectory() )
+				if( State.isUpdated(State.RES_KEY_GCC) || !new File(getGccPath(context)).isDirectory() )
 				{
 					FileUtil.freeZip(context, "gcc.zip", getRunablePath(context));
 				}
 				setMsg(R.string.free_gcc_res);
 				setProcess(40);
-				if( State.isUpdated() || !new File(getIncludeDir()).isDirectory() )
+				if( State.isUpdated(State.RES_KEY_GCC_INCLUDE) || !new File(getIncludeDir()).isDirectory() )
 				{
 					FileUtil.freeZip(context, "gcc include.zip", getSystemDir() );
 				}
 				setMsg(R.string.free_gpp_res);
 				setProcess(60);
-				if( State.isUpdated() || !new File(getIncludeDirEx()).isDirectory() )
+				if( State.isUpdated(State.RES_KEY_GPP_INCLUDE) || !new File(getIncludeDirEx()).isDirectory() )
 				{
 					FileUtil.freeZip(context, "g++ include.zip", getSystemDir() );
 				}
 				setProcess(80);
-				if( State.isUpdated() || !new File(getFixCppObj(context)).isFile() )
+				if( State.isUpdated(State.RES_KEY_FIX_CPP) || !new File(getFixCppObj(context)).isFile() )
 				{
 					FileUtil.freeFile(context, "fix.cpp.o", getFixCppObj(context));
 				}
 				setProcess(99);
-				if( State.isUpdated() || !new File(Setting.getThemeDir()).isDirectory() )
+				if( State.isUpdated(State.RES_KEY_THEMES) || !new File(Setting.getThemeDir()).isDirectory() )
 				{
 					FileUtil.freeZip(context, "themes.zip", Setting.getThemeDir() );
 				}

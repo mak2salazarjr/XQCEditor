@@ -17,6 +17,26 @@ public class State {
 	public static String VersionNameNow = null;
 	private static final String ConfigName="State";
 	private static final String TAG="State";
+
+	public static final String RES_KEY_WORKSPACE = "workspace";
+	public static final String RES_KEY_GCC = "gcc";
+	public static final String RES_KEY_GCC_INCLUDE = "gcc_include";
+	public static final String RES_KEY_GPP_INCLUDE = "g++_include";
+	public static final String RES_KEY_FIX_CPP = "cix_cpp";
+	public static final String RES_KEY_THEMES = "themes";
+
+	//31 : 2.1.8 
+	//32 : 2.1.9 
+	
+	public static final UpdateInfo[] mAllUpdates= {
+		new UpdateInfo(31,RES_KEY_WORKSPACE),//
+		new UpdateInfo(31,RES_KEY_GCC),//
+		new UpdateInfo(31,RES_KEY_GCC_INCLUDE),//
+		new UpdateInfo(31,RES_KEY_GPP_INCLUDE),//
+		new UpdateInfo(31,RES_KEY_FIX_CPP),//
+		new UpdateInfo(31,RES_KEY_THEMES),//
+	};
+	
 	public static void init(Context context)
 	{
 		SharedPreferences sharedPreferences=context.getSharedPreferences(ConfigName, Context.MODE_PRIVATE);
@@ -56,6 +76,19 @@ public class State {
 			return true;
 		return false;
 	}
+
+	public static boolean isUpdated(String key){
+		if(VersionCodeNow<VersionCodePro)
+			return true;
+		for(UpdateInfo update:mAllUpdates){
+			if(update.mDataKey.equals(key)){
+				if(VersionCodePro<update.mCode && update.mCode<=VersionCodeNow){
+					return true;
+				}
+			}
+		}
+		return false;
+	}
 	
 	public static void save(Context context)
 	{
@@ -80,6 +113,15 @@ public class State {
 		builder.setPositiveButton(android.R.string.ok, null);
 		builder.create();
 		builder.show();
+	}
+}
+
+class UpdateInfo {
+	public int mCode;
+	public String mDataKey;
+	public UpdateInfo(int code,String key) {
+		mCode = code;
+		mDataKey = key;
 	}
 }
 
