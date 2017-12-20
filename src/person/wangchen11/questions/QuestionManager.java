@@ -18,10 +18,18 @@ public class QuestionManager {
 	
 	private ArrayList<QuestionGroup> mAllLevelQuestions = new ArrayList<QuestionGroup>();
 	
+	private boolean mIsDebug = false;
+	
+	public boolean isDebug(){
+		return mIsDebug;
+	}
+	
 	private QuestionManager(Context context) {
 		String path = ASSETS_PATH;
+		mIsDebug = false;
 		if(new File(DEBUG_QUESTION_PATH).isDirectory()){
 			path = DEBUG_QUESTION_PATH;
+			mIsDebug = true;
 		}
 		mAllLevelQuestions.add(new QuestionGroup(context,path,"1.",100,"»Î√≈—µ¡∑"));
 		mAllLevelQuestions.add(new QuestionGroup(context,path,"2.",100,"ª˘¥°¡∑œ∞"));
@@ -95,7 +103,7 @@ public class QuestionManager {
 		int questionGroupIndex = mAllLevelQuestions.indexOf(questionGroup);
 		int questionIndex = questionGroup.getQuestionIndex(question);
 		
-		return GNUCCompiler.getSystemDir()+"/answers/answer"+String.format("%03d", questionGroupIndex+1)+"_"+String.format("%03d", questionIndex+1)+".c";
+		return GNUCCompiler.getSystemDir()+"/answers/answer"+String.format("%03d", questionGroupIndex+1)+"_"+String.format("%03d", questionIndex+1)+".cpp";
 	}
 
 	public void loadAllQuestionInfo(Context context){

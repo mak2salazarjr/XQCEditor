@@ -14,7 +14,6 @@ public class QuestionGroup {
 			try {
 				mQuestions.add(new Question(context, assetsPath+prefix+i+"/", prefix+i));
 			} catch (IOException e) {
-				e.printStackTrace();
 			}
 		}
 		mName = name;

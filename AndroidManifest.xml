@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="person.wangchen11.xqceditor"
-    android:versionCode="31"
-    android:versionName="2.1.8" >
+    android:versionCode="32"
+    android:versionName="2.1.9" >
 
     <uses-sdk
         android:minSdkVersion="11"
@@ -58,6 +58,22 @@
             android:configChanges="screenSize|keyboardHidden|orientation" 
             android:label="++" >
         </activity>
+        <activity
+			android:name="com.tencent.tauth.AuthActivity" 
+			android:noHistory="true" 
+			android:launchMode="singleTask" >
+			<intent-filter>
+				<action android:name="android.intent.action.VIEW" />
+				<category android:name="android.intent.category.DEFAULT" />
+				<category android:name="android.intent.category.BROWSABLE" />
+				<data android:scheme="tencent1105556556" />
+			</intent-filter>
+		</activity>
+		<activity 
+		    android:name="com.tencent.connect.common.AssistActivity"
+			android:theme="@android:style/Theme.Translucent.NoTitleBar"
+			android:configChanges="orientation|keyboardHidden|screenSize" 
+		/>
         <!-- 
         <meta-data android:name="APP_ID" android:value="f29592b5daa7915e1048e659e7e930cf" />
         <meta-data android:name="APP_PID" android:value="mumayi" /> -->

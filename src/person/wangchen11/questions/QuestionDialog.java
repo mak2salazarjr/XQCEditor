@@ -123,7 +123,11 @@ public class QuestionDialog extends AlertDialog implements AlertDialog.OnClickLi
 				}
 			}
 		});
-		
+		if(QuestionManager.instance().isDebug()){
+			buttonAnwser.setVisibility(View.VISIBLE);
+		}else{
+			buttonAnwser.setVisibility(View.GONE);
+		}
 		
 	}
 	
@@ -311,6 +315,11 @@ public class QuestionDialog extends AlertDialog implements AlertDialog.OnClickLi
 			textViewTestResult.setBackgroundDrawable(new ColorDrawable(questionTask.getColor()));
 			TextView textViewMarks = (TextView) layout.findViewById(R.id.textViewMarks);
 			textViewMarks.setText(""+questionTask.getMarks());
+			if(questionTask instanceof SumMarksTask && questionTask.isComplite()){
+				mQuestion.mMarks = questionTask.getMarks();
+				QuestionManager.saveQuestionInfo(getContext(), mQuestion);
+				new ShareDialog(getContext(),mQuestion,mView).show();
+			}
 		}
 	}
 	

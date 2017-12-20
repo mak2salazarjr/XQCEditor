@@ -21,6 +21,7 @@ import person.wangchen11.filebrowser.FileBowserFragment;
 import person.wangchen11.gnuccompiler.GNUCCompiler;
 import person.wangchen11.plugins.PluginsManager;
 import person.wangchen11.util.ToastUtil;
+import person.wangchen11.waps.TencentApi;
 import person.wangchen11.waps.Waps;
 import person.wangchen11.window.MenuTag;
 import person.wangchen11.window.WindowPointer;
@@ -32,6 +33,7 @@ import person.wangchen11.window.ext.FileBrowser;
 import person.wangchen11.window.ext.Setting;
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
+import android.app.Activity;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Color;
@@ -65,12 +67,18 @@ public class EditorActivity extends FragmentActivity implements OnClickListener,
 	private PopupMenu mPopupMenu;
 	private EmptyFragment mEmptyFragment=new EmptyFragment();
 	private Handler mHandler = new Handler();
+	private static Activity mBaseActivity = null;
+	public static Activity getBaseActivity(){
+		return mBaseActivity;
+	}
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		mBaseActivity = this;
 		ToastUtil.init(this);
 		Waps.init(this);//艹！万普广告居然捕获了异常，还TM是异步设置的，真贱   
-		
+		TencentApi.init(this);
 		State.init(this);
 		PluginsManager.init(this);
 		Setting.applyChangeDefault(Setting.loadConfig(this));

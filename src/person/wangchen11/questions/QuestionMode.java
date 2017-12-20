@@ -4,7 +4,9 @@ import java.util.List;
 
 import person.wangchen11.window.MenuTag;
 import person.wangchen11.window.Window;
+import person.wangchen11.window.WindowPointer;
 import person.wangchen11.window.WindowsManager;
+import person.wangchen11.window.WindowsManager.WindowsManagerLintener;
 import person.wangchen11.window.ext.Setting;
 import person.wangchen11.xqceditor.R;
 import android.annotation.SuppressLint;
@@ -21,12 +23,13 @@ import android.widget.ExpandableListView.OnChildClickListener;
 import android.widget.TextView;
 
 @SuppressLint("InflateParams") 
-public class QuestionMode extends Fragment implements Window {
+public class QuestionMode extends Fragment implements Window, WindowsManagerLintener {
 	private WindowsManager mWindowsManager = null;
 	private ExpandableListView mExpandableListView = null;
 	private QuestionAdapter mQuestionAdapter = null;
 	public QuestionMode(WindowsManager windowsManager) {
 		mWindowsManager = windowsManager;
+		windowsManager.addListener(this);
 	}
 	
 	@Override
@@ -73,6 +76,7 @@ public class QuestionMode extends Fragment implements Window {
 
 	@Override
 	public boolean onClose() {
+		mWindowsManager.removeListener(this);
 		return true;
 	}
 
@@ -93,6 +97,23 @@ public class QuestionMode extends Fragment implements Window {
 
 	@Override
 	public void resumeByCmd(String[] cmd) throws Exception {
+	}
+
+	@Override
+	public void onChangeWindow(WindowsManager manager) {
+		if(manager.getSelectWindow().mWindow==this){
+			if(mQuestionAdapter!=null)
+				mQuestionAdapter.notifyDataSetChanged();
+		}
+	}
+
+	@Override
+	public void onAddWindow(WindowsManager manager, WindowPointer pointer) {
+		
+	}
+
+	@Override
+	public void onCloseWindow(WindowsManager manager, WindowPointer pointer) {
 	}
 }
 
