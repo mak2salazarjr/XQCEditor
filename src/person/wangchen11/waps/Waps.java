@@ -5,6 +5,7 @@ import java.util.Date;
 import cn.waps.AppConnect;
 import cn.waps.UpdatePointsListener;
 import android.content.Context;
+import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
 @SuppressWarnings("deprecation")
@@ -59,8 +60,11 @@ public class Waps {
 			return ;
 		try {
 			try {
+				AdRelativeLayoutWithClose adRelativeLayoutWithClose = new AdRelativeLayoutWithClose(context);
 				AdLinearLayout adLinearLayout=new AdLinearLayout(context);
-				linearLayout.addView(adLinearLayout);
+				adRelativeLayoutWithClose.addView(adLinearLayout);
+				adRelativeLayoutWithClose.addCloseButton();
+				linearLayout.addView(adRelativeLayoutWithClose,ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.MATCH_PARENT);
 				AppConnect.getInstance(context).showBannerAd(context, adLinearLayout);
 			} catch (Error e) {
 				e.printStackTrace();
