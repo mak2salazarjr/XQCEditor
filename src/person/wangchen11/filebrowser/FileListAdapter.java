@@ -151,16 +151,15 @@ public class FileListAdapter extends BaseAdapter implements OnCheckedChangeListe
 		return ret;
 	}
 	
-	public boolean RefreshEx()
+	
+	
+	public boolean needRefresh()
 	{
 		if((mLastModified==mPath.lastModified()) && (getFileSubFilesNumber(mPath) == mLastFilesNumber) )
 		{
-			return true;
+			return false;
 		}
-		boolean ret= OpenPath(mPath);
-		if(mCallBack!=null)
-			mCallBack.onCheckChange();
-		return ret;
+		return true;
 	}
 	
 	private int getFileSubFilesNumber(File file){
