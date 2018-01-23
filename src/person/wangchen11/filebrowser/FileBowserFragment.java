@@ -136,27 +136,30 @@ public class FileBowserFragment extends Fragment implements OnItemClickListener,
 		mOptionLayout.setVisibility(View.GONE);
 		mPasteLayout.setVisibility(View.GONE);
 		//Aapt.init(getActivity());
-		SingerThreadPool.getPublicThreadPool().execute(new Runnable() {
+
+		view.postDelayed(new Runnable() {
 			@Override
 			public void run() {
 				if(mIsAlive)
 				{
-					if(needRefresh())
-					view.post(new Runnable() {
+					view.postDelayed(this,2000);
+					SingerThreadPool.getPublicThreadPool().execute(new Runnable() {
 						@Override
 						public void run() {
-							refresh();
+							if(needRefresh()){
+								view.post(new Runnable() {
+									@Override
+									public void run() {
+										if(mIsAlive)
+											refresh();
+									}
+								});
+							}
 						}
 					});
-					try {
-						Thread.sleep(1000);
-					} catch (InterruptedException e) {
-						e.printStackTrace();
-					}
-					SingerThreadPool.getPublicThreadPool().execute(this);
 				}
 			}
-		});
+		},1000);
 		Waps.showBanner(view.getContext(), (LinearLayout)view.findViewById(R.id.banner));
 		return view;
 	}
