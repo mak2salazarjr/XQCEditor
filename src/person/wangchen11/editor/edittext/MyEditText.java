@@ -708,7 +708,7 @@ public class MyEditText extends View implements OnGestureListener,TextWatcher, O
 		if(!isMoveSelection())
 		{
 			scrollBy((int)distanceX, (int )distanceY);
-			invalidate();  
+			postInvalidate();  
 		}
 		else{
 			int line=mLayout.getLineForVertical(getScrollY()+(int) e2.getY()-(int)(1.5f*mLayout.getLineHeight()) );
@@ -1168,7 +1168,7 @@ public class MyEditText extends View implements OnGestureListener,TextWatcher, O
 		if(getLayout() instanceof EditableWithLayout)
 		{
 			((EditableWithLayout)getLayout()).setWarnAndErrors(warnAndErrors);
-			this.invalidate();
+			this.postInvalidate();
 		}
 	}
 	

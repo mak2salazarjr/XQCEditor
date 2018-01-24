@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.LinkedList;
 
+import person.wangchen11.util.SingerThreadPool;
 import person.wangchen11.waps.Waps;
 import person.wangchen11.xqceditor.R;
 
@@ -135,16 +136,30 @@ public class FileBowserFragment extends Fragment implements OnItemClickListener,
 		mOptionLayout.setVisibility(View.GONE);
 		mPasteLayout.setVisibility(View.GONE);
 		//Aapt.init(getActivity());
+
 		view.postDelayed(new Runnable() {
 			@Override
 			public void run() {
 				if(mIsAlive)
 				{
-					refreshEx();
-					view.postDelayed(this,500);
+					view.postDelayed(this,2000);
+					SingerThreadPool.getPublicThreadPool().execute(new Runnable() {
+						@Override
+						public void run() {
+							if(needRefresh()){
+								view.post(new Runnable() {
+									@Override
+									public void run() {
+										if(mIsAlive)
+											refresh();
+									}
+								});
+							}
+						}
+					});
 				}
 			}
-		}, 500);
+		},1000);
 		Waps.showBanner(view.getContext(), (LinearLayout)view.findViewById(R.id.banner));
 		return view;
 	}
@@ -577,8 +592,8 @@ public class FileBowserFragment extends Fragment implements OnItemClickListener,
 		mFileListAdapter.Refresh();
 	}
 	
-	public void refreshEx(){
-		mFileListAdapter.RefreshEx();
+	public boolean needRefresh(){
+		return mFileListAdapter.needRefresh();
 	}
 	
 	public void selectFile(File file){

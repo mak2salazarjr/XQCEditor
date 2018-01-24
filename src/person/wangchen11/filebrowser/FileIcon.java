@@ -26,7 +26,7 @@ public class FileIcon {
 	public final static int mDefaultSzie=36;
 	public static int mBaseSize=mDefaultSzie;
 	private static ReentrantLock mLock=new ReentrantLock();
-	private static LruCache<String, Bitmap> mCache=new LruCache<String, Bitmap>((int) (Runtime.getRuntime().maxMemory() / 1024 / 8)){
+	private static LruCache<String, Bitmap> mCache=new LruCache<String, Bitmap>((int) (Runtime.getRuntime().maxMemory() / 1024 / 32)){
 		protected int sizeOf(String key, Bitmap bitmap) {
             return bitmap.getRowBytes() * bitmap.getHeight() / 1024;
 		};

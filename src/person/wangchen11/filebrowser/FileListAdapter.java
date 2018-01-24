@@ -7,10 +7,9 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.LinkedList;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 import person.wangchen11.drawable.RectDrawable;
+import person.wangchen11.util.SingerThreadPool;
 import person.wangchen11.window.ext.Setting;
 import person.wangchen11.xqceditor.R;
 
@@ -37,7 +36,6 @@ public class FileListAdapter extends BaseAdapter implements OnCheckedChangeListe
 {
 	File mSdcard;
 	Handler mHandler=new Handler();
-	static ExecutorService mThreadPool=Executors.newFixedThreadPool(2);
 	LayoutInflater mInflater=null;
 	Bitmap DirIcon ;
 	LinkedList<FileItem> mFiles=new LinkedList<FileItem>(); 
@@ -153,16 +151,15 @@ public class FileListAdapter extends BaseAdapter implements OnCheckedChangeListe
 		return ret;
 	}
 	
-	public boolean RefreshEx()
+	
+	
+	public boolean needRefresh()
 	{
 		if((mLastModified==mPath.lastModified()) && (getFileSubFilesNumber(mPath) == mLastFilesNumber) )
 		{
-			return true;
+			return false;
 		}
-		boolean ret= OpenPath(mPath);
-		if(mCallBack!=null)
-			mCallBack.onCheckChange();
-		return ret;
+		return true;
 	}
 	
 	private int getFileSubFilesNumber(File file){
@@ -284,7 +281,7 @@ public class FileListAdapter extends BaseAdapter implements OnCheckedChangeListe
 		{
 			LoadIconRunnable loadIconRunnable=new LoadIconRunnable(fileItem.mFile,imageView,mHandler);
 			imageView.setTag(loadIconRunnable);
-			mThreadPool.execute(loadIconRunnable);
+			SingerThreadPool.getPublicThreadPool().execute(loadIconRunnable);
 		}
 		
 		if(file.isDirectory())

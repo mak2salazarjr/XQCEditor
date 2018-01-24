@@ -7,7 +7,7 @@ public class SingerThreadPool {
 	private static ExecutorService mExecutorService = null;
 	public static synchronized ExecutorService getPublicThreadPool(){
 		if(mExecutorService==null){
-			mExecutorService = Executors.newSingleThreadExecutor();
+			mExecutorService = Executors.newFixedThreadPool(1);
 		}
 		return mExecutorService;
 	}
