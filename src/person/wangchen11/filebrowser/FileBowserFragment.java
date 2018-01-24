@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.LinkedList;
 
-import person.wangchen11.util.SingerThreadPool;
+import person.wangchen11.util.PublicThreadPool;
 import person.wangchen11.waps.Waps;
 import person.wangchen11.xqceditor.R;
 
@@ -143,7 +143,7 @@ public class FileBowserFragment extends Fragment implements OnItemClickListener,
 				if(mIsAlive)
 				{
 					view.postDelayed(this,2000);
-					SingerThreadPool.getPublicThreadPool().execute(new Runnable() {
+					PublicThreadPool.getPublicThreadPool().execute(new Runnable() {
 						@Override
 						public void run() {
 							if(needRefresh()){

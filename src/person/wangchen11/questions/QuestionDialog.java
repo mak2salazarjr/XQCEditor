@@ -16,7 +16,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 import person.wangchen11.questions.QuestionTask.OnTaskCompliteListener;
-import person.wangchen11.util.SingerThreadPool;
+import person.wangchen11.util.PublicThreadPool;
 import person.wangchen11.util.ToastUtil;
 import person.wangchen11.window.WindowPointer;
 import person.wangchen11.window.WindowsManager;
@@ -225,7 +225,7 @@ public class QuestionDialog extends AlertDialog implements AlertDialog.OnClickLi
 			if(task!=null){
 				task.mTesting = true;
 				mTesting = true;
-				SingerThreadPool.getPublicThreadPool().execute(task);
+				PublicThreadPool.getPublicThreadPool().execute(task);
 				mHandler.post(new Runnable() {
 					@Override
 					public void run() {

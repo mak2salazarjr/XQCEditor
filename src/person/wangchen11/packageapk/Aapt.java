@@ -117,6 +117,27 @@ public class Aapt {
 		return project.getBinPath()+"/"+getClassesShortPath();
 	}
 	
+	public static String getCreateRCmd(Context context,CProject project){
+		String cmd="";
+		cmd+="echo "+context.getString(R.string.deal_res)+"\n";
+		cmd+="chmod 744 \""+getAaptFilePath(context)+"\"\n";
+		cmd+="export PATH=$PATH:"+getAaptPath(context)+"\n";
+		cmd+="aapt package -f ";
+		cmd+=" -I \""+getFrameworkFilePath(context)+"\" ";
+		cmd+=" -S \""+project.getResPath()+"\" ";
+		cmd+=" -A \""+project.getAssetsPath()+"\" ";
+		cmd+=" -M \""+project.getManifestPath()+"\" ";
+		//cmd+=" -F \""+project.getResZipPath()+"\" ";
+		cmd+=" -J \""+project.getBinPath()+"\" ";// R file dir 
+		cmd+="\n";
+
+		cmd+="if [  $? -ne 0 ]; then \n";
+		cmd+="echo \""+context.getText(R.string.package_fail)+"\"\n";
+		cmd+="exit 1\n";
+		cmd+="fi\n";
+		return cmd;
+	}
+	
 	public static String getPackageApkCmd(Context context,CProject project)
 	{
 		String cmd="";
@@ -129,6 +150,7 @@ public class Aapt {
 		cmd+=" -A \""+project.getAssetsPath()+"\" ";
 		cmd+=" -M \""+project.getManifestPath()+"\" ";
 		cmd+=" -F \""+project.getResZipPath()+"\" ";
+		//cmd+=" -J \""+project.getBinPath()+"\" ";// R file dir 
 		cmd+="\n";
 
 		cmd+="if [  $? -ne 0 ]; then \n";

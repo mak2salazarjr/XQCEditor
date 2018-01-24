@@ -60,7 +60,7 @@ import person.wangchen11.editor.newedittext.NewEditText;
 import person.wangchen11.editor.newedittext.WarnAndErrorScrollBar;
 import person.wangchen11.gnuccompiler.CheckInfo;
 import person.wangchen11.gnuccompiler.GNUCCodeCheck;
-import person.wangchen11.util.SingerThreadPool;
+import person.wangchen11.util.PublicThreadPool;
 import person.wangchen11.window.ext.Setting;
 import person.wangchen11.xqceditor.R;
 
@@ -254,7 +254,7 @@ public class NewEditorFregment extends Fragment implements OnClickListener, Afte
 			}*/
 			if(mCodeCheck==null)
 			{
-				SingerThreadPool.getPublicThreadPool().execute(new Runnable() {
+				PublicThreadPool.getPublicThreadPool().execute(new Runnable() {
 					@Override
 					public void run() {
 						checkCode();

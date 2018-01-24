@@ -9,7 +9,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 
 import person.wangchen11.drawable.RectDrawable;
-import person.wangchen11.util.SingerThreadPool;
+import person.wangchen11.util.PublicThreadPool;
 import person.wangchen11.window.ext.Setting;
 import person.wangchen11.xqceditor.R;
 
@@ -281,7 +281,7 @@ public class FileListAdapter extends BaseAdapter implements OnCheckedChangeListe
 		{
 			LoadIconRunnable loadIconRunnable=new LoadIconRunnable(fileItem.mFile,imageView,mHandler);
 			imageView.setTag(loadIconRunnable);
-			SingerThreadPool.getPublicThreadPool().execute(loadIconRunnable);
+			PublicThreadPool.getPublicThreadPool().execute(loadIconRunnable);
 		}
 		
 		if(file.isDirectory())

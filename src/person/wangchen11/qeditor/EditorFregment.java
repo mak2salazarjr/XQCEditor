@@ -57,7 +57,7 @@ import person.wangchen11.editor.codeedittext.OnNeedChangeWants;
 import person.wangchen11.editor.edittext.AfterTextChangeListener;
 import person.wangchen11.gnuccompiler.CheckInfo;
 import person.wangchen11.gnuccompiler.GNUCCodeCheck;
-import person.wangchen11.util.SingerThreadPool;
+import person.wangchen11.util.PublicThreadPool;
 import person.wangchen11.window.ext.Setting;
 import person.wangchen11.xqceditor.R;
 
@@ -268,7 +268,7 @@ public class EditorFregment extends Fragment implements OnClickListener, AfterTe
 			if(mCodeCheck==null)
 			{
 				
-				SingerThreadPool.getPublicThreadPool().execute(new Runnable() {
+				PublicThreadPool.getPublicThreadPool().execute(new Runnable() {
 					@Override
 					public void run() {
 						checkCode();
