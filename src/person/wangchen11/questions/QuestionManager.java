@@ -73,6 +73,8 @@ public class QuestionManager {
 		int index = questionGroup.getQuestionIndex(question);
 		if(index+1 >= questionGroup.getQuestions().size()){
 			int questionGroupIndex = mAllLevelQuestions.indexOf(questionGroup);
+			if(questionGroupIndex==-1)
+				return null;
 			if(questionGroupIndex+1 >= mAllLevelQuestions.size())
 				return null;
 			return mAllLevelQuestions.get(questionGroupIndex+1).getQuestions().get(0);

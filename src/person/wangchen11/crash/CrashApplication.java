@@ -1,11 +1,11 @@
 package person.wangchen11.crash;
 
 import android.app.Application;
-import android.os.Handler;
 
 public class CrashApplication extends Application {
 	@Override
 	public void onCreate() {
+		/*
 		final CrashHandler mCrashHandler = new CrashHandler(getApplicationContext());
 		Thread.setDefaultUncaughtExceptionHandler(mCrashHandler);
 		new Handler().postDelayed(new Runnable() {
@@ -13,7 +13,7 @@ public class CrashApplication extends Application {
 			public void run() {
 				Thread.setDefaultUncaughtExceptionHandler(mCrashHandler);
 			}
-		},1000);
+		},1000);*/
 		super.onCreate();
 	}
 }

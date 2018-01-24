@@ -180,6 +180,7 @@
     <string name="_updateinfo">
 2.1.9:\n
 (1)增加答题模式\n
+\n
 2.1.8:\n
 (1)解决部分设备编译成功后提示:overwrite ------T user:user for \'*.tmp\'。\n
 (2)增加.nomedia文件，让相册不再扫描快写代码的目录。\n
