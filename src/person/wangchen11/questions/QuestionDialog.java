@@ -301,11 +301,11 @@ public class QuestionDialog extends AlertDialog implements AlertDialog.OnClickLi
 			TextView textViewTestResult = (TextView) layout.findViewById(R.id.textViewTestResult);
 			ProgressBar progressBar = (ProgressBar) layout.findViewById(R.id.progressBarTesting);
 			if(questionTask.mTesting){
-				textViewTestResult.setVisibility(View.GONE);
+				textViewTestResult.setVisibility(View.INVISIBLE);
 				progressBar.setVisibility(View.VISIBLE);
 			}else{
 				textViewTestResult.setVisibility(View.VISIBLE);
-				progressBar.setVisibility(View.GONE);
+				progressBar.setVisibility(View.INVISIBLE);
 			}
 			if(questionTask.isComplite()){
 				textViewTestResult.setText(questionTask.getCompliteMsg(getContext()));
