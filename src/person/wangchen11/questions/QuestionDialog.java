@@ -207,6 +207,8 @@ public class QuestionDialog extends AlertDialog implements AlertDialog.OnClickLi
 	public void startTest(String file){
 		stopTest();
 		synchronized (mQuestionTasks) {
+			Button buttonShowTestResult = (Button) mView.findViewById(R.id.buttonShowTestResult);
+			buttonShowTestResult.setClickable(false);
 			CompileTask compileTask = new CompileTask(getContext(),"Брвы",this, 20*1000, file);
 			mQuestionTasks.add(compileTask);
 			for(int i=0;i<mQuestion.getInputCount();i++){
@@ -319,6 +321,8 @@ public class QuestionDialog extends AlertDialog implements AlertDialog.OnClickLi
 				mQuestion.mMarks = questionTask.getMarks();
 				QuestionManager.saveQuestionInfo(getContext(), mQuestion);
 				new ShareDialog(getContext(),mQuestion,mView).show();
+				Button buttonShowTestResult = (Button) mView.findViewById(R.id.buttonShowTestResult);
+				buttonShowTestResult.setClickable(true);
 			}
 		}
 	}

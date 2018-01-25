@@ -47,6 +47,12 @@ public class ShareDialog extends AlertDialog implements AlertDialog.OnClickListe
 		mView = layoutInflater.inflate(R.layout.dialog_share, null);
 		setView(mView);
 		((ImageView)mView.findViewById(R.id.imageViewShare)).setImageBitmap(mBitmap);
+		mView.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				dismiss();
+			}
+		});
 		super.onCreate(savedInstanceState);
 	}
 

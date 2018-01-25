@@ -96,6 +96,14 @@
                         android:layout_height="wrap_content"
                         android:orientation="vertical" >
                     </LinearLayout>
+
+                    <Button
+                        android:clickable="false"
+                        android:id="@+id/buttonShowTestResult"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="查看详细测试结果" />
+
                 </LinearLayout>
 
                 <TextView
