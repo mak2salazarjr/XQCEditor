@@ -30,7 +30,7 @@ public class About extends Fragment implements Window{
 				startActivity(intent);
 			}
 		});
-		State.showUpdateMsg(inflater.getContext());
+		//State.showUpdateMsg(inflater.getContext());
 		return viewGroup;
 	}
 	
