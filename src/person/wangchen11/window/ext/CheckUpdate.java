@@ -166,6 +166,12 @@ public class CheckUpdate {
 					Log.i("cmp", ""+newCode+":"+curCode);
 					if(newCode>curCode){
 						return true;
+					}else if(newCode==curCode)
+					{
+						// cmp next code
+					}else {
+						// newCode < curCode; 
+						break;
 					}
 				} catch (Exception e) {
 					e.printStackTrace();
