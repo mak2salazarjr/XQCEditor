@@ -98,10 +98,18 @@
                      >
                 
                 <Button
+                    android:layout_weight="3"
         			android:id="@+id/button_check_update"
-        			android:layout_width="match_parent"
+        			android:layout_width="wrap_content"
         			android:layout_height="wrap_content"
         			android:text="@string/check_for_update" />
+
+                <Button
+                    android:layout_weight="1"
+        			android:id="@+id/button_ask_for_update"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/ask_for_update" />
                 
             </LinearLayout>
             
