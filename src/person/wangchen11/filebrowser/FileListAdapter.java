@@ -307,7 +307,7 @@ public class FileListAdapter extends BaseAdapter implements OnCheckedChangeListe
 		int gray = Color.argb(0x6a, 0, 0, 0);
 		fileSizeView.setTextColor(gray);
 		TextView fileDateView=(TextView)view.findViewById(R.id.filedate);
-		SimpleDateFormat mFormat=new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+		SimpleDateFormat mFormat=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		fileDateView.setText(mFormat.format(new Date(file.lastModified())));
 		fileDateView.setTextColor(gray);
 		TextView fileRWView=(TextView)view.findViewById(R.id.readwrite);
